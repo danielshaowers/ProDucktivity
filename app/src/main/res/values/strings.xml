@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">ProDucktive</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">ProDucktive</string>
+    <string name="nav_header_subtitle">Take flight with your productivity</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">User Hub</string>
+    <string name="menu_gallery">Usage Data</string>
+    <string name="menu_slideshow">Block Apps</string>
+    <string name="menu_tools">To Do</string>
+    <string name="menu_share">Calendar</string>
+    <string name="menu_send">Your Profile</string>
+</resources>
