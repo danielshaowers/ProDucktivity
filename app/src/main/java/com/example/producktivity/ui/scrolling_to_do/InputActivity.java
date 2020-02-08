@@ -1,26 +1,13 @@
 package com.example.producktivity.ui.scrolling_to_do;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.icu.text.IDNA;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -38,7 +25,6 @@ import java.util.Calendar;
 public class InputActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private InputAdapter mAdapter;
-    private Combine dataCombined;
     // private ArrayList<String> data = new ArrayList<>();
     private ArrayList<Info> data = new ArrayList<>();
     public static final int GET_FROM_GALLERY = 1;
