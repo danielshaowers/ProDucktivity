@@ -1,4 +1,4 @@
-package com.example.producktivity.ui.share;
+package com.example.producktivity.ui.send;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.R;
 
-public class ShareFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
-    private ShareViewModel shareViewModel;
+    private ProfileViewModel profileViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        shareViewModel =
-                ViewModelProviders.of(this).get(ShareViewModel.class);
-        View root = inflater.inflate(R.layout.calendar, container, false);
-        final TextView textView = root.findViewById(R.id.text_share);
-        shareViewModel.getText().observe(this, new Observer<String>() {
+        profileViewModel =
+                ViewModelProviders.of(this).get(ProfileViewModel.class);
+        View root = inflater.inflate(R.layout.profile, container, false);
+        final TextView textView = root.findViewById(R.id.text_send);
+        profileViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

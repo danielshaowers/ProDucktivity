@@ -12,8 +12,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView;
 
 import com.example.producktivity.R;
 
@@ -32,7 +32,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private View.OnFocusChangeListener focusChangeListener;
     private int previousPosition;
     private EditText oldEditText;
-  //  private ArrayList<LocationStore> locationStore = new ArrayList<>();
+    //  private ArrayList<LocationStore> locationStore = new ArrayList<>();
     // private ArrayList<Integer> oldTracker;
 
     public int getPos() {
@@ -41,6 +41,48 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public InputAdapter(ArrayList<Info> input) {
         allData = input;
+    }
+    //creates new views (is invoked by the layout manager)
+    //remember that viewgroup is a view that can be recycled into a different view
+    //sets InputViewHolder to store the view given in the parameter
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.to_do, parent, false);
+        mContext = parent.getContext();
+        return new InputViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Info current = allData.get(position);
+        EditText et = ((InputViewHolder) holder).term;
+        et.setText(current.getText());
+        et.setTag(position);
+        ((InputViewHolder) holder).fraction.setText(((current.getFraction())));
+    }
+    //replace the contents (data) of a view (invoked by the layout manager) when the view needs to be used again
+    //get element from your dataset at this position
+    //replace the contents of the view with that element
+    //((InputViewHolder)holder).term.setOnFocusChangeListener(null);
+    // this way, the FocusChangeListener can't be called WHILE onBindViewHolder is preparing info
+    //this catches callback first. if no payload, then passes it on to onBindViewHolder
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
+        if (!payloads.isEmpty()) {
+            if (payloads.get(0) instanceof String) {
+                ((InputViewHolder) holder).fraction.setText((String) payloads.get(0));
+            }
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
+
+
+
+    @Override
+    public int getItemCount() {
+        return allData.size();
     }
 
     public class InputViewHolder extends RecyclerView.ViewHolder {
@@ -55,7 +97,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public InputViewHolder(final View itemView) {
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.image);
-          //  this.fraction = (TextView) itemView.findViewById(R.id.fraction); if i want fraction
+            //  this.fraction = (TextView) itemView.findViewById(R.id.fraction); if i want fraction
             this.term = itemView.findViewById(R.id.todo_text);  //very important. sets the string of the viewHolder equal to the string in the edit text
             //imageButton = itemView.findViewById(R.id.photoButton); both these if i want images
             //imageButton.setOnClickListener(new AddImageListener());
@@ -90,9 +132,8 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                     Info lastTerm = allData.get(focusPosition).copyInfo(allData.get(focusPosition));   //sets lastterm to what it was before updating the arraylist
                                     if (!lastTerm.getText().equals(oldEditText.getText().toString())) {  //if the edittext changed, update the array's text
                                         allData.get(focusPosition).setText(oldEditText.getText().toString());
-                                           // updateFraction(allData.get(focusPosition), focusPosition, lastTerm); commented out bc update fraction doesnt exist
+                                        // updateFraction(allData.get(focusPosition), focusPosition, lastTerm); commented out bc update fraction doesnt exist
                                     }
-
 
 
                                     oldEditText.setOnFocusChangeListener(null);
@@ -119,7 +160,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         }
 
-//if I want to give image
+        //if I want to give image
   /*      public class AddImageListener implements ImageButton.OnClickListener {
             @Override
             public void onClick(View view) {
@@ -137,79 +178,18 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 */
-    public void addNewRow(int position) {
-        if ((position >= allData.size() - 1)) { //when it's the last position in the dataset, and it's not empty, we add two more infos
-            allData.add(new Info(""));
-            allData.get(position + 1).setFraction(1, 1); //replace this with a method that automatically checks the arraylist and updates the fractions
-            allData.add(new Info(""));
-            allData.get(position + 2).setFraction(1, 1);
-            notifyItemInserted(position + 1);
-            notifyItemInserted(position + 2);
-        }
-    }
-
-
-    //creates new views (is invoked by the layout manager)
-    //remember that viewgroup is a view that can be recycled into a different view
-    //sets InputViewHolder to store the view given in the parameter
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //create a new view
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.to_do, parent, false);
-        mContext = parent.getContext();
-        return new InputViewHolder(view);
-    }
-
-    //replace the contents (data) of a view (invoked by the layout manager) when the view needs to be used again
-    //get element from your dataset at this position
-    //replace the contents of the view with that element
-    //((InputViewHolder)holder).term.setOnFocusChangeListener(null); //this way, the FocusChangeListener can't be called WHILE onBindViewHolder is preparing info
-
-    //this catches callback first. if no payload, then passes it on to onBindViewHolder
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
-        if (!payloads.isEmpty()) {
-            if (payloads.get(0) instanceof String) {
-                ((InputViewHolder) holder).fraction.setText((String) payloads.get(0));
+        public void addNewRow(int position) {
+            if ((position >= allData.size() - 1)) { //when it's the last position in the dataset, and it's not empty, we add two more infos
+                allData.add(new Info(""));
+                allData.get(position + 1).setFraction(1, 1); //replace this with a method that automatically checks the arraylist and updates the fractions
+                allData.add(new Info(""));
+                allData.get(position + 2).setFraction(1, 1);
+                notifyItemInserted(position + 1);
+                notifyItemInserted(position + 2);
             }
-        } else {
-            super.bindViewHolder(holder, position, payloads);
         }
-    }
 
-    @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        Info current = allData.get(position);
-        EditText et = ((InputViewHolder) holder).term;
-        //  if (((current.getText() != null))) {
-        //    et.clearFocus();
-        et.setText(current.getText());
-        et.setTag(position);
-        //   et.setOnFocusChangeListener(focusChangeListener);
-        // }
 
-        //if I want to include the option to add pictures, use this
-        /*if (current.getUri() != null) {
-            ((InputViewHolder) holder).image.setImageDrawable(current.getImage());
-            ((InputViewHolder) holder).image.setVisibility(View.VISIBLE);
-            ((InputViewHolder) holder).image.setOnClickListener(new View.OnClickListener() {  //opens up the activity that makes a full screen image with some new buttons
-                @Override
-                public void onClick(View view) {
-                    // open another activity on item click
-                    Intent intent = new Intent(mContext, FullImageActivity.class);
-                    intent.putExtra("image", allData.get(position).getUri()); // put image data in Intent
-                    mContext.startActivity(intent); // start Intent
-                }
-            });
-        } */
-        ((InputViewHolder) holder).fraction.setText(((current.getFraction())));
-    }
-
-    //return the size of the dataset (invoked by layout manager)
-    @Override
-    public int getItemCount() {
-        return allData.size();   //i might want to return 1 greater so that we always have an empty editText that they can edit. or just make a button at the bottom. i think i'll do that
-    }
 /*
     //returns index and place of the location storer
     public int getTermIndex(Info term) {
@@ -323,7 +303,8 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         }
                 }
             oldTracker = trackPosition; */
-        }
+    }
+}
     //}
 //}
 //}
