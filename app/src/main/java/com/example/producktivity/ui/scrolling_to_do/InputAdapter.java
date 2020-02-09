@@ -3,7 +3,6 @@ package com.example.producktivity.ui.scrolling_to_do;
 import android.content.Context;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,11 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +29,11 @@ import java.util.List;
 public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Info> allData;
     private Context mContext;
-    // private int position;
     private int focusPosition = 0;
     private View.OnFocusChangeListener focusChangeListener;
     private int previousPosition;
-    private EditText oldEditText;
-    //  private ArrayList<LocationStore> locationStore = new ArrayList<>();
-    // private ArrayList<Integer> oldTracker;
+    private TextInputEditText oldEditText;
+
 
     public int getPos() {
         return focusPosition;
@@ -59,10 +56,10 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Info current = allData.get(position);
-        EditText et = ((InputViewHolder) holder).term;
+        TextInputEditText et = ((InputViewHolder) holder).term;
         et.setText(current.getText());
         et.setTag(position);
-        ((InputViewHolder) holder).fraction.setText(((current.getFraction())));
+
     }
     //replace the contents (data) of a view (invoked by the layout manager) when the view needs to be used again
     //get element from your dataset at this position
@@ -123,7 +120,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public class InputViewHolder extends RecyclerView.ViewHolder {
 
-        public EditText term;
+        public TextInputEditText term;
         public ImageView image;
         public ImageButton imageButton, audioButton;
         public MediaStore.Audio audio; //this one i just yoloed. don't know what it actually is
@@ -134,7 +131,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.image);
             /*  this.fraction = (TextView) itemView.findViewById(R.id.fraction); if i want fraction*/
-            this.term = itemView.findViewById(R.id.todo_text);  //very important. sets the string of the viewHolder equal to the string in the edit text
+            this.term = itemView.findViewById(R.id.task_input);  //very important. sets the string of the viewHolder equal to the string in the edit text
             /*imageButton = itemView.findViewById(R.id.photoButton); both these if i want images
             imageButton.setOnClickListener(new AddImageListener()); */
             term.setFocusable(true);
@@ -164,7 +161,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             public void run() {
                                 focusPosition = (int) v.getTag(); // perfect EXCEPT when a new row is added, this !hasFocus is called twice...?
                                 if (focusPosition >= 0 && allData.get(focusPosition) != null && allData != null) {
-                                    oldEditText = v.findViewById(R.id.todo_text);
+                                    oldEditText = v.findViewById(R.id.task_input);
                                     Info lastTerm = allData.get(focusPosition).copyInfo(allData.get(focusPosition));   //sets lastterm to what it was before updating the arraylist
                                     if (!lastTerm.getText().equals(oldEditText.getText().toString())) {  //if the edittext changed, update the array's text
                                         allData.get(focusPosition).setText(oldEditText.getText().toString());
@@ -217,11 +214,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public void addNewRow(int position) {
             if ((position >= allData.size() - 1)) { //when it's the last position in the dataset, and it's not empty, we add two more infos
                 allData.add(new Info(""));
-                allData.get(position + 1).setFraction(1, 1); //replace this with a method that automatically checks the arraylist and updates the fractions
-                allData.add(new Info(""));
-                allData.get(position + 2).setFraction(1, 1);
                 notifyItemInserted(position + 1);
-                notifyItemInserted(position + 2);
             }
         }
 
