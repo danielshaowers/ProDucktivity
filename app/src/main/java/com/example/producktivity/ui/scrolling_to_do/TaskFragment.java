@@ -40,20 +40,6 @@ public class TaskFragment extends Fragment {
     private ArrayList<Info> data = new ArrayList<>();
     public static final int GET_FROM_GALLERY = 1;
 
-    //  private ArrayList<Data> data;
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.to_do);
-        // use a constraint layout manager
-        recyclerView = findViewById(R.id.todo_recyclerview);
-        //  recyclerView.addItemDecoration(new EqualSpacingItemDecoration(5, EqualSpacingItemDecoration.GRID));
-        data.add(new Info(""));
-        mAdapter = new InputAdapter(data);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)); ////i may want to do constraintlayout, in which case i might have to make a separate class that extends recyclerview.layoutmanager
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-    } */
    @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -73,6 +59,8 @@ public class TaskFragment extends Fragment {
         //based on https://stackoverflow.com/questions/44489235/update-recyclerview-with-android-livedata
        recyclerView = root.findViewById(R.id.todo_recyclerview); //did not declare it final
        final InputAdapter mAdapter = new InputAdapter(viewModel.getTasks().getValue());
+       //now if tasks ever changes, we notify the adapter that the dataset has changed, calling setDataSet
+       //on the new list
        viewModel.getTasks().observe(getViewLifecycleOwner(), (newTasks) -> {
            mAdapter.setDataSet(newTasks);
        });
