@@ -24,7 +24,7 @@ public class CalendarFragment extends Fragment {
                 ViewModelProviders.of(this).get(CalendarViewModel.class);
         View root = inflater.inflate(R.layout.calendar, container, false);
         final TextView textView = root.findViewById(R.id.text_share);
-        calendarViewModel.getText().observe(this, new Observer<String>() {
+        calendarViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

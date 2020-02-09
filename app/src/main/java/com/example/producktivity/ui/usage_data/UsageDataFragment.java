@@ -24,7 +24,8 @@ public class UsageDataFragment extends Fragment {
                 ViewModelProviders.of(this).get(DataViewModel.class);
         View root = inflater.inflate(R.layout.usage_data, container, false);
         final TextView textView = root.findViewById(R.id.title);
-        dataViewModel.getText().observe(this, new Observer<String>() {
+        //this line watches the data view model for any changes, adjusting accordingly
+        dataViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

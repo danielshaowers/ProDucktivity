@@ -24,7 +24,7 @@ public class BlockFragment extends Fragment {
                 ViewModelProviders.of(this).get(BlockViewModel.class);
         View root = inflater.inflate(R.layout.block_apps, container, false);
         final TextView textView = root.findViewById(R.id.title_block);
-        blockViewModel.getText().observe(this, new Observer<String>() {
+        blockViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

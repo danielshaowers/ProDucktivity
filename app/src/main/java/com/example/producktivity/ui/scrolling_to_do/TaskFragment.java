@@ -7,12 +7,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
 import com.example.producktivity.ui.tools.ToDoViewModel;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,11 +33,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 //implements InputAdapter.ItemClickListener if i want it to register button clicks
-//public class InputActivity extends AppCompatActivity {
-public class InputActivity extends Fragment {
+//public class TaskFragment extends AppCompatActivity {
+public class TaskFragment extends Fragment {
     private RecyclerView recyclerView;
     private InputAdapter mAdapter;
-    // private ArrayList<String> data = new ArrayList<>();
     private ArrayList<Info> data = new ArrayList<>();
     public static final int GET_FROM_GALLERY = 1;
 
@@ -51,12 +55,31 @@ public class InputActivity extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     } */
    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        ViewModelProviders.of(this).get(ToDoViewModel.class);
+        //get access to the TaskViewModel class and its infinite wisdom/data
+        final TaskViewModel viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
+        //create the overall view specified by the to_do xml file
         View root = inflater.inflate(R.layout.to_do, container, false);
-
-        return root;
+        //find the view we need to attach data from TaskViewModel to
+       final TextInputEditText textView = root.findViewById(R.id.task_input);
+       //we set the text to observe+reflect any changes in text of TaskViewModel
+       viewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+           @Override
+           public void onChanged(@Nullable String s) {
+               textView.setText(s);
+           }
+       });
+        //based on https://stackoverflow.com/questions/44489235/update-recyclerview-with-android-livedata
+       recyclerView = root.findViewById(R.id.todo_recyclerview); //did not declare it final
+       final InputAdapter mAdapter = new InputAdapter(viewModel.getTasks().getValue());
+       viewModel.getTasks().observe(getViewLifecycleOwner(), (newTasks) -> {
+           mAdapter.setDataSet(newTasks);
+       });
+       recyclerView.setAdapter(mAdapter);
+       recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext())); //not sure about this argument
+       recyclerView.setItemAnimator(new DefaultItemAnimator());
+       return root;
     }
      /*   ImageButton buttonLoadImage = findViewById(R.id.photoButton);
         buttonLoadImage.setOnClickListener(new Set1.AddImageListener()); */

@@ -24,7 +24,7 @@ public class ToDoFragment extends Fragment {
                 ViewModelProviders.of(this).get(ToDoViewModel.class);
         View root = inflater.inflate(R.layout.to_do, container, false);
         final TextView textView = root.findViewById(R.id.text_tools);
-        toDoViewModel.getText().observe(this, new Observer<String>() {
+        toDoViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
