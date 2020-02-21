@@ -3,6 +3,7 @@ package com.example.producktivity.ui.scrolling_to_do;
 import android.content.Context;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
@@ -20,7 +23,7 @@ import com.example.producktivity.R;
 import java.util.ArrayList;
 import java.util.List;
 
-//import static com.example.flashcards.InputActivity.GET_FROM_GALLERY; //not sure if it should be input activity
+//import static com.example.flashcards.TaskFragment.GET_FROM_GALLERY; //not sure if it should be input activity
 
 //this class creates views for data, and replaces the content of views when they are no longer available
 //dang it i can't figure out how to make the inputviewHolder work as a static class instead of nonstatic class
@@ -77,7 +80,40 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super.onBindViewHolder(holder, position, payloads);
         }
     }
+    //https://github.com/android/architecture-components-samples/blob/master/BasicSample/app/src/main/java/com/example/android/persistence/ui/ProductAdapter.java#L44
+    //detects changes in a single row without changing EVERYTHING
+    public void setDataSet(final ArrayList<Info> ds) {
+        //if the dataset is empty, then we just update it
+        if (allData == null) {
+            allData = ds;
+            notifyItemRangeInserted(0, ds.size());
+        }
+        else{ //if the dataset has changed, we check the differences
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return allData.size();
+                }
 
+                @Override
+                public int getNewListSize() {
+                    return ds.size();
+                }
+
+                @Override //unsure how these two are suppossed to be different
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return allData.get(oldItemPosition).equals(ds.get(newItemPosition));
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    return allData.get(oldItemPosition).equals(ds.get(newItemPosition));
+                }
+            });
+            allData = ds;
+            result.dispatchUpdatesTo(this);
+        }
+    }
 
 
     @Override
@@ -97,10 +133,10 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public InputViewHolder(final View itemView) {
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.image);
-            //  this.fraction = (TextView) itemView.findViewById(R.id.fraction); if i want fraction
+            /*  this.fraction = (TextView) itemView.findViewById(R.id.fraction); if i want fraction*/
             this.term = itemView.findViewById(R.id.todo_text);  //very important. sets the string of the viewHolder equal to the string in the edit text
-            //imageButton = itemView.findViewById(R.id.photoButton); both these if i want images
-            //imageButton.setOnClickListener(new AddImageListener());
+            /*imageButton = itemView.findViewById(R.id.photoButton); both these if i want images
+            imageButton.setOnClickListener(new AddImageListener()); */
             term.setFocusable(true);
            /* term.setOnClickListener(new View.OnClickListener() { //already originally commented out
                 @Override
@@ -117,11 +153,11 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 //called when the focus state of a view has changed. when it gets focus, and when it loses focus
                 public void onFocusChange(final View v, boolean hasFocus) { //i guess this isn't used when you click directly
                     if (hasFocus) {
-                        //    focusPosition = getAdapterPosition(); //why the heck does this give a different position
-                        //  focusPosition = (int)v.getTag();
-                        //  System.out.println(focusPosition + " hasFocus");
-                        //     looks like adapterposition is different from the click position :(
-                    }
+                        /*    focusPosition = getAdapterPosition(); //why the heck does this give a different position
+                          focusPosition = (int)v.getTag();
+                          System.out.println(focusPosition + " hasFocus");
+                             looks like adapterposition is different from the click position :(
+                    */}
                     if (!hasFocus) { //so my problem is that it loses focus while it's still being edited for some reason
                         new Handler().post(new Runnable() {
                             @Override
@@ -132,7 +168,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                     Info lastTerm = allData.get(focusPosition).copyInfo(allData.get(focusPosition));   //sets lastterm to what it was before updating the arraylist
                                     if (!lastTerm.getText().equals(oldEditText.getText().toString())) {  //if the edittext changed, update the array's text
                                         allData.get(focusPosition).setText(oldEditText.getText().toString());
-                                        // updateFraction(allData.get(focusPosition), focusPosition, lastTerm); commented out bc update fraction doesnt exist
+                                        /* updateFraction(allData.get(focusPosition), focusPosition, lastTerm); commented out bc update fraction doesnt exist*/
                                     }
 
 
