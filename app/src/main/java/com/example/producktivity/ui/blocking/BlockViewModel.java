@@ -1,4 +1,4 @@
-package com.example.producktivity.ui.slideshow;
+package com.example.producktivity.ui.blocking;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,7 +10,7 @@ public class BlockViewModel extends ViewModel {
 
     public BlockViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Limit Your App use");
+        mText.setValue("Limit Your App Use");
     }
 
     public LiveData<String> getText() {

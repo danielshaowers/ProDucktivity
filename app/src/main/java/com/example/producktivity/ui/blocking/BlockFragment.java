@@ -1,4 +1,4 @@
-package com.example.producktivity.ui.slideshow;
+package com.example.producktivity.ui.blocking;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,10 +18,8 @@ public class BlockFragment extends Fragment {
 
     private BlockViewModel blockViewModel;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        blockViewModel =
-                ViewModelProviders.of(this).get(BlockViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
         View root = inflater.inflate(R.layout.block_apps, container, false);
         final TextView textView = root.findViewById(R.id.title_block);
         blockViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
