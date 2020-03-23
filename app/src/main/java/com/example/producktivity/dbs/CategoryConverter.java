@@ -2,7 +2,7 @@ package com.example.producktivity.dbs;
 
 import androidx.room.TypeConverter;
 
-class CategoryConverter {
+public class CategoryConverter {
 
     @TypeConverter
     public static Category fromCategory(String value) {
