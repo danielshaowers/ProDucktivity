@@ -40,9 +40,7 @@ public class Task implements Serializable {
     }
 
 
-    public boolean isComplete() {
-        return complete;
-    }
+    public boolean isComplete() {return complete; }
 
     public void setComplete(boolean complete) {
         this.complete = complete;
