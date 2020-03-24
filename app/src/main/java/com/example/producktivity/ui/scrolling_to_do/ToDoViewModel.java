@@ -33,4 +33,7 @@ public class ToDoViewModel extends AndroidViewModel {
 
     public void insert(Task task) {repo.insert(task);}
 
+    public void update(Task task) {repo.updateTask(task);}
+
+    public void delete(Task task) {repo.deleteTask(task);}
 }

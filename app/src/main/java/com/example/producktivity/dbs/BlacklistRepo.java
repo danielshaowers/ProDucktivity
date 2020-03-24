@@ -29,4 +29,9 @@ public class BlacklistRepo {
         BlacklistDatabase.databaseWriteExecutor.execute(() ->
                 dao.insert(entry));
     }
+
+    public void deleteEntry(BlacklistEntry entry) {
+        BlacklistDatabase.databaseWriteExecutor.execute(() ->
+                dao.delete(entry));
+    }
 }

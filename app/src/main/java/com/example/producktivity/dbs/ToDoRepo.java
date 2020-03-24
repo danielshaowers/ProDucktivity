@@ -33,4 +33,13 @@ public class ToDoRepo {
                 mToDoDao.insert(task));
     }
 
+    public void updateTask(Task task) {
+        ToDoDatabase.databaseWriteExecutor.execute(() ->
+                mToDoDao.update(task));
+    }
+
+    public void deleteTask(Task task) {
+        ToDoDatabase.databaseWriteExecutor.execute(() ->
+                mToDoDao.delete(task));
+    }
 }

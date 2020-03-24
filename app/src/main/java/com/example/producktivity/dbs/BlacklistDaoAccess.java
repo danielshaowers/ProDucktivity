@@ -23,9 +23,6 @@ public interface BlacklistDaoAccess {
     @Insert
     void insert(BlacklistEntry entry);
 
-    @Update
-    void update(BlacklistEntry entry);
-
     @Delete
     void delete(BlacklistEntry entry);
 }
