@@ -19,6 +19,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.producktivity.MainActivity;
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.Priority;
 import com.example.producktivity.dbs.Task;
@@ -36,14 +37,14 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
    public class TaskViewHolder extends RecyclerView.ViewHolder {
-       private final CardView taskView;
-       private final EditText title;
-       private final EditText date;
-       private final EditText desc;
-       private final EditText reminder;
-       private final RadioButton low;
-       private final RadioButton medium;
-       private final RadioButton high;
+       private CardView taskView;
+       private EditText title;
+       private EditText date;
+       private EditText desc;
+       private EditText reminder;
+       private RadioButton low;
+       private RadioButton medium;
+       private RadioButton high;
        private TaskViewHolder(View itemView){
            super(itemView);
            taskView = itemView.findViewById(R.id.todo_card);
@@ -81,6 +82,9 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder.title.setText(current.getTitle());
             holder.date.setText(current.getDueDate().toString()); //not sure if this one is correct
             holder.desc.setText(current.getDesc());
+            holder.reminder.setText(current.getReminderTime().toString());
+            MainActivity.makeCalendar(holder.reminder, this.mContext);
+            MainActivity.makeCalendar(holder.date, this.mContext);
             //holder.priority = current.getPriority(); not sure how to set the value for a radio button
             Priority p = current.getPriority();
             if (p == Priority.HIGH)

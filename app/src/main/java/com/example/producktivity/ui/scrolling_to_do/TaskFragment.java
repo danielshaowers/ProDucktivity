@@ -47,7 +47,8 @@ public class TaskFragment extends Fragment {
     //public View onCreateView()
    @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-       data.add(new Task());
+       //data.add(new Task());
+
        super.onCreate(savedInstanceState);
         //get access to the TaskViewModel class and its infinite wisdom/data
        // final TaskViewModel viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);

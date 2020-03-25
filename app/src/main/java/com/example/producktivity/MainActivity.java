@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) { //make this add a task in future
-                Snackbar.make(view, "Suck my duck", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Create a task", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 //once the FAB is clicked
             if (!isFabOpen){
@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 taskCard.setVisibility(View.VISIBLE);
                 EditText dueDate = findViewById(R.id.task_date);
                 Calendar myCalendar = MainActivity.makeCalendar( dueDate, MainActivity.this);
+                EditText reminder = findViewById(R.id.reminder);
+                Calendar reminderCalendar = MainActivity.makeCalendar(reminder, MainActivity.this);
                /* final Calendar myCalendar = Calendar.getInstance();
                 EditText dueDate= findViewById(R.id.task_date);
                 DatePickerDialog.OnDateSetListener date = (view1, year, monthOfYear, dayOfMonth) -> {
@@ -106,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                             if (myCalendar.getTime() != null) {
                                 task.setDueDate(myCalendar.getTime());
                             }
+                            if (reminderCalendar.getTime() != null)
+                                task.setReminderTime(reminderCalendar.getTime());
                         }
                         //also need to set reminder time. would prefer if it was an enum instead of a date
                         task.setComplete(task.getTitle() != null && task.getDesc() != null && task.getPriority() != null &&
@@ -145,14 +149,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     public static Calendar makeCalendar(EditText date, Context context) {
         Calendar myCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener duedate = (view1, year, monthOfYear, dayOfMonth) -> {
             myCalendar.set(Calendar.YEAR, year);
             myCalendar.set(Calendar.MONTH, monthOfYear);
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            String myFormat = "MM/dd/yy"; //In which you need put here
+            String myFormat = "MM/dd/yy";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
             date.setText(sdf.format(myCalendar.getTime()));
         };
