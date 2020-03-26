@@ -10,6 +10,18 @@ import java.io.Serializable;
 @Entity(tableName = "blacklist")
 public class BlacklistEntry implements Serializable {
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -19,4 +31,16 @@ public class BlacklistEntry implements Serializable {
     @ColumnInfo(name = "category")
     @TypeConverters({CategoryConverter.class})
     private Category category;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
 }
