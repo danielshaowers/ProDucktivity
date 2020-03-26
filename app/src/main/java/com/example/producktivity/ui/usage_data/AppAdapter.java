@@ -13,7 +13,7 @@ import com.example.producktivity.R;
 
 import java.util.List;
 
-public class appAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class appViewHolder extends RecyclerView.ViewHolder {
         private final TextView appView;
@@ -28,9 +28,9 @@ public class appAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private final LayoutInflater mInflater;
-    private List<UsageDataHandler.UsageTime> data; // Cached copy of words
+    private List<UsageTime> data; // Cached copy of words
 
-    appAdapter(Context context) {
+    AppAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
@@ -43,13 +43,13 @@ public class appAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        onBindViewHolder((appAdapter.appViewHolder) holder, position); //bruh idk why mine doesn't work
+        onBindViewHolder((AppAdapter.appViewHolder) holder, position); //bruh idk why mine doesn't work
     }
 
 
     public void onBindViewHolder(appViewHolder holder, int position) {
         if (data != null) {
-            UsageDataHandler.UsageTime current = data.get(position);
+            UsageTime current = data.get(position);
             holder.appView.setText(current.appName);
             holder.usageView.setText(longToString(current.millisUsed)); //converts milliseconds to
         } else {
@@ -61,7 +61,7 @@ public class appAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
 
-    public void setData(List<UsageDataHandler.UsageTime> datas) {
+    public void setData(List<UsageTime> datas) {
         data = datas;
         notifyDataSetChanged();
     }
