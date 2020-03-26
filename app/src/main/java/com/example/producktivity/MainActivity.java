@@ -14,16 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import androidx.annotation.Nullable;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import androidx.lifecycle.Observer;
-
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -31,15 +30,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.producktivity.dbs.Priority;
-
 import com.example.producktivity.dbs.Task;
-
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Locale;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -184,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
     public void checkPermissions(String permission, String setting) {
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
         if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
@@ -197,4 +193,45 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    /*@RequiresApi(api = Build.VERSION_CODES.M)
+    public void checkPermissions() {
+        if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.PACKAGE_USAGE_STATS) != PackageManager.PERMISSION_GRANTED) {
+            //if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS))
+            System.out.println("we require permission");
+            //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS}, PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
+            startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
+        } else
+            System.out.println("bro we are vibing");
+    }*/
+
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent data) {
+        System.out.println("are we ok?");
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == 69  && resultCode  == RESULT_OK) {
+                System.out.println("we gucci");
+            }
+        } catch (Exception ex) {
+            Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("congrats, we have permission");
+                } else
+                    System.out.println("ok, now everything fails");
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }*/
 }
