@@ -59,6 +59,7 @@
         android:visibility="visible"
         app:cardBackgroundColor="#DAFF9800"
         app:cardCornerRadius="10dp"
+        app:cardElevation="3dp"
         app:contentPadding="3dp"
         app:layout_constraintBottom_toTopOf="@+id/fab"
         app:layout_constraintEnd_toEndOf="@+id/fab">
@@ -75,19 +76,20 @@
                 android:text="Done"
                 app:layout_constraintBottom_toBottomOf="@+id/description"
                 app:layout_constraintEnd_toEndOf="@+id/priority_group"
-                app:layout_constraintStart_toEndOf="@+id/description" />
+                app:layout_constraintStart_toStartOf="@+id/priority_group" />
 
             <EditText
                 android:id="@+id/task_date"
                 android:layout_width="81dp"
                 android:layout_height="38dp"
                 android:layout_marginBottom="2dp"
+                android:background="@drawable/card_item_background"
                 android:ems="10"
                 android:focusable="false"
-                android:hint="     deadline"
+                android:hint="deadline"
+
                 android:inputType="date"
 
-                android:textSize="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/task_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/task_title"
@@ -98,6 +100,7 @@
 
                 android:layout_width="81dp"
                 android:layout_height="38dp"
+                android:background="@drawable/card_item_background"
                 android:ems="10"
                 android:focusable="false"
                 android:hint="      reminder"
@@ -113,8 +116,8 @@
                 android:layout_width="220dp"
                 android:layout_height="244dp"
                 android:layout_marginEnd="3dp"
-                android:layout_marginRight="3dp"
                 android:layout_marginTop="5dp"
+                android:background="@drawable/card_item_background"
                 android:ems="10"
                 android:inputType="textPersonName"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -128,6 +131,7 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/card_item_background"
                 android:ems="10"
                 android:hint="Enter title"
                 android:inputType="textPersonName"
@@ -136,12 +140,13 @@
 
             <RadioGroup
                 android:id="@+id/priority_group"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+
+                android:layout_width="81dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/card_item_background"
                 app:layout_constraintEnd_toEndOf="@+id/reminder"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/description"
+                app:layout_constraintStart_toStartOf="@+id/reminder"
                 app:layout_constraintTop_toBottomOf="@+id/reminder">
 
                 <TextView
