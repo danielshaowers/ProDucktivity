@@ -9,6 +9,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class UsageDataHandler {
         Map<String, UsageStats> usageStatsMap = manager.queryAndAggregateUsageStats(System.currentTimeMillis() - 2628000000L, System.currentTimeMillis());
         System.out.println(usageStatsMap.size());
         List<UsageTime> output = usageStatsMap.values().stream()
-                .filter(v -> v.getTotalTimeInForeground() > 0)
+                .filter(v -> v.getTotalTimeInForeground() > 60000 && isApp(v))
                 .map(v -> getUsage(v)).collect(Collectors.toList());
         for (UsageTime a:output)
             System.out.println(a.toString());
@@ -42,7 +43,7 @@ public class UsageDataHandler {
         return ai;
     }
 
-    private String packageName(String packageName) {
+    private String appName(String packageName) {
         PackageManager pm = context.getPackageManager();
         ApplicationInfo ai;
         try {ai = pm.getApplicationInfo(packageName, 0);} catch (PackageManager.NameNotFoundException e) {ai = null;}
@@ -51,11 +52,13 @@ public class UsageDataHandler {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private UsageTime getUsage(UsageStats data) {
-        return new UsageTime(packageName(data.getPackageName()), data.getTotalTimeInForeground());
+        return new UsageTime(appName(data.getPackageName()), data.getTotalTimeInForeground());
     }
 
-    private boolean isApp(UsageStats app) {
-        return true;    //TODO
+    private boolean isApp(UsageStats app) {                     //more can always be added
+        List<String> notApps = Arrays.asList("Pixel Launcher", "Permission Controller",
+                "com.google.android.sdksetup", "Data Transfer Tool", "Android Setup");
+        return !notApps.contains(appName(app.getPackageName()));
     }
 
 }
