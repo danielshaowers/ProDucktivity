@@ -76,9 +76,17 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private String longToString(long millis) {
-        int hours = (int) (millis / 3600000);
-        int minutes = (int) ((millis % 3600000) / 60000);
-        return hours + " hours, " + minutes + " minutes";
+        String output = "";
+        long minutes = millis / 60000;
+        if (minutes > 1440) {
+            output += (minutes / 1440) + " days, ";
+            minutes %= 1440;
+        }
+        if (minutes > 60) {
+            output += (minutes / 60) + " hours, ";
+            minutes %= 60;
+        }
+        return output + minutes + " minutes";
     }
 
 

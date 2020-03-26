@@ -56,7 +56,7 @@ public class UsageDataHandler {
     }
 
     private boolean isApp(UsageStats app) {                     //more can always be added
-        List<String> notApps = Arrays.asList("Pixel Launcher", "Permission Controller",
+        List<String> notApps = Arrays.asList("oh gosh oh darn", "Pixel Launcher", "Permission Controller",
                 "com.google.android.sdksetup", "Data Transfer Tool", "Android Setup");
         return !notApps.contains(appName(app.getPackageName()));
     }
