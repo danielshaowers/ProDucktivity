@@ -1,8 +1,10 @@
 package com.example.producktivity;
 
 
+import android.app.ActivityManager;
 import android.app.AppOpsManager;
 import android.app.DatePickerDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -23,6 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -142,6 +145,18 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        ActivityManager mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> RunningTask = mActivityManager.getRunningAppProcesses();
+        // Get the info we need for comparison.
+        ComponentName componentInfo = RunningTask.get(0).importanceReasonComponent;
+        ViewModel 
+        // Check if it matches our package name.
+        if(componentInfo.getPackageName().equals(this.getPackageName()))
+
+        activityOnTop=ar.topActivity.getClassName();
+
+
     }
 
     private void clearInputs(){

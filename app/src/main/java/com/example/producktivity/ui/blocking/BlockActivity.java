@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.R;
+import com.google.android.material.snackbar.Snackbar;
 
 public class BlockActivity extends AppCompatActivity {
 
@@ -29,14 +31,31 @@ public class BlockActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.block_apps);
+        setContentView(R.layout.block_page);
 
         blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
         System.out.println("creating a blocker");
         Blocker blocker = new Blocker(this);
         blocker.detect();
         final TextView textView = findViewById(R.id.title_block);
-        Button return = findViewById(R.id.)
+        ImageButton duck = findViewById(R.id.continueDuck);
+        Button returnButt = findViewById(R.id.ReturnButton);
+        returnButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //make this add a task in future
+                Snackbar.make(view, "Good Choice!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+    });
+    duck.setOnClickListener(new View.OnClickListener(){
+       @Override
+       public void onClick(View view){
+           if (++duckClicks > 4){
+
+           }
+
+       }
     }
+    });
 
 }
