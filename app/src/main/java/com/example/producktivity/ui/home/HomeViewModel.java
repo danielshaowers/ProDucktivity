@@ -11,6 +11,8 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
+        on = new MutableLiveData<>();
+        on.setValue(false);
         mText.setValue("See what matters most to you");
     }
 
