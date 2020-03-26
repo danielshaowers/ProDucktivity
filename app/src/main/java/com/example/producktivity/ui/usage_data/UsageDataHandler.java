@@ -40,7 +40,7 @@ public class UsageDataHandler {
     public UsageDataHandler(Context context) {this.context = context;}
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void getStats() {
+    public List<UsageTime> getStats() {
 
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         System.out.println("handling"); //one month in the past
@@ -49,8 +49,7 @@ public class UsageDataHandler {
         List<UsageTime> output = usageStatsMap.values().stream()
                 .filter(v -> v.getTotalTimeInForeground() > 0)
                 .map(v -> getUsage(v)).collect(Collectors.toList());
-        for (UsageTime t : output)
-            System.out.println(t);
+        return output;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
