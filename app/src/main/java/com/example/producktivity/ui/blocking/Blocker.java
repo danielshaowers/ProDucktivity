@@ -3,6 +3,8 @@ package com.example.producktivity.ui.blocking;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -25,13 +27,26 @@ public class Blocker {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void appOnScreen() {
-        UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-        UsageEvents events = manager.queryEvents(System.currentTimeMillis() - 2500, System.currentTimeMillis());
+        PackageManager pManager = context.getPackageManager();
+        UsageStatsManager usManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+        UsageEvents events = usManager.queryEvents(System.currentTimeMillis() - 2500, System.currentTimeMillis());
         System.out.println("testing");
         while (events.hasNextEvent()) {
             UsageEvents.Event event = new UsageEvents.Event();
             events.getNextEvent(event);
             System.out.println(event.getClassName());
+            boolean isBlocked;
+            try {
+                isBlocked = (pManager.getApplicationInfo(event.getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) == 0
+                    && event.getClassName() != "Producktive";
+            } catch (Exception e) {
+                isBlocked = false;
+            }
+            if (isBlocked) {
+
+                //TODO your own code of the window and whatnot
+
+            }
         }
     }
 
