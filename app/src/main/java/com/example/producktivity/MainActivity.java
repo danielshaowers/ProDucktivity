@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFabOpen = false;
     private ToDoViewModel toDoVM;
 
-    @RequiresApi(api = 29)
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -202,10 +203,11 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("bro we are vibing");
     }*/
 
-    @RequiresApi(api = 29)
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void checkPermissions() {
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-        if (appOps.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+        if (appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
             System.out.println("we do have permission");
         } else
