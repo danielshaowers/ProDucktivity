@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class UsageDataHandler {
 
-    class UsageTime {
+    class UsageTime implements Comparable<UsageTime>{
 
         public String appName;
         public long millisUsed;
@@ -23,6 +23,12 @@ public class UsageDataHandler {
         public UsageTime(String appName, long millisUsed) {
             this.appName = appName;
             this.millisUsed = millisUsed;
+        }
+
+
+        @Override
+        public int compareTo(UsageTime o){
+            return Long.compare(millisUsed, o.millisUsed);
         }
 
         public String toString() {return appName + ",\t" + millisUsed;}
@@ -37,7 +43,7 @@ public class UsageDataHandler {
     public void getStats() {
 
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-        System.out.println("handling");
+        System.out.println("handling"); //one month in the past
         Map<String, UsageStats> usageStatsMap = manager.queryAndAggregateUsageStats(System.currentTimeMillis() - 2628000000L, System.currentTimeMillis());
         System.out.println(usageStatsMap.size());
         List<UsageTime> output = usageStatsMap.values().stream()

@@ -47,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration; //the lefthand bar to navigate
 
 
-    private final int PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1;
-
-
     private boolean isFabOpen = false;
     private ToDoViewModel toDoVM;
 
@@ -57,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkPermissions();
+        checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_APP_USAGE_SETTINGS);
+        checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -203,13 +201,12 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void checkPermissions() {
+    public void checkPermissions(String permission, String setting) {
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-        if (appOps.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
+        if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
             System.out.println("we do have permission");
         } else
-            startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
+            startActivityForResult(new Intent(setting), 69);
     }
 
     @Override
@@ -218,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             super.onActivityResult(requestCode, resultCode, data);
 
-            if (requestCode == PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS  && resultCode  == RESULT_OK) {
+            if (requestCode == 69  && resultCode  == RESULT_OK) {
                 System.out.println("we gucci");
             }
         } catch (Exception ex) {

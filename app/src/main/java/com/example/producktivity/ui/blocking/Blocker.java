@@ -26,7 +26,6 @@ public class Blocker {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void appOnScreen() {
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-        final long INTERVAL = 10000;
         UsageEvents events = manager.queryEvents(System.currentTimeMillis() - 2500, System.currentTimeMillis());
         System.out.println("testing");
         while (events.hasNextEvent()) {

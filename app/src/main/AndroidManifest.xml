@@ -11,6 +11,7 @@
 
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
+        android:name="android.permission.SYSTEM_ALERT_WINDOW"
         tools:ignore="ProtectedPermissions" />
         <!--tools:remove="android:maxSdkVersion"-->
     <application

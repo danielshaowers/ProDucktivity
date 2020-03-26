@@ -1,37 +1,56 @@
 package com.example.producktivity.ui.usage_data;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.producktivity.R;
+
+import java.util.List;
 
 public class UsageDataFragment extends Fragment {
 
     private DataViewModel dataViewModel;
+    private List<UsageDataHandler.UsageTime> allData;
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        dataViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+
+        dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
         System.out.println("creating a tracker");
         UsageDataHandler handler = new UsageDataHandler(getContext());
-        handler.getStats();
+        handler.getStats(); //obtains all the values for us.
+        allData = null;
+        dataViewModel.setAllData(allData); //DANIEL. CHANGE THIS ONCE WE ACTUALLY GET THE DATA
         View root = inflater.inflate(R.layout.usage_data, container, false);
-        final TextView textView = root.findViewById(R.id.title);
         //this line watches the data view model for any changes, adjusting accordingly
-        dataViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageDataHandler.UsageTime>>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onChanged(@Nullable List<UsageDataHandler.UsageTime> s) {
             }
         });
+
+
+
+
+
         return root;
+    }
+
+
+    public void createGraph(){
+
     }
 }
