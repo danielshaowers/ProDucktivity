@@ -1,6 +1,5 @@
 package com.example.producktivity.ui.blocking;
 
-import android.annotation.TargetApi;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -20,7 +19,6 @@ public class Blocker {
     }
 
 
-    @TargetApi(21)      //TODO idk if this is ok
     public void appOnScreen() {
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         final long INTERVAL = 10000;

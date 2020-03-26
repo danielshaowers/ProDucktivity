@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFabOpen = false;
     private ToDoViewModel toDoVM;
 
-    @RequiresApi(api = 29)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,8 +200,7 @@ public class MainActivity extends AppCompatActivity {
         } else
             System.out.println("bro we are vibing");
     }*/
-
-    @RequiresApi(api = 29)
+    
     public void checkPermissions() {
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
         if (appOps.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
