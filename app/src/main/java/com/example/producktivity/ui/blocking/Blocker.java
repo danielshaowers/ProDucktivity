@@ -51,11 +51,10 @@ public class Blocker {
         }
     }
 
-    public boolean showBlockScreen(){
+    public void showBlockScreen(){
         Intent startBlock = new Intent("com.example.producktivity.ui.blocking.BlockActivity");
         startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(startBlock);
-        return true;
     }
 
     /*public String[] getForegroundPackageNameClassNameByUsageStats() {
