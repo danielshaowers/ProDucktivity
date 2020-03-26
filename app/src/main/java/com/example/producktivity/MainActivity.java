@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 CardView taskCard = findViewById(R.id.task_card);
                 taskCard.setVisibility(View.VISIBLE);
                 EditText dueDate = findViewById(R.id.task_date);
-                Calendar myCalendar = MainActivity.makeCalendar( dueDate, MainActivity.this);
+                Calendar myCalendar = MainActivity.makeCalendar(dueDate, MainActivity.this);
                 EditText reminder = findViewById(R.id.reminder);
                 Calendar reminderCalendar = MainActivity.makeCalendar(reminder, MainActivity.this);
                /* final Calendar myCalendar = Calendar.getInstance();
@@ -103,17 +103,16 @@ public class MainActivity extends AppCompatActivity {
                                 task.setPriority(Priority.MED);
                             if (priority.getId() == R.id.low_priority)
                                 task.setPriority(Priority.LOW);
-                            EditText description = findViewById(R.id.description);
-                            if (description.getText() != null)
-                                task.setDesc(description.getText().toString());
-                            if (myCalendar.getTime() != null) {
-                                task.setDueDate(myCalendar.getTime());
-                            }
-                            if (reminderCalendar.getTime() != null)
-                                task.setReminderTime(reminderCalendar.getTime());
                         }
                         else
                             task.setPriority(Priority.LOW);
+                        EditText description = findViewById(R.id.description);
+                        if (!description.getText().toString().equals(""))
+                            task.setDesc(description.getText().toString());
+                        if (!myCalendar.getTime().toString().equals("")) {
+                            task.setDueDate(myCalendar.getTime());
+                        }
+                        task.setReminderTime(reminderCalendar.getTime());
                         //also need to set reminder time. would prefer if it was an enum instead of a date
                         task.setComplete(task.getTitle() != null && task.getDesc() != null && task.getPriority() != null &&
                             task.getDueDate() != null); //task.getReminderTime() != null
@@ -129,15 +128,17 @@ public class MainActivity extends AppCompatActivity {
                         toDoVM.insert(task);
                         taskCard.setVisibility(View.GONE);
                         isFabOpen = false;
+                        //clear all views
+                        clearInputs();
+                        Snackbar.make(view, "Task Saved", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
                     }});
             }
             else{
                 isFabOpen = false;
                 CardView card= findViewById(R.id.task_card);
-                card.setVisibility(View.GONE);
-                if (((EditText)findViewById(R.id.task_title)).toString() != null){
-                    
-                }
+                card.setVisibility(View.GONE); //if they entered something into the database
+                clearInputs();
             }
             }
         });
@@ -156,7 +157,16 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
-
+    private void clearInputs(){
+        CardView card= findViewById(R.id.task_card);
+        card.setVisibility(View.GONE); //if they entered something into the database
+        ((EditText)findViewById(R.id.task_title)).getText().clear();
+        ((RadioGroup)findViewById(R.id.priority_group)).clearCheck();
+        ((EditText)findViewById(R.id.task_date)).getText().clear();
+        ((EditText)findViewById(R.id.reminder)).getText().clear();
+        ((EditText)findViewById(R.id.description)).getText().clear();
+    }
+    //sets the onclick listener and returns the calendar with the selected date
     public static Calendar makeCalendar(EditText date, Context context) {
         Calendar myCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener duedate = (view1, year, monthOfYear, dayOfMonth) -> {

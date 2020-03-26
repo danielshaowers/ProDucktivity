@@ -26,6 +26,7 @@ import com.example.producktivity.dbs.Task;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
        private RadioButton low;
        private RadioButton medium;
        private RadioButton high;
+
+
        private TaskViewHolder(View itemView){
            super(itemView);
            taskView = itemView.findViewById(R.id.todo_card);
@@ -77,15 +80,21 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     //TaskViewHolder is the current view of our cardview
     public void onBindViewHolder( TaskViewHolder holder, int position){
-        if (tasks != null){
-            Task current = tasks.get(position);
+        if (tasks == null) {
+            holder.title.setText("Enter tasks and View Tasks Here");
+        }
+        System.out.println("current task at position " + position + " is " + tasks.get(position).getTitle());
+        int i = -1;
+        while (tasks.get(position + ++i).getTitle() == null && position + i < tasks.size());
+            Task current = tasks.get(position+i);
             holder.title.setText(current.getTitle());
             if (current.getDueDate() != null)
                 holder.date.setText(current.getDueDate().toString()); //not sure if this one is correct
-            holder.desc.setText(current.getDesc());
-            holder.reminder.setText(current.getReminderTime().toString());
-            MainActivity.makeCalendar(holder.reminder, this.mContext);
             MainActivity.makeCalendar(holder.date, this.mContext);
+            holder.desc.setText(current.getDesc());
+            if (current.getReminderTime() != null)
+                holder.reminder.setText(current.getReminderTime().toString());
+            MainActivity.makeCalendar(holder.reminder, this.mContext);
             //holder.priority = current.getPriority(); not sure how to set the value for a radio button
             Priority p = current.getPriority();
             if (p == Priority.HIGH)
@@ -94,12 +103,6 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 holder.medium.toggle();
             else
                 holder.low.toggle();
-            holder.reminder.setText(current.getReminderTime().toString());
-        }
-        else{
-            //set default values if I want
-
-        }
     }
     void setTasks(List<Task> t){
         tasks = t;
