@@ -18,7 +18,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.producktivity.MainActivity;
 import com.example.producktivity.R;
+import com.example.producktivity.ui.home.HomeViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 public class BlockActivity extends AppCompatActivity {
@@ -51,11 +53,10 @@ public class BlockActivity extends AppCompatActivity {
     duck.setOnClickListener(new View.OnClickListener(){
        @Override
        public void onClick(View view){
-           if (++duckClicks > 4){
-                   Intent startMain = new Intent("com.example.producktivity.MainActivity");
+           if (++duckClicks > 10){
+                   Intent startMain = new Intent(BlockActivity.this, MainActivity.class);
                    startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                    startActivity(startMain);
-
            }
            else
                Snackbar.make(view, "Noooo don't do it!", Snackbar.LENGTH_LONG).setAction("Action", null).show();

@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
         });*/
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                homeViewModel.setOn(true); //not how it's supposed to be done, but whtv
                 if (isChecked) {
                     //send to blockeractivity
                     ActivityManager mActivityManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
