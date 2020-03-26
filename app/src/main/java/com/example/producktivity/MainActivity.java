@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
     public void checkPermissions() {
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
         if (appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,

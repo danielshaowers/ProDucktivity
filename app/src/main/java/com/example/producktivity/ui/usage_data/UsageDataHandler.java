@@ -9,9 +9,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class UsageDataHandler {
 
@@ -38,20 +36,36 @@ public class UsageDataHandler {
     Context context;
 
     public UsageDataHandler(Context context) {this.context = context;}
+
     public UsageDataHandler(){};
 
     @RequiresApi(api = 24)
+
     public void getStats() {
 
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         System.out.println("handling"); //one month in the past
         Map<String, UsageStats> usageStatsMap = manager.queryAndAggregateUsageStats(System.currentTimeMillis() - 2628000000L, System.currentTimeMillis());
         System.out.println(usageStatsMap.size());
-        List<UsageTime> output = usageStatsMap.values().stream()
-                .filter(v -> v.getTotalTimeInForeground() > 0 && (v.getPackageName().contains("producktivity") || v.getPackageName().contains("app")))
+        /*List<UsageTime> output = usageStatsMap.values().stream()
+                //.filter(v -> v.getTotalTimeInForeground() > 0 && (v.getPackageName().contains("producktivity") || v.getPackageName().contains("app")))
                 .map(v -> getUsage(v)).collect(Collectors.toList());
         for (UsageTime t : output)
-            System.out.println(t);
+            System.out.println(t);*/
+
+        for (UsageStats stat : usageStatsMap.values()) {
+            System.out.println(packageName(stat.getPackageName()));
+            System.out.println(info(stat).toString());
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private ApplicationInfo info(UsageStats stats) {
+        PackageManager pm = context.getPackageManager();
+        ApplicationInfo ai;
+        try {ai = pm.getApplicationInfo(stats.getPackageName(), 0);} catch (PackageManager.NameNotFoundException e) {ai = null;}
+        return ai;
     }
 
     private String packageName(String packageName) {
@@ -64,6 +78,10 @@ public class UsageDataHandler {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private UsageTime getUsage(UsageStats data) {
         return new UsageTime(packageName(data.getPackageName()), data.getTotalTimeInForeground());
+    }
+
+    private boolean isApp(UsageStats app) {
+        return true;    //TODO
     }
 
 }

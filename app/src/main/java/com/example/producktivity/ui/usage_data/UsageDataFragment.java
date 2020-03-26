@@ -1,14 +1,13 @@
 package com.example.producktivity.ui.usage_data;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -27,7 +26,9 @@ public class UsageDataFragment extends Fragment {
     private List<UsageDataHandler.UsageTime> allData;
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.N)
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
