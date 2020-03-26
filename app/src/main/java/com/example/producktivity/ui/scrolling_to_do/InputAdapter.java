@@ -1,8 +1,10 @@
 package com.example.producktivity.ui.scrolling_to_do;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,24 +12,122 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.producktivity.MainActivity;
 import com.example.producktivity.R;
+import com.example.producktivity.dbs.Priority;
+import com.example.producktivity.dbs.Task;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 //import static com.example.flashcards.TaskFragment.GET_FROM_GALLERY; //not sure if it should be input activity
 
 //this class creates views for data, and replaces the content of views when they are no longer available
 //dang it i can't figure out how to make the inputviewHolder work as a static class instead of nonstatic class
 public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<Info> allData;
+private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
+
+    public class TaskViewHolder extends RecyclerView.ViewHolder {
+       private CardView taskView;
+       private EditText title;
+       private EditText date;
+       private EditText desc;
+       private EditText reminder;
+       private RadioButton low;
+       private RadioButton medium;
+       private RadioButton high;
+
+
+       private TaskViewHolder(View itemView){
+           super(itemView);
+           taskView = itemView.findViewById(R.id.todo_card);
+           title = itemView.findViewById(R.id.todo_title);
+           date = itemView.findViewById(R.id.todo_date);
+          desc = itemView.findViewById(R.id.todo_description);
+          reminder = itemView.findViewById(R.id.todo_reminder);
+           low = itemView.findViewById(R.id.high_todo);
+           medium = itemView.findViewById(R.id.medium_todo);
+           high = itemView.findViewById(R.id.low_todo);
+       } //could set onclick listeners for the calendars here if i was motivated
+   }
+
+   private LayoutInflater mInflater;
+   private List<Task> tasks; //cached copy of words
+    //obtains the layoutinflater from the given context. layoutinflater converts the xml file into its corresponding view
+    InputAdapter(Context context) { mInflater = LayoutInflater.from(context);}
+
+    @Override @NonNull
+    public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+        View itemView = mInflater.inflate(R.layout.single_task_rcyclr,  parent, false);
+        return new TaskViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        onBindViewHolder((TaskViewHolder)holder, position); //bruh idk why mine doesn't work
+    }
+
+
+    //TaskViewHolder is the current view of our cardview
+    public void onBindViewHolder( TaskViewHolder holder, int position){
+        if (tasks == null) {
+            holder.title.setText("Enter tasks and View Tasks Here");
+        }
+        System.out.println("current task at position " + position + " is " + tasks.get(position).getTitle());
+        int i = -1;
+        while (tasks.get(position + ++i).getTitle() == null && position + i < tasks.size());
+            Task current = tasks.get(position+i);
+            holder.title.setText(current.getTitle());
+            if (current.getDueDate() != null)
+                holder.date.setText(dateFormat.format(current.getDueDate())); //formats in mm/dd form //not sure if this one is correct
+            //MainActivity.makeCalendar(holder.date, this.mContext);
+            holder.desc.setText(current.getDesc());
+            if (current.getReminderTime() != null)
+                holder.reminder.setText(dateFormat.format(current.getReminderTime())); //formats in mm/dd form
+            //MainActivity.makeCalendar(holder.reminder, this.mContext);
+            //holder.priority = current.getPriority(); not sure how to set the value for a radio button
+            Priority p = current.getPriority();
+            if (p == Priority.HIGH)
+                holder.high.toggle();
+            else if (p == Priority.MED)
+                holder.medium.toggle();
+            else
+                holder.low.toggle();
+    }
+    void setTasks(List<Task> t){
+        tasks = t;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount(){
+        if (tasks != null)
+            return tasks.size();
+        return 0;
+    }
+
+
+
+
+
+
+
+
+    private ArrayList<Task> allData;
     private Context mContext;
     private int focusPosition = 0;
     private View.OnFocusChangeListener focusChangeListener;
@@ -39,21 +139,21 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return focusPosition;
     }
 
-    public InputAdapter(ArrayList<Info> input) {
+    public InputAdapter(ArrayList<Task> input) {
         allData = input;
     }
     //creates new views (is invoked by the layout manager)
     //remember that viewgroup is a view that can be recycled into a different view
     //sets InputViewHolder to store the view given in the parameter
-    @NonNull
+  /*  @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.to_do, parent, false);
         mContext = parent.getContext();
         return new InputViewHolder(view);
-    }
+    } */ //DANIEL: COMMENTED OUT WHILE CREATING NEW
 
-    @Override
+   /* @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Info current = allData.get(position);
         TextInputEditText et = ((InputViewHolder) holder).term;
@@ -126,15 +226,15 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public MediaStore.Audio audio; //this one i just yoloed. don't know what it actually is
         public TextView fraction;
 
-
-        public InputViewHolder(final View itemView) {
+*/ //DANIEL: COMMENTED OUT WHILE CREATING ENTIRELY NEW BOI
+     /*   public InputViewHolder(final View itemView) {
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.image);
-            /*  this.fraction = (TextView) itemView.findViewById(R.id.fraction); if i want fraction*/
+            //  this.fraction = (TextView) itemView.findViewById(R.id.fraction); if i want fraction
             this.term = itemView.findViewById(R.id.task_input);  //very important. sets the string of the viewHolder equal to the string in the edit text
-            /*imageButton = itemView.findViewById(R.id.photoButton); both these if i want images
-            imageButton.setOnClickListener(new AddImageListener()); */
-            term.setFocusable(true);
+            //imageButton = itemView.findViewById(R.id.photoButton); both these if i want images
+            //imageButton.setOnClickListener(new AddImageListener());
+            term.setFocusable(true);*/ //DANIEL: COMMENTED OUT TO CREATE NEW BOI
            /* term.setOnClickListener(new View.OnClickListener() { //already originally commented out
                 @Override
                 public void onClick(View v) {
@@ -144,18 +244,18 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             }); */
 
-            term.setOnTouchListener(new myListener());
+          /*  term.setOnTouchListener(new myListener());
             focusChangeListener = new View.OnFocusChangeListener() { //i might have to specifically do each textview, edittext, imageview
                 @Override
                 //called when the focus state of a view has changed. when it gets focus, and when it loses focus
                 public void onFocusChange(final View v, boolean hasFocus) { //i guess this isn't used when you click directly
                     if (hasFocus) {
-                        /*    focusPosition = getAdapterPosition(); //why the heck does this give a different position
+                        /*    focusPosition = getAdapterPosition(); //why the heck does this give a different position. ALRDY COMMENTED
                           focusPosition = (int)v.getTag();
                           System.out.println(focusPosition + " hasFocus");
                              looks like adapterposition is different from the click position :(
                     */}
-                    if (!hasFocus) { //so my problem is that it loses focus while it's still being edited for some reason
+                   /* if (!hasFocus) { //so my problem is that it loses focus while it's still being edited for some reason
                         new Handler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -165,7 +265,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                     Info lastTerm = allData.get(focusPosition).copyInfo(allData.get(focusPosition));   //sets lastterm to what it was before updating the arraylist
                                     if (!lastTerm.getText().equals(oldEditText.getText().toString())) {  //if the edittext changed, update the array's text
                                         allData.get(focusPosition).setText(oldEditText.getText().toString());
-                                        /* updateFraction(allData.get(focusPosition), focusPosition, lastTerm); commented out bc update fraction doesnt exist*/
+                                        // updateFraction(allData.get(focusPosition), focusPosition, lastTerm);// commented out bc update fraction doesnt exist
                                     }
 
 
@@ -210,8 +310,8 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }
     }
-*/
-        public void addNewRow(int position) {
+*/ //ADD IMAGE LISTENER ALREADY COMMENTED OUT, THE REST NOT
+/*        public void addNewRow(int position) {
             if ((position >= allData.size() - 1)) { //when it's the last position in the dataset, and it's not empty, we add two more infos
                 allData.add(new Info(""));
                 notifyItemInserted(position + 1);
@@ -332,8 +432,8 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         }
                 }
             oldTracker = trackPosition; */
-    }
-}
+   // }
+//}
     //}
 //}
 //}
