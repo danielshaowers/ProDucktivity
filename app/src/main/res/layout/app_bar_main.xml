@@ -56,7 +56,7 @@
         android:layout_height="305dp"
         android:fadingEdge="none"
         android:outlineProvider="background"
-        android:visibility="visible"
+        android:visibility="gone"
         app:cardBackgroundColor="#DAFF9800"
         app:cardCornerRadius="10dp"
         app:cardElevation="3dp"
