@@ -20,7 +20,7 @@ public class UsageDataFragment extends Fragment {
 
     private DataViewModel dataViewModel;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dataViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
         System.out.println("creating a tracker");
