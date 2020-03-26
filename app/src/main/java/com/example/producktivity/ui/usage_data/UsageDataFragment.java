@@ -16,8 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class UsageDataFragment extends Fragment {
 
@@ -35,6 +41,7 @@ public class UsageDataFragment extends Fragment {
         UsageDataHandler handler = new UsageDataHandler(this.getContext());
         allData = handler.getStats();
         dataViewModel.setAllData(allData); //passes to the viewmodel
+
         View root = inflater.inflate(R.layout.usage_data, container, false);
         RecyclerView recyclerView = root.findViewById(R.id.app_recyclerView);
         final AppAdapter adapter = new AppAdapter(this.getContext());
@@ -47,11 +54,32 @@ public class UsageDataFragment extends Fragment {
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
+        GraphView graph = root.findViewById(R.id.graph);
+        createGraph(graph);
+
         return root;
     }
 
 
-    public void createGraph(){
+    public void createGraph(GraphView graph){
 
+        //Fill the series with the data and add it to the graph
+        AtomicInteger n = new AtomicInteger(1);
+        DataPoint[] dataPoints = (DataPoint[])allData.stream().limit(7).map(d -> new DataPoint(n.getAndIncrement(), d.millisUsed/60000)).toArray();
+        BarGraphSeries<DataPoint> barSeries = new BarGraphSeries<>(dataPoints);
+        graph.addSeries(barSeries);
+
+        //Change graph format to show the name of the app
+        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if(isValueX) {
+                    return super.formatLabel(value, true);
+                } else {
+                    return allData.get((int)value).appName;
+                }
+            }
+        });
     }
 }

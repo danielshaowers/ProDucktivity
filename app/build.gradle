@@ -58,6 +58,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0';
     implementation 'androidx.fragment:fragment:1.2.1'
 
+    implementation 'com.jjoe64:graphview:4.2.2'  //For making the graph for the usage stats
+
     def work_version = "2.3.2"
     implementation "androidx.work:work-runtime:$work_version"   //for my app blocking
 
@@ -81,8 +83,9 @@ dependencies {
 
     implementation 'com.google.api-client:google-api-client:1.20.0'
     implementation 'com.google.api-client:google-api-client-gson:1.20.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
 
-   // implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+    // implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 
 }
 
