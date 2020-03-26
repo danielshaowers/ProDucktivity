@@ -28,6 +28,15 @@ public class Blocker {
     }*/
 
 
+    
+/*This code here goes wherever you need the permission
+if(ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.PACKAGE_USAGE_STATS) != PackageManager.PERMISSION_GRANTED){
+    //need to request the permission
+    ActivityCompat.requestPermissions(thisActivity, Manifest.permission.PACKAGE_USAGE_STATS)
+}
+
+
+ */
 
 
 }
