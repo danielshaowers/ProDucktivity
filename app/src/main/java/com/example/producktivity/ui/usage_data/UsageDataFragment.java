@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
@@ -45,11 +47,10 @@ public class UsageDataFragment extends Fragment {
             public void onChanged(@Nullable List<UsageDataHandler.UsageTime> s) {
             }
         });
-
-
-
-
-
+        RecyclerView recyclerView = root.findViewById(R.id.app_recyclerView);
+        final appAdapter adapter = new appAdapter(this.getContext());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return root;
     }
 
