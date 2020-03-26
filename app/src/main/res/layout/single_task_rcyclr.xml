@@ -60,29 +60,30 @@
                 android:id="@+id/todo_reminder"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:ems="10"
                 android:focusable="true"
                 android:hint="reminder"
                 android:inputType="time"
                 android:textSize="8sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/todo_description"
                 app:layout_constraintTop_toBottomOf="@+id/todo_date" />
 
             <EditText
                 android:id="@+id/todo_description"
                 android:layout_width="0dp"
-                android:layout_height="146dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:ems="10"
-                android:inputType="textMultiLine"
+                android:hint="Description"
+                android:inputType="textLongMessage"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/todo_reminder"
-                android:layout_marginLeft="8dp" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <RadioGroup
                 android:id="@+id/todo_priority"
@@ -98,21 +99,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="High Priority"
-                    android:textSize="10sp" />
+                    android:textSize="8sp" />
 
                 <RadioButton
                     android:id="@+id/medium_todo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Medium Priority"
-                    android:textSize="10sp" />
+                    android:textSize="8sp" />
 
                 <RadioButton
                     android:id="@+id/low_todo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Low Priority"
-                    android:textSize="10sp" />
+                    android:textSize="8sp" />
+
             </RadioGroup>
 
             <View
@@ -124,6 +126,17 @@
                 app:layout_constraintEnd_toEndOf="@+id/todo_date"
                 app:layout_constraintStart_toStartOf="@+id/todo_description"
                 app:layout_constraintTop_toBottomOf="@+id/todo_title" />
+
+            <Button
+                android:id="@+id/remove_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Remove"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/todo_priority"
+                app:layout_constraintStart_toEndOf="@+id/todo_description"
+                app:layout_constraintTop_toBottomOf="@+id/todo_priority" />
 
             <View
                 android:id="@+id/divider2"

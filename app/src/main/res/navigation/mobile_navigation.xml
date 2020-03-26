@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/nav_block"
-        android:name="com.example.producktivity.ui.blocking.BlockFragment"
+        android:name="com.example.producktivity.ui.blocking.BlockActivity"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/block_apps" />
 
