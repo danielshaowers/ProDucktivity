@@ -12,8 +12,7 @@ public class TaskViewModel extends ViewModel {
 
         //Live data updates user profile fragment when data is updated
         private MutableLiveData<String> mText;
-        private MutableLiveData<InputAdapter> inputAdapter;
-        private MutableLiveData<ArrayList<Info>> tasks;
+        private MutableLiveData<ArrayList<Info>> tasks = new MutableLiveData<ArrayList<Info>>();
         private SavedStateHandle mState; //if I want to use this it'd be cool
 
 
@@ -31,14 +30,15 @@ public class TaskViewModel extends ViewModel {
          /* inputAdapter = new MutableLiveData<>(); not sure if this belongs in taskview or fragment
           inputAdapter.setValue(new InputAdapter(tasks.getValue())); */
       }
-        //this doesn't work, so I will do it in input adapter, not here
-        public LiveData<InputAdapter> getAdapter() {
-            return inputAdapter;
-        }
-
+        //should add one entry at the start
         public LiveData<ArrayList<Info>> getTasks(){
+          if (tasks.getValue() == null) {
+              tasks.setValue(new ArrayList<Info>());
+              tasks.getValue().add(new Info(""));
+          }
           return tasks;
         }
+
 
 
 

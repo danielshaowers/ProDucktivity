@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
-import com.example.producktivity.ui.tools.ToDoViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.FileNotFoundException;
@@ -42,11 +41,12 @@ public class TaskFragment extends Fragment {
 
    @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
+       data.add(new Info(""));
+       super.onCreate(savedInstanceState);
         //get access to the TaskViewModel class and its infinite wisdom/data
         final TaskViewModel viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
-        //create the overall view specified by the to_do xml file
-        View root = inflater.inflate(R.layout.to_do, container, false);
+       //create the overall view specified by the to_do xml file
+       View root = inflater.inflate(R.layout.to_do, container, false);
         //find the view we need to attach data from TaskViewModel to
        final TextInputEditText textView = root.findViewById(R.id.task_input);
        //we set the text to observe+reflect any changes in text of TaskViewModel
@@ -58,7 +58,7 @@ public class TaskFragment extends Fragment {
        });
         //based on https://stackoverflow.com/questions/44489235/update-recyclerview-with-android-livedata
        recyclerView = root.findViewById(R.id.todo_recyclerview); //did not declare it final
-       final InputAdapter mAdapter = new InputAdapter(viewModel.getTasks().getValue());
+       final InputAdapter mAdapter = new InputAdapter(viewModel.getTasks().getValue()); //note this ignores my instance var. not sure which is better
        //now if tasks ever changes, we notify the adapter that the dataset has changed, calling setDataSet
        //on the new list
        viewModel.getTasks().observe(getViewLifecycleOwner(), (newTasks) -> {
