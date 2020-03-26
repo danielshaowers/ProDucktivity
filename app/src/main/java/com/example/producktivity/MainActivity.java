@@ -16,11 +16,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -28,11 +30,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.producktivity.dbs.Priority;
+import com.example.producktivity.dbs.Task;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -174,6 +180,13 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void checkPermissions(String permission, String setting) {
+        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+        if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
+            System.out.println("we do have permission");
+        }
+        else startActivityForResult(new Intent(setting), 69);
+    }
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -191,15 +204,6 @@ public class MainActivity extends AppCompatActivity {
         } else
             System.out.println("bro we are vibing");
     }*/
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void checkPermissions(String permission, String setting) {
-        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-        if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
-            System.out.println("we do have permission");
-        } else
-            startActivityForResult(new Intent(setting), 69);
-    }
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
