@@ -18,7 +18,10 @@ public class BlockFragment extends Fragment {
 
     private BlockViewModel blockViewModel;
 
+    private final int PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 
         blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
         System.out.println("creating a blocker");
@@ -34,4 +37,5 @@ public class BlockFragment extends Fragment {
         });
         return root;
     }
+
 }
