@@ -1,5 +1,6 @@
 package com.example.producktivity.ui.scrolling_to_do;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -25,19 +26,22 @@ import com.example.producktivity.dbs.Priority;
 import com.example.producktivity.dbs.Task;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 //import static com.example.flashcards.TaskFragment.GET_FROM_GALLERY; //not sure if it should be input activity
 
 //this class creates views for data, and replaces the content of views when they are no longer available
 //dang it i can't figure out how to make the inputviewHolder work as a static class instead of nonstatic class
 public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
 
-
-   public class TaskViewHolder extends RecyclerView.ViewHolder {
+    public class TaskViewHolder extends RecyclerView.ViewHolder {
        private CardView taskView;
        private EditText title;
        private EditText date;
@@ -58,7 +62,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
            low = itemView.findViewById(R.id.high_todo);
            medium = itemView.findViewById(R.id.medium_todo);
            high = itemView.findViewById(R.id.low_todo);
-       }
+       } //could set onclick listeners for the calendars here if i was motivated
    }
 
    private LayoutInflater mInflater;
@@ -89,12 +93,12 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Task current = tasks.get(position+i);
             holder.title.setText(current.getTitle());
             if (current.getDueDate() != null)
-                holder.date.setText(current.getDueDate().toString()); //not sure if this one is correct
-            MainActivity.makeCalendar(holder.date, this.mContext);
+                holder.date.setText(dateFormat.format(current.getDueDate())); //formats in mm/dd form //not sure if this one is correct
+            //MainActivity.makeCalendar(holder.date, this.mContext);
             holder.desc.setText(current.getDesc());
             if (current.getReminderTime() != null)
-                holder.reminder.setText(current.getReminderTime().toString());
-            MainActivity.makeCalendar(holder.reminder, this.mContext);
+                holder.reminder.setText(dateFormat.format(current.getReminderTime())); //formats in mm/dd form
+            //MainActivity.makeCalendar(holder.reminder, this.mContext);
             //holder.priority = current.getPriority(); not sure how to set the value for a radio button
             Priority p = current.getPriority();
             if (p == Priority.HIGH)

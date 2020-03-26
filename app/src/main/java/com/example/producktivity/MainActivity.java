@@ -160,10 +160,12 @@ public class MainActivity extends AppCompatActivity {
     public static Calendar makeCalendar(EditText date, Context context) {
         Calendar myCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener duedate = (view1, year, monthOfYear, dayOfMonth) -> {
-            myCalendar.set(Calendar.YEAR, year);
+            //myCalendar.set(Calendar.YEAR, year);
             myCalendar.set(Calendar.MONTH, monthOfYear);
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            String myFormat = "MM/dd/yy";
+            //myCalendar.set(Calendar.MINUTE, minuteOfHour);
+          //  myCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+            String myFormat = "MM/dd";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
             date.setText(sdf.format(myCalendar.getTime()));
         };
