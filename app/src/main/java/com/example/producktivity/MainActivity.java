@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFabOpen = false;
     private ToDoViewModel toDoVM;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,21 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 Calendar myCalendar = MainActivity.makeCalendar(dueDate, MainActivity.this);
                 EditText reminder = findViewById(R.id.reminder);
                 Calendar reminderCalendar = MainActivity.makeCalendar(reminder, MainActivity.this);
-               /* final Calendar myCalendar = Calendar.getInstance();
-                EditText dueDate= findViewById(R.id.task_date);
-                DatePickerDialog.OnDateSetListener date = (view1, year, monthOfYear, dayOfMonth) -> {
-                    myCalendar.set(Calendar.YEAR, year);
-                    myCalendar.set(Calendar.MONTH, monthOfYear);
-                    myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    String myFormat = "MM/dd/yy"; //In which you need put here
-                    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-                    dueDate.setText(sdf.format(myCalendar.getTime()));
-                };
-
-                dueDate.setOnClickListener(v -> new DatePickerDialog(MainActivity.this, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show()); */
                 //done setting date
                 Button done = findViewById(R.id.done_button);
                 done.setOnClickListener(view12 -> {
@@ -146,8 +133,7 @@ public class MainActivity extends AppCompatActivity {
                         toDoVM.getAllTasks().observe(MainActivity.this, new Observer<List<Task>>(){
                             @Override
                             public void onChanged(@Nullable final List<Task> tasks){
-                                //Daniel: might want to update adapter if possible
-                                //bruh idk, somehow notify the adapter that things have changed
+
                             }
                         }
                         );
@@ -224,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void checkPermissions() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.PACKAGE_USAGE_STATS) != PackageManager.PERMISSION_GRANTED) {
             //if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS))
