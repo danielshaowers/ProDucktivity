@@ -34,8 +34,9 @@ public class UsageDataFragment extends Fragment {
         dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
         dataViewModel.context = getContext();
         System.out.println("creating a tracker");
-        allData = null;
-        dataViewModel.setAllData(allData); //DANIEL. CHANGE THIS ONCE WE ACTUALLY GET THE DATA
+        UsageDataHandler handler = new UsageDataHandler(this.getContext());
+        allData = handler.getStats();
+        dataViewModel.setAllData(allData);
         View root = inflater.inflate(R.layout.usage_data, container, false);
         //this line watches the data view model for any changes, adjusting accordingly
         dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageDataHandler.UsageTime>>() {
