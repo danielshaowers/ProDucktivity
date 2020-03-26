@@ -7,10 +7,10 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="405dp"
-        android:layout_height="53dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,13 +20,13 @@
         <TextView
             android:id="@+id/app_name"
             android:layout_width="206dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0" />
 
         <TextView
             android:id="@+id/usage_data"
             android:layout_width="201dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="TextView" />
 
     </LinearLayout>
