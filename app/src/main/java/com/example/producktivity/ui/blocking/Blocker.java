@@ -3,6 +3,7 @@ package com.example.producktivity.ui.blocking;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -50,6 +51,13 @@ public class Blocker {
         }
     }
 
+    public boolean showBlockScreen(){
+        Intent startBlock = new Intent("com.example.producktivity.ui.blocking.BlockActivity");
+        startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(startBlock);
+        return true;
+    }
+
     /*public String[] getForegroundPackageNameClassNameByUsageStats() {
         String packageNameByUsageStats = null;
         String classByUsageStats = null;
@@ -88,6 +96,15 @@ public class Blocker {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         return manager.getRunningAppProcesses();
     }*/
+
+    /*
+    public boolean showBlockScreen(){
+    Intent startBlock = new Intent(this, BlockActivity.class);
+    startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(startBlock);
+    return true;
+    }
+     */
 
 
 
