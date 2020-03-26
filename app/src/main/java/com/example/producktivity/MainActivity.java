@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFabOpen = false;
     private ToDoViewModel toDoVM;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = 29)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,17 +202,19 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("bro we are vibing");
     }*/
 
-    @RequiresApi(api = 21)
+    @RequiresApi(api = 29)
     public void checkPermissions() {
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-        if (appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+        if (appOps.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
             System.out.println("we do have permission");
-        }
+        } else
+            startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
     }
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
+        System.out.println("are we ok?");
         try {
             super.onActivityResult(requestCode, resultCode, data);
 

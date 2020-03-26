@@ -18,6 +18,7 @@ public class UsageDataHandler {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void getStats() {
+
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         System.out.println("handling");
         Map<String, UsageStats> usageStatsMap = manager.queryAndAggregateUsageStats(System.currentTimeMillis(), System.currentTimeMillis() - 1000000);
