@@ -115,8 +115,8 @@
                 android:id="@+id/description"
                 android:layout_width="220dp"
                 android:layout_height="244dp"
-                android:layout_marginEnd="3dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="3dp"
                 android:background="@drawable/card_item_background"
                 android:ems="10"
                 android:inputType="textPersonName"
@@ -141,8 +141,8 @@
             <RadioGroup
                 android:id="@+id/priority_group"
 
-                android:layout_width="81dp"
-                android:layout_height="62dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/card_item_background"
                 app:layout_constraintEnd_toEndOf="@+id/reminder"
@@ -152,35 +152,36 @@
                 <TextView
                     android:id="@+id/Priority"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="wrap_content"
+                    android:text="   Priority" />
 
-                    <RadioButton
-                        android:id="@+id/high_priority"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="High"
-                        android:textSize="8dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:layout_editor_absoluteX="0dp" />
+                <RadioButton
+                    android:id="@+id/high_priority"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="High"
+                    android:textSize="8dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="0dp" />
 
-                    <RadioButton
-                        android:id="@+id/medium_priority"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Medium"
-                        android:textSize="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/high_priority"
-                        tools:layout_editor_absoluteX="0dp" />
 
+                <RadioButton
+                    android:id="@+id/medium_priority"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Medium"
+                    android:textSize="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/high_priority"
+                    tools:layout_editor_absoluteX="0dp" />
 
                 <RadioButton
                     android:id="@+id/low_priority"
                     android:layout_width="match_parent"
                     android:layout_height="18dp"
-                    android:text="Low Priority"
-                    android:textSize="12sp" />
+                    android:text="Low"
+                    android:textSize="8sp" />
 
             </RadioGroup>
 

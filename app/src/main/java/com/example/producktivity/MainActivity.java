@@ -1,8 +1,11 @@
 package com.example.producktivity;
 
 
+import android.app.ActivityManager;
 import android.app.AppOpsManager;
 import android.app.DatePickerDialog;
+import android.app.usage.UsageStats;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -23,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -31,7 +35,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.producktivity.dbs.Priority;
 import com.example.producktivity.dbs.Task;
+import com.example.producktivity.ui.home.HomeViewModel;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
+import com.example.producktivity.ui.usage_data.DataViewModel;
+import com.example.producktivity.ui.usage_data.UsageDataHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;

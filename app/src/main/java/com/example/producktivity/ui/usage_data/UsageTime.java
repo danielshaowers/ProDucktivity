@@ -17,5 +17,10 @@ public class UsageTime implements Comparable<UsageTime>{
     }
 
     public String toString() {return appName + ",\t" + millisUsed;}
+    @Override
+    public boolean equals(Object o){
+        UsageTime obj = (UsageTime) o;
+        return appName.equals(obj.appName);
+    }
 
 }
