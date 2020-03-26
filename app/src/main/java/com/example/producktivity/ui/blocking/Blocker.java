@@ -13,16 +13,23 @@ public class Blocker {
         this.context = context;
     }
 
+    public void detect() {
+        while (true)
+            if (System.currentTimeMillis() % 2000 == 0)
+                appOnScreen();
+    }
+
+
     @TargetApi(21)      //TODO idk if this is ok
     public void appOnScreen() {
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         final long INTERVAL = 10000;
-        UsageEvents events = manager.queryEvents(System.currentTimeMillis(), System.currentTimeMillis() - 100);
+        UsageEvents events = manager.queryEvents(System.currentTimeMillis() - 2500, System.currentTimeMillis());
         System.out.println("testing");
         while (events.hasNextEvent()) {
             UsageEvents.Event event = new UsageEvents.Event();
             events.getNextEvent(event);
-            System.out.println(event);
+            System.out.println(event.getClassName());
         }
     }
 
