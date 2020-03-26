@@ -81,7 +81,8 @@
                 android:inputType="textMultiLine"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/todo_reminder" />
+                app:layout_constraintTop_toTopOf="@+id/todo_reminder"
+                android:layout_marginLeft="8dp" />
 
             <RadioGroup
                 android:id="@+id/todo_priority"
