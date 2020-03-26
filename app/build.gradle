@@ -39,4 +39,25 @@ dependencies {
 
     def work_version = "2.3.2"
     implementation "androidx.work:work-runtime:$work_version"   //for my app blocking
+
+    // calendar dependencies
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'pub.devrel:easypermissions:0.3.0'
+    implementation('com.google.api-client:google-api-client-android:1.23.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation('com.google.apis:google-api-services-calendar:v3-rev218-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+
+    implementation 'com.google.api-client:google-api-client:1.20.0'
+    implementation 'com.google.api-client:google-api-client-gson:1.20.0'
+
+   // implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+
+}
+
+configurations{
+    all*.exclude group: 'com.google.guava', module: 'listenablefuture'
 }
