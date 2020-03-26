@@ -1,5 +1,6 @@
 package com.example.producktivity.ui.blocking;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -51,11 +52,15 @@ public class BlockActivity extends AppCompatActivity {
        @Override
        public void onClick(View view){
            if (++duckClicks > 4){
+                   Intent startMain = new Intent("com.example.producktivity.MainActivity");
+                   startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                   startActivity(startMain);
 
            }
-
+           else
+               Snackbar.make(view, "Noooo don't do it!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
        }
-    }
     });
+    }
 
 }

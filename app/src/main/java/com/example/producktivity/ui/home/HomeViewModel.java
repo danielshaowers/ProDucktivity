@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
+    private MutableLiveData<Boolean> on;
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
@@ -16,4 +17,6 @@ public class HomeViewModel extends ViewModel {
     public LiveData<String> getText() {
         return mText;
     }
+    public LiveData<Boolean> getOn() {return on;}
+    public void setOn(boolean on) {this.on.setValue(on);}
 }

@@ -4,6 +4,7 @@ package com.example.producktivity;
 import android.app.ActivityManager;
 import android.app.AppOpsManager;
 import android.app.DatePickerDialog;
+import android.app.usage.UsageStats;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +35,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.producktivity.dbs.Priority;
 import com.example.producktivity.dbs.Task;
+import com.example.producktivity.ui.home.HomeViewModel;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
+import com.example.producktivity.ui.usage_data.DataViewModel;
+import com.example.producktivity.ui.usage_data.UsageDataHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -146,15 +150,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        ActivityManager mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> RunningTask = mActivityManager.getRunningAppProcesses();
-        // Get the info we need for comparison.
-        ComponentName componentInfo = RunningTask.get(0).importanceReasonComponent;
-        ViewModel 
-        // Check if it matches our package name.
-        if(componentInfo.getPackageName().equals(this.getPackageName()))
 
-        activityOnTop=ar.topActivity.getClassName();
+
+        // Check if it matches our package name.
+        /*if(componentInfo.getPackageName().equals(this.getPackageName()))
+        if (dataHandler.getUsage(new UsageStats()))
+        activityOnTop=ar.topActivity.getClassName(); */
 
 
     }

@@ -43,7 +43,7 @@ public class UsageDataHandler {
         return ai;
     }
 
-    private String appName(String packageName) {
+    public String appName(String packageName) {
         PackageManager pm = context.getPackageManager();
         ApplicationInfo ai;
         try {ai = pm.getApplicationInfo(packageName, 0);} catch (PackageManager.NameNotFoundException e) {ai = null;}
@@ -51,7 +51,7 @@ public class UsageDataHandler {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private UsageTime getUsage(UsageStats data) {
+    public UsageTime getUsage(UsageStats data) {
         return new UsageTime(appName(data.getPackageName()), data.getTotalTimeInForeground());
     }
 
