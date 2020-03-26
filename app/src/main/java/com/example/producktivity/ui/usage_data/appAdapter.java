@@ -61,7 +61,7 @@ public class appAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
 
-    void setData(List<UsageDataHandler.UsageTime> datas) {
+    public void setData(List<UsageDataHandler.UsageTime> datas) {
         data = datas;
         notifyDataSetChanged();
     }

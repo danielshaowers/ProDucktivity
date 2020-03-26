@@ -35,6 +35,7 @@ public class DataViewModel extends ViewModel {
     public LiveData<List<UsageDataHandler.UsageTime>> getAllData(){return data; }
     //I would like to sort the data
     public void setAllData(List<UsageDataHandler.UsageTime> allData){
+        sortData(allData);
         data.setValue(allData);
     }
     public void insert(String app, Long time){
