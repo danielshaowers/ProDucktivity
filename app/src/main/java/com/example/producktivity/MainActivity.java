@@ -149,13 +149,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-
-
-        // Check if it matches our package name.
-        /*if(componentInfo.getPackageName().equals(this.getPackageName()))
-        if (dataHandler.getUsage(new UsageStats()))
-        activityOnTop=ar.topActivity.getClassName(); */
     }
 
     private void clearInputs(){

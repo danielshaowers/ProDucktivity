@@ -36,8 +36,8 @@ public class BlockActivity extends AppCompatActivity {
 
         blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
         System.out.println("creating a blocker");
-        Blocker blocker = new Blocker(this);
-        blocker.detect();
+      //  Blocker blocker = new Blocker(this);
+      //  blocker.detect();
         final TextView textView = findViewById(R.id.title_block);
         ImageButton duck = findViewById(R.id.continueDuck);
         Button returnButt = findViewById(R.id.ReturnButton);

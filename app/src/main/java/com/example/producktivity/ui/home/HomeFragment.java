@@ -33,12 +33,12 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.block_apps, container, false);
         Switch sw = root.findViewById(R.id.activate_blocker);
         homeViewModel.setOn(sw.isChecked());
-        homeViewModel.getOn().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        /*homeViewModel.getOn().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean s) {
                 homeViewModel.setOn(s);
             }
-        });
+        });*/
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
