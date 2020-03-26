@@ -72,11 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkPermissions() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.PACKAGE_USAGE_STATS) != PackageManager.PERMISSION_GRANTED) {
+            //if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS))
 
-            //need to request the permissions
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS},
                     PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
-        }
+        } else
+            System.out.println("bro we are vibing");
     }
 
     @Override
