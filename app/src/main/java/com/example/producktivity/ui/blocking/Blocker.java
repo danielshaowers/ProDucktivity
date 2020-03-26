@@ -3,6 +3,9 @@ package com.example.producktivity.ui.blocking;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 public class Blocker {
 
@@ -12,6 +15,7 @@ public class Blocker {
         this.context = context;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void detect() {
         while (true)
             if (System.currentTimeMillis() % 2000 == 0)
@@ -19,6 +23,7 @@ public class Blocker {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void appOnScreen() {
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         final long INTERVAL = 10000;

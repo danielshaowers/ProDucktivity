@@ -5,10 +5,13 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class UsageDataHandler {
 
@@ -30,25 +33,21 @@ public class UsageDataHandler {
 
     public UsageDataHandler(Context context) {this.context = context;}
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void getStats() {
 
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         System.out.println("handling");
         Map<String, UsageStats> usageStatsMap = manager.queryAndAggregateUsageStats(System.currentTimeMillis() - 2628000000L, System.currentTimeMillis());
         System.out.println(usageStatsMap.size());
-        /*List<UsageTime> output = usageStatsMap.values().stream()
-                //.filter(v -> v.getTotalTimeInForeground() > 0 && (v.getPackageName().contains("producktivity") || v.getPackageName().contains("app")))
+        List<UsageTime> output = usageStatsMap.values().stream()
+                .filter(v -> v.getTotalTimeInForeground() > 0)
                 .map(v -> getUsage(v)).collect(Collectors.toList());
         for (UsageTime t : output)
-            System.out.println(t);*/
-
-        for (UsageStats stat : usageStatsMap.values()) {
-            System.out.println(packageName(stat.getPackageName()));
-            System.out.println(info(stat).toString());
-        }
-
+            System.out.println(t);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private ApplicationInfo info(UsageStats stats) {
         PackageManager pm = context.getPackageManager();
         ApplicationInfo ai;
@@ -63,6 +62,7 @@ public class UsageDataHandler {
         return ai == null ? "oh gosh oh darn" : pm.getApplicationLabel(ai).toString();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private UsageTime getUsage(UsageStats data) {
         return new UsageTime(packageName(data.getPackageName()), data.getTotalTimeInForeground());
     }
