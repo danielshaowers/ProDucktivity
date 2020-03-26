@@ -19,6 +19,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.R;
+import com.example.producktivity.ui.blocking.BlockActivity;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.util.List;
@@ -47,8 +48,9 @@ public class HomeFragment extends Fragment {
                     List<ActivityManager.RunningAppProcessInfo> RunningTask = mActivityManager.getRunningAppProcesses();
                     // Get the info we need for comparison.
                     ComponentName componentInfo = RunningTask.get(0).importanceReasonComponent;
-                    if (!componentInfo.getPackageName().equals(getActivity().getPackageName())) {
-                        Intent startBlock = new Intent("com.example.producktivity.ui.blocking.BlockActivity");
+                    if (componentInfo == null || !componentInfo.getPackageName().equals(getActivity().getPackageName())) {
+                        System.out.println("is this working");
+                        Intent startBlock = new Intent(HomeFragment.this.getActivity(), BlockActivity.class);
                         startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(startBlock);
                     }
