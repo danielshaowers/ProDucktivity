@@ -15,7 +15,6 @@ public class PriorityConverter {
         return null;
     }
 
-
     @TypeConverter
     public static String priorityToString(Priority p) {
         return p.name();
