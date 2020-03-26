@@ -28,8 +28,7 @@ public class BlockFragment extends Fragment {
 
         blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
         System.out.println("creating a blocker");
-        Blocker blocker = new Blocker(getContext());
-        blocker.detect();
+        BlockerService blocker = new BlockerService(getContext());
         View root = inflater.inflate(R.layout.block_apps, container, false);
         final TextView textView = root.findViewById(R.id.title_block);
         blockViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -38,6 +37,7 @@ public class BlockFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        blocker.detect();
         return root;
     }
 

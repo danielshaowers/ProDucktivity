@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //make this add a task in future
-                Snackbar.make(view, "Suck my duck", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Add a task!", Snackbar.LENGTH_LONG)
+                        .setAction("!Ksat a dda", null).show();
                 //once the FAB is clicked
             if (!isFabOpen){
                 isFabOpen = true;

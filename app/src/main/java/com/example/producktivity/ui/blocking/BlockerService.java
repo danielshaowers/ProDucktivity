@@ -1,19 +1,23 @@
 package com.example.producktivity.ui.blocking;
 
+import android.app.Service;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.IBinder;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-public class Blocker {
+public class BlockerService extends Service {
 
     Context context;
 
-    public Blocker(Context context) {
+    public BlockerService(Context context) {
         this.context = context;
     }
 
@@ -48,6 +52,12 @@ public class Blocker {
 
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     /*public String[] getForegroundPackageNameClassNameByUsageStats() {

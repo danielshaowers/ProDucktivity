@@ -79,14 +79,14 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         String output = "";
         long minutes = millis / 60000;
         if (minutes > 1440) {
-            output += (minutes / 1440) + " days, ";
+            output += (minutes / 1440) + "d ";
             minutes %= 1440;
         }
         if (minutes > 60) {
-            output += (minutes / 60) + " hours, ";
+            output += (minutes / 60) + "h ";
             minutes %= 60;
         }
-        return output + minutes + " minutes";
+        return output + minutes + "m";
     }
 
 
