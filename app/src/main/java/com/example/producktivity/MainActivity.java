@@ -156,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
         /*if(componentInfo.getPackageName().equals(this.getPackageName()))
         if (dataHandler.getUsage(new UsageStats()))
         activityOnTop=ar.topActivity.getClassName(); */
-
-
     }
 
     private void clearInputs(){
