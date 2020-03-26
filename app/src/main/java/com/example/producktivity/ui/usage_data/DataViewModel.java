@@ -1,6 +1,5 @@
 package com.example.producktivity.ui.usage_data;
 
-import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -14,8 +13,7 @@ import java.util.List;
 public class DataViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
-    private MutableLiveData<List<UsageDataHandler.UsageTime>> data = new MutableLiveData<>(); //app name and time spent
-    public Context context;     //TODO, risky
+    private MutableLiveData<List<UsageTime>> data = new MutableLiveData<>(); //app name and time spent
 
 
     public DataViewModel() {
@@ -26,21 +24,20 @@ public class DataViewModel extends ViewModel {
         return mText;
     }
     @RequiresApi(api = Build.VERSION_CODES.N) //sorts by length of use
-    public List<UsageDataHandler.UsageTime> sortData(List<UsageDataHandler.UsageTime> a){
+    public List<UsageTime> sortData(List<UsageTime> a){
        Collections.sort(a);
        return a;
     }
 
     //note that long is in milliseconds
-    public LiveData<List<UsageDataHandler.UsageTime>> getAllData(){return data; }
+    public LiveData<List<UsageTime>> getAllData(){return data; }
     //I would like to sort the data
-    public void setAllData(List<UsageDataHandler.UsageTime> allData){
+    public void setAllData(List<UsageTime> allData){
         sortData(allData);
         data.setValue(allData);
     }
     public void insert(String app, Long time){
-        UsageDataHandler h = new UsageDataHandler(context);
-        data.getValue().add(h.new UsageTime(app, time));
+        data.getValue().add(new UsageTime(app, time));
     }
 
 }
