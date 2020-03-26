@@ -94,8 +94,8 @@
 
             <EditText
                 android:id="@+id/reminder"
-                android:layout_width="80dp"
-                android:layout_height="27dp"
+                android:layout_width="81dp"
+                android:layout_height="38dp"
                 android:ems="10"
                 android:focusable="false"
                 android:hint="reminder"
@@ -142,20 +142,23 @@
                 <RadioButton
                     android:id="@+id/high_priority"
                     android:layout_width="match_parent"
-                    android:layout_height="15dp"
-                    android:text="High Priority" />
+                    android:layout_height="18dp"
+                    android:text="High Priority"
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/medium_priority"
                     android:layout_width="match_parent"
                     android:layout_height="18dp"
-                    android:text="Medium Priority" />
+                    android:text="Medium Priority"
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/low_priority"
                     android:layout_width="match_parent"
                     android:layout_height="18dp"
-                    android:text="Low Priority" />
+                    android:text="Low Priority"
+                    android:textSize="12sp" />
             </RadioGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
