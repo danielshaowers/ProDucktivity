@@ -26,7 +26,7 @@ public class UsageDataHandler {
 
         @Override
         public int compareTo(UsageTime o){
-            return Long.compare(millisUsed, o.millisUsed);
+            return -Long.compare(millisUsed, o.millisUsed);
         }
 
         public String toString() {return appName + ",\t" + millisUsed;}
