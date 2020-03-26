@@ -48,30 +48,25 @@ public class TaskFragment extends Fragment {
     //public View onCreateView()
    @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-       //data.add(new Task());
        super.onCreate(savedInstanceState);
         //get access to the TaskViewModel class and its infinite wisdom/data
-       // final TaskViewModel viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
        viewModel = new ViewModelProvider(this).get(ToDoViewModel.class);
-       //create the overall view specified by the to_do xml file
+       final InputAdapter mAdapter = new InputAdapter(this.getContext());
+       //create the overall view specified by the to_do xml file.
+       //the layout inflater converts a layout xml file into the Views that constitute it. Lets us interact with the xml contents
        View root = inflater.inflate(R.layout.to_do, container, false);
         //find the view we need to attach data from TaskViewModel to
        final EditText title = root.findViewById(R.id.todo_title);
-       recyclerView = root.findViewById(R.id.todo_recyclerview); //did not declare it final
-       final InputAdapter mAdapter = new InputAdapter(this.getContext());
+       recyclerView = root.findViewById(R.id.todo_recyclerview);
        //we set the task list to observe+reflect any changes in text of TaskViewModel
-       viewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
-           @Override
-           public void onChanged(@Nullable List<Task> s) {
-                   mAdapter.setTasks(s);
-                   mAdapter.notifyDataSetChanged();
-           }
+       viewModel.getAllTasks().observe(getViewLifecycleOwner(), s -> {
+               mAdapter.setTasks(s);
+               mAdapter.notifyDataSetChanged();
        });
         //based on https://stackoverflow.com/questions/44489235/update-recyclerview-with-android-livedata
 
        //now if tasks ever changes, we notify the adapter that the dataset has changed, calling setDataSet
        //on the new list
-       viewModel.getAllTasks().observe(getViewLifecycleOwner(), mAdapter::setTasks);
        recyclerView.setAdapter(mAdapter);
        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext())); //not sure about this argument
        recyclerView.setItemAnimator(new DefaultItemAnimator());

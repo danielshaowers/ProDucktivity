@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     if (title.getText() != null){
                         task.setTitle(title.getText().toString());
                         RadioGroup priorities = findViewById(R.id.priority_group);
+
                         RadioButton priority = findViewById(priorities.getCheckedRadioButtonId());
                         if (priority != null) {
                             if (priority.getId() == R.id.high_priority)
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                             if (reminderCalendar.getTime() != null)
                                 task.setReminderTime(reminderCalendar.getTime());
                         }
+                        else
+                            task.setPriority(Priority.LOW);
                         //also need to set reminder time. would prefer if it was an enum instead of a date
                         task.setComplete(task.getTitle() != null && task.getDesc() != null && task.getPriority() != null &&
                             task.getDueDate() != null); //task.getReminderTime() != null
@@ -130,7 +133,11 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 isFabOpen = false;
-                findViewById(R.id.task_card).setVisibility(View.GONE);
+                CardView card= findViewById(R.id.task_card);
+                card.setVisibility(View.GONE);
+                if (((EditText)findViewById(R.id.task_title)).toString() != null){
+                    
+                }
             }
             }
         });

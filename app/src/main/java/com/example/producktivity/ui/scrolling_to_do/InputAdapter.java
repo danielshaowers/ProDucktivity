@@ -60,7 +60,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
    private LayoutInflater mInflater;
    private List<Task> tasks; //cached copy of words
-
+    //obtains the layoutinflater from the given context. layoutinflater converts the xml file into its corresponding view
     InputAdapter(Context context) { mInflater = LayoutInflater.from(context);}
 
     @Override @NonNull
