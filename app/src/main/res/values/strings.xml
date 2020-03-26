@@ -13,4 +13,29 @@
     <string name="menu_tools">To Do</string>
     <string name="menu_share">Calendar</string>
     <string name="menu_send">Your Profile</string>
+
+    <string name="current_date">March, 2020</string>
+    <string name="add_event">ADD CALENDAR EVENT</string>
+    <string name="sun">SUN</string>
+    <string name="mon">MON</string>
+    <string name="tue">TUE</string>
+    <string name="wed">WED</string>
+    <string name="thu">THU</string>
+    <string name="fri">FRI</string>
+    <string name="sat">SAT</string>
+    <string name="last_date">30</string>
+    <string name="current_month_placeholder">January 1970</string>
+    <string name="previous_month_placeholder">&lt;&lt;</string>
+    <string name="next_month_placeholder">&gt;&gt;</string>
+    <string-array name="days_array">
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>T</item>
+        <item>F</item>
+        <item>S</item>
+        <item>S</item>
+    </string-array>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
