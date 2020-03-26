@@ -9,27 +9,26 @@
     <LinearLayout
         android:layout_width="405dp"
         android:layout_height="53dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/app name"
+            android:id="@+id/app_name"
             android:layout_width="206dp"
             android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:text="TextView" />
+            android:layout_weight="0" />
 
         <TextView
-            android:id="@+id/usage time"
-            android:layout_width="fill_parent"
+            android:id="@+id/usage_data"
+            android:layout_width="201dp"
             android:layout_height="match_parent"
             android:text="TextView" />
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

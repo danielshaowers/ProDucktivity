@@ -1,7 +1,7 @@
 package com.example.producktivity.ui.usage_data;
 
+import android.content.Context;
 import android.os.Build;
-import android.util.Pair;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
@@ -9,14 +9,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DataViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
     private MutableLiveData<List<UsageDataHandler.UsageTime>> data = new MutableLiveData<>(); //app name and time spent
+    public Context context;     //TODO, risky
 
 
     public DataViewModel() {
@@ -39,7 +38,7 @@ public class DataViewModel extends ViewModel {
         data.setValue(allData);
     }
     public void insert(String app, Long time){
-        UsageDataHandler h = new UsageDataHandler();
+        UsageDataHandler h = new UsageDataHandler(context);
         data.getValue().add(h.new UsageTime(app, time));
     }
 

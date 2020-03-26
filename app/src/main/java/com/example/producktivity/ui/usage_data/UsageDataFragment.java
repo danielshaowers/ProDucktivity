@@ -12,6 +12,9 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
 
@@ -29,9 +32,8 @@ public class UsageDataFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
+        dataViewModel.context = getContext();
         System.out.println("creating a tracker");
-        UsageDataHandler handler = new UsageDataHandler(getContext());
-        handler.getStats(); //obtains all the values for us.
         allData = null;
         dataViewModel.setAllData(allData); //DANIEL. CHANGE THIS ONCE WE ACTUALLY GET THE DATA
         View root = inflater.inflate(R.layout.usage_data, container, false);
@@ -41,11 +43,10 @@ public class UsageDataFragment extends Fragment {
             public void onChanged(@Nullable List<UsageDataHandler.UsageTime> s) {
             }
         });
-
-
-
-
-
+        RecyclerView recyclerView = root.findViewById(R.id.app_recyclerView);
+        final appAdapter adapter = new appAdapter(this.getContext());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return root;
     }
 
