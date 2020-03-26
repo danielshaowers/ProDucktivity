@@ -49,6 +49,8 @@ public class UsageDataHandler {
         List<UsageTime> output = usageStatsMap.values().stream()
                 .filter(v -> v.getTotalTimeInForeground() > 0)
                 .map(v -> getUsage(v)).collect(Collectors.toList());
+        for (UsageTime a:output)
+            System.out.println(a.toString());
         return output;
     }
 
