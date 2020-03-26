@@ -95,6 +95,7 @@
                 android:layout_height="27dp"
                 android:ems="10"
                 android:hint="reminder"
+                android:focusable="false"
                 android:inputType="time"
                 app:layout_constraintEnd_toEndOf="@+id/task_date"
                 app:layout_constraintStart_toStartOf="@+id/task_date"

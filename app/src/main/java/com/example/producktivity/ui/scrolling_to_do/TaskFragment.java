@@ -43,16 +43,16 @@ public class TaskFragment extends Fragment {
     private InputAdapter mAdapter;
     private ArrayList<Task> data = new ArrayList<>();
     public static final int GET_FROM_GALLERY = 1;
+    private ToDoViewModel viewModel;
 
     //public View onCreateView()
    @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
        //data.add(new Task());
-
        super.onCreate(savedInstanceState);
         //get access to the TaskViewModel class and its infinite wisdom/data
        // final TaskViewModel viewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
-       final ToDoViewModel viewModel = new ViewModelProvider(this).get(ToDoViewModel.class);
+       viewModel = new ViewModelProvider(this).get(ToDoViewModel.class);
        //create the overall view specified by the to_do xml file
        View root = inflater.inflate(R.layout.to_do, container, false);
         //find the view we need to attach data from TaskViewModel to

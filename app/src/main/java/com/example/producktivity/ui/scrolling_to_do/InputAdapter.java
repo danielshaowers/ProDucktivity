@@ -75,7 +75,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 
-
+    //TaskViewHolder is the current view of our cardview
     public void onBindViewHolder( TaskViewHolder holder, int position){
         if (tasks != null){
             Task current = tasks.get(position);
