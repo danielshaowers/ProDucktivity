@@ -56,7 +56,6 @@ public class TaskFragment extends Fragment {
        //the layout inflater converts a layout xml file into the Views that constitute it. Lets us interact with the xml contents
        View root = inflater.inflate(R.layout.to_do, container, false);
         //find the view we need to attach data from TaskViewModel to
-       final EditText title = root.findViewById(R.id.todo_title);
        recyclerView = root.findViewById(R.id.todo_recyclerview);
        //we set the task list to observe+reflect any changes in text of TaskViewModel
        viewModel.getAllTasks().observe(getViewLifecycleOwner(), s -> {

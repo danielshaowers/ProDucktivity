@@ -65,7 +65,7 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override @NonNull
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        View itemView = mInflater.inflate(R.layout.to_do,  parent, false);
+        View itemView = mInflater.inflate(R.layout.single_task_rcyclr,  parent, false);
         return new TaskViewHolder(itemView);
     }
 
@@ -80,7 +80,8 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (tasks != null){
             Task current = tasks.get(position);
             holder.title.setText(current.getTitle());
-            holder.date.setText(current.getDueDate().toString()); //not sure if this one is correct
+            if (current.getDueDate() != null)
+                holder.date.setText(current.getDueDate().toString()); //not sure if this one is correct
             holder.desc.setText(current.getDesc());
             holder.reminder.setText(current.getReminderTime().toString());
             MainActivity.makeCalendar(holder.reminder, this.mContext);
