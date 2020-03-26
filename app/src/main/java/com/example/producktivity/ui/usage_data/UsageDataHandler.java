@@ -21,7 +21,7 @@ public class UsageDataHandler {
 
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         System.out.println("handling");
-        Map<String, UsageStats> usageStatsMap = manager.queryAndAggregateUsageStats(System.currentTimeMillis(), System.currentTimeMillis() - 1000000);
+        Map<String, UsageStats> usageStatsMap = manager.queryAndAggregateUsageStats(System.currentTimeMillis() - 2628000000L, System.currentTimeMillis());
         System.out.println(usageStatsMap.size());
         for (Map.Entry<String, UsageStats> e : usageStatsMap.entrySet()) {
             System.out.println(e);
