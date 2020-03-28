@@ -23,9 +23,9 @@ public class BlockerService {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void detect() {
-        while (true)
-            if (System.currentTimeMillis() % 2000 == 0)
-                appOnScreen();
+       // while (true)
+           // if (System.currentTimeMillis() % 2000 == 0)
+              //  appOnScreen();
     }
 
 

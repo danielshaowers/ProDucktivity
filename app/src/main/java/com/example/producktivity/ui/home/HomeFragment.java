@@ -1,9 +1,15 @@
 package com.example.producktivity.ui.home;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -13,6 +19,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.R;
+import com.example.producktivity.ui.blocking.BlockActivity;
+import com.example.producktivity.ui.usage_data.UsageTime;
+
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -20,10 +30,36 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.Title);
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        View root = inflater.inflate(R.layout.block_apps, container, false);
+        Switch sw = root.findViewById(R.id.activate_blocker);
+        homeViewModel.setOn(sw.isChecked());
+        /*homeViewModel.getOn().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean s) {
+                homeViewModel.setOn(s);
+            }
+        });*/
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                homeViewModel.setOn(true); //not how it's supposed to be done, but whtv
+                if (isChecked) {
+                    //send to blockeractivity
+                    ActivityManager mActivityManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+                    List<ActivityManager.RunningAppProcessInfo> RunningTask = mActivityManager.getRunningAppProcesses();
+                    // Get the info we need for comparison.
+                    ComponentName componentInfo = RunningTask.get(0).importanceReasonComponent;
+                    if (componentInfo == null || !componentInfo.getPackageName().equals(getActivity().getPackageName())) {
+                        Intent startBlock = new Intent(HomeFragment.this.getActivity(), BlockActivity.class);
+                        startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(startBlock);
+                    }
+                }
+            }}); return root;}}
+        //} else {
+
+        //}
+    /*}
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -32,4 +68,4 @@ public class HomeFragment extends Fragment {
         });
         return root;
     }
-}
+}*/
