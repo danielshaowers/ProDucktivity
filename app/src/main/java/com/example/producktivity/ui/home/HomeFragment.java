@@ -50,7 +50,6 @@ public class HomeFragment extends Fragment {
                     // Get the info we need for comparison.
                     ComponentName componentInfo = RunningTask.get(0).importanceReasonComponent;
                     if (componentInfo == null || !componentInfo.getPackageName().equals(getActivity().getPackageName())) {
-                        System.out.println("is this working");
                         Intent startBlock = new Intent(HomeFragment.this.getActivity(), BlockActivity.class);
                         startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(startBlock);
