@@ -188,12 +188,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkPermissions(String permission, String setting) {
-        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-        if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
+    //    AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+    //    if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
             System.out.println("we do have permission");
         }
-        else startActivityForResult(new Intent(setting), 69);
-    }
+  //      else startActivityForResult(new Intent(setting), 69);
+  //  }
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
