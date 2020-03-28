@@ -94,17 +94,17 @@ public class CalendarFragment extends Fragment {
     }
 
     //to add calendar event for specific day chosen
-    public void AddCalendarEvent(View view) {
-        Calendar calendarEvent = Calendar.getInstance();
-        Intent i = new Intent(Intent.ACTION_EDIT);
-        i.setType("vnd.android.cursor.item/event");
-        i.putExtra("beginTime", calendarEvent.getTimeInMillis());
-        i.putExtra("allDay", true);
-        i.putExtra("rule", "FREQ=YEARLY");
-        i.putExtra("endTime", calendarEvent.getTimeInMillis() + 60 * 60 * 1000);
-        i.putExtra("title", "Calendar Event");
-        startActivity(i);
-    }
+    //public void AddCalendarEvent(View view) {
+    //    Calendar calendarEvent = Calendar.getInstance();
+    //  Intent i = new Intent(Intent.ACTION_EDIT);
+        //i.setType("vnd.android.cursor.item/event");
+    //    i.putExtra("beginTime", calendarEvent.getTimeInMillis());
+    //    i.putExtra("allDay", true);
+    //    i.putExtra("rule", "FREQ=YEARLY");
+    //    i.putExtra("endTime", calendarEvent.getTimeInMillis() + 60 * 60 * 1000);
+    //    i.putExtra("title", "Calendar Event");
+    //    startActivity(i);
+    //}
 
     //to get to previous month, uses data from current month to update previous month
     protected final void onPreviousMonth() {

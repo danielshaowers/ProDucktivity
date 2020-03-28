@@ -56,9 +56,10 @@
         android:layout_height="305dp"
         android:fadingEdge="none"
         android:outlineProvider="background"
-        android:visibility="visible"
+        android:visibility="gone"
         app:cardBackgroundColor="#DAFF9800"
         app:cardCornerRadius="10dp"
+        app:cardElevation="3dp"
         app:contentPadding="3dp"
         app:layout_constraintBottom_toTopOf="@+id/fab"
         app:layout_constraintEnd_toEndOf="@+id/fab">
@@ -75,16 +76,18 @@
                 android:text="Done"
                 app:layout_constraintBottom_toBottomOf="@+id/description"
                 app:layout_constraintEnd_toEndOf="@+id/priority_group"
-                app:layout_constraintStart_toEndOf="@+id/description" />
+                app:layout_constraintStart_toStartOf="@+id/priority_group" />
 
             <EditText
                 android:id="@+id/task_date"
                 android:layout_width="81dp"
                 android:layout_height="38dp"
                 android:layout_marginBottom="2dp"
+                android:background="@drawable/card_item_background"
                 android:ems="10"
                 android:focusable="false"
                 android:hint="deadline"
+
                 android:inputType="date"
 
                 app:layout_constraintBottom_toBottomOf="@+id/task_title"
@@ -94,13 +97,17 @@
 
             <EditText
                 android:id="@+id/reminder"
-                android:layout_width="80dp"
-                android:layout_height="27dp"
+
+                android:layout_width="81dp"
+                android:layout_height="38dp"
+                android:background="@drawable/card_item_background"
                 android:ems="10"
                 android:focusable="false"
-                android:hint="reminder"
+                android:hint="      reminder"
                 android:inputType="time"
+                android:textSize="12dp"
                 app:layout_constraintEnd_toEndOf="@+id/task_date"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/task_date"
                 app:layout_constraintTop_toTopOf="@+id/description" />
 
@@ -109,8 +116,8 @@
                 android:layout_width="220dp"
                 android:layout_height="244dp"
                 android:layout_marginEnd="3dp"
-                android:layout_marginRight="3dp"
                 android:layout_marginTop="5dp"
+                android:background="@drawable/card_item_background"
                 android:ems="10"
                 android:inputType="textPersonName"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -124,6 +131,7 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/card_item_background"
                 android:ems="10"
                 android:hint="Enter title"
                 android:inputType="textPersonName"
@@ -132,30 +140,48 @@
 
             <RadioGroup
                 android:id="@+id/priority_group"
+
                 android:layout_width="81dp"
-                android:layout_height="82dp"
+                android:layout_height="62dp"
                 android:layout_marginTop="5dp"
+                android:background="@drawable/card_item_background"
                 app:layout_constraintEnd_toEndOf="@+id/reminder"
-                app:layout_constraintStart_toEndOf="@+id/description"
+                app:layout_constraintStart_toStartOf="@+id/reminder"
                 app:layout_constraintTop_toBottomOf="@+id/reminder">
 
-                <RadioButton
-                    android:id="@+id/high_priority"
+                <TextView
+                    android:id="@+id/Priority"
                     android:layout_width="match_parent"
-                    android:layout_height="15dp"
-                    android:text="High Priority" />
+                    android:layout_height="match_parent"/>
 
-                <RadioButton
-                    android:id="@+id/medium_priority"
-                    android:layout_width="match_parent"
-                    android:layout_height="18dp"
-                    android:text="Medium Priority" />
+                    <RadioButton
+                        android:id="@+id/high_priority"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="High"
+                        android:textSize="8dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="0dp" />
+
+                    <RadioButton
+                        android:id="@+id/medium_priority"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Medium"
+                        android:textSize="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/high_priority"
+                        tools:layout_editor_absoluteX="0dp" />
+
 
                 <RadioButton
                     android:id="@+id/low_priority"
                     android:layout_width="match_parent"
                     android:layout_height="18dp"
-                    android:text="Low Priority" />
+                    android:text="Low Priority"
+                    android:textSize="12sp" />
+
             </RadioGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

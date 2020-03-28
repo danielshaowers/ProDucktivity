@@ -13,7 +13,7 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-public class BlockerService extends Service {
+public class BlockerService {
 
     Context context;
 
@@ -54,10 +54,12 @@ public class BlockerService extends Service {
         }
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+
+    public void showBlockScreen(){
+        Intent startBlock = new Intent("com.example.producktivity.ui.blocking.BlockActivity");
+        startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(startBlock);
+
     }
 
     /*public String[] getForegroundPackageNameClassNameByUsageStats() {
@@ -98,6 +100,15 @@ public class BlockerService extends Service {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         return manager.getRunningAppProcesses();
     }*/
+
+    /*
+    public boolean showBlockScreen(){
+    Intent startBlock = new Intent(this, BlockActivity.class);
+    startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(startBlock);
+    return true;
+    }
+     */
 
 
 

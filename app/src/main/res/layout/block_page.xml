@@ -6,16 +6,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/ReturnButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#2196F3"
+            android:textAlignment="center"
+            android:textColor="#FF9800"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView4"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@mipmap/duck"
-        android:foreground="@mipmap/duck"
-        android:text="Usage blocked. Tap anywhere to return to the safety of The Pond"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="APP BLOCKED. TAP DUCK 5 TIMES TO CONTINUE. TAP ANYWHERE ELSE TO GO BACK"
+        android:textAlignment="center"
         android:textColor="#FF9800"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/continueDuck"
+        android:layout_width="247dp"
+        android:layout_height="454dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:foreground="@mipmap/duck"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
