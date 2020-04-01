@@ -36,10 +36,6 @@ public class Task implements Serializable {
     @ColumnInfo(name = "complete")
     private boolean complete;
 
-    public Task() {
-    }
-
-
     public boolean isComplete() {return complete; }
 
     public void setComplete(boolean complete) {
