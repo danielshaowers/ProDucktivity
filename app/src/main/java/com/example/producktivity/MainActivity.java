@@ -55,10 +55,80 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isFabOpen = false;
     private ToDoViewModel toDoVM;
+    private CardView taskCard;
+    private EditText dueDate;
+    private EditText reminder;
+    private Button done;
+    private Task task;
+    private FloatingActionButton fab;
+
+    public AppBarConfiguration getmAppBarConfiguration() {
+        return mAppBarConfiguration;
+    }
+
+    public void setmAppBarConfiguration(AppBarConfiguration mAppBarConfiguration) {
+        this.mAppBarConfiguration = mAppBarConfiguration;
+    }
+
+    public boolean isFabOpen() {
+        return isFabOpen;
+    }
+
+    public void setFabOpen(boolean fabOpen) {
+        isFabOpen = fabOpen;
+    }
+
+    public ToDoViewModel getToDoVM() {
+        return toDoVM;
+    }
+
+    public void setToDoVM(ToDoViewModel toDoVM) {
+        this.toDoVM = toDoVM;
+    }
+
+    public CardView getTaskCard() {
+        return taskCard;
+    }
+
+    public void setTaskCard(CardView taskCard) {
+        this.taskCard = taskCard;
+    }
+
+    public EditText getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(EditText dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public EditText getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(EditText reminder) {
+        this.reminder = reminder;
+    }
+
+    public Button getDone() {
+        return done;
+    }
+
+    public void setDone(Button done) {
+        this.done = done;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_APP_USAGE_SETTINGS);
         checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
@@ -74,11 +144,11 @@ public class MainActivity extends AppCompatActivity {
                 //once the FAB is clicked
             if (!isFabOpen){
                 isFabOpen = true;
-                CardView taskCard = findViewById(R.id.task_card);
+                taskCard = findViewById(R.id.task_card);
                 taskCard.setVisibility(View.VISIBLE);
-                EditText dueDate = findViewById(R.id.task_date);
+                dueDate = findViewById(R.id.task_date);
                 Calendar myCalendar = MainActivity.makeCalendar(dueDate, MainActivity.this);
-                EditText reminder = findViewById(R.id.reminder);
+                reminder = findViewById(R.id.reminder);
                 Calendar reminderCalendar = MainActivity.makeCalendar(reminder, MainActivity.this);
 
                 //done setting date
