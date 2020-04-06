@@ -1,11 +1,14 @@
 package com.example.producktivity.ui.send;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.TempBlackListEntry;
+import com.example.producktivity.ui.usage_data.UsageDataHandler;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.util.ArrayList;
@@ -17,6 +20,8 @@ public class BlockSelectViewModel extends ViewModel {
     private MutableLiveData<List<TempBlackListEntry>> list;
     public BlockSelectViewModel() {
         list = new MutableLiveData<>();
+        //set the stats from the database.
+        //right now i'm initializing the values in Fragment every time (slow).
 
       /*  save = itemView.findViewById(R.id.save_select_button);
         appSelect = itemView.findViewById(R.id.app_select_button);

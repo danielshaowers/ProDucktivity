@@ -58,6 +58,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     @Override
                     public void onClick(View v) {
                         card.setVisibility(View.VISIBLE);
+                        appSelect.setVisibility(View.INVISIBLE);
                     }
                 });
             }
@@ -65,7 +66,6 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
         private final LayoutInflater mInflater;
-        private List<UsageTime> data; // Cached copy of words Daniel: should change later to include all apps
         private List<TempBlackListEntry> limits;
         SelectAdapter(Context context) {
             mInflater = LayoutInflater.from(context);
@@ -76,33 +76,38 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = mInflater.inflate(R.layout.single_usage_rcyclr, parent, false);
+            View itemView = mInflater.inflate(R.layout.single_select_rcyclr, parent, false);
             return new selectViewHolder(itemView);
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            onBindViewHolder((selectViewHolder) holder, position); //bruh idk why mine doesn't work
+            onBindViewHolder((selectViewHolder) holder, position);
         }
 
 
         public void onBindViewHolder(selectViewHolder holder, int position) {
-            if (data != null) {
-                UsageTime current = data.get(position);
-                holder.appSelect.setText(current.appName);
+            if (limits != null) {
+                TempBlackListEntry current = limits.get(position);
+                holder.appSelect.setText(current.getAppName());
+                holder.weekLimit.setText(longToString(current.getWeekLimit()));
+                holder.dayLimit.setText(longToString(current.getDayLimit()));
                 holder.save.setOnClickListener(new View.OnClickListener(){
-                    public void onClick(View v){
+                    public void onClick(View v){ //when done is clicked, hide and save the values
                         holder.card.setVisibility(View.INVISIBLE);
-                        TempBlackListEntry input = new TempBlackListEntry();
-                        if (holder.appSelect.getText() != null)
-                            input.setAppName(holder.appSelect.getText().toString());
-                        if (holder.dayLimit.getText() != null)
-                            input.setDayLimit(TempBlackListEntry.stringToLong(
-                                holder.dayLimit.getText().toString()));
-                        if (holder.weekLimit.getText() != null)
-                            input.setWeekLimit(TempBlackListEntry.
-                                stringToLong(holder.weekLimit.getText().toString()));
-                        limits.add(position, input);
+                        //if (holder.appSelect.getText().toString() != null) not necessary
+                           // input.setAppName(holder.appSelect.getText().toString());
+                        if (holder.dayLimit.getText().toString().length() > 0) {
+                            long length = TempBlackListEntry.stringToLong(holder.dayLimit.getText().toString());
+                            current.setDayLimit(length);
+                            holder.dayLimit.setText(longToString(length));
+                        }
+                        if (holder.weekLimit.getText().toString().length() > 0) {
+                            long length = (TempBlackListEntry.stringToLong(holder.weekLimit.getText().toString()));
+                            current.setWeekLimit(length);
+                            holder.weekLimit.setText(longToString(length));
+                        }
+                        limits.set(position, current);
                         notifyItemChanged(position); //this is useful if we want to display the limits
                     }
                 });;
@@ -110,31 +115,22 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 // Covers the case of data not being ready yet.
                 holder.appSelect.setText("No apps found");
             }
-
         }
 
-
-        public void setLimit(List<TempBlackListEntry> a) {
-            limits = a;
-        }
-
-        public void setData(List<UsageTime> datas) {
-            data = datas;
-            notifyDataSetChanged();
-        }
 
         // getItemCount() is called many times, and when it is first called,
         // mWords has not been updated (means initially, it's null, and we can't return null).
         @Override
         public int getItemCount() {
-            if (data != null)
-                return data.size();
+            if (limits != null)
+                return limits.size();
             return 0;
         }
 
-        private String longToString(long millis) {
-            String output = "";
-            long minutes = millis / 60000;
+    private String longToString(long millis) {
+        String output = "";
+        long minutes = millis / 60000;
+
             if (minutes > 1440) {
                 output += (minutes / 1440) + "d ";
                 minutes %= 1440;
