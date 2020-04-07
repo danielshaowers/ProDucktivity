@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -35,13 +36,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -59,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_APP_USAGE_SETTINGS);
-   //     checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+        checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //make this add a task in future
-                Snackbar.make(view, "Suck my duck", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Create a task", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 //once the FAB is clicked
             if (!isFabOpen){
@@ -167,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             myCalendar.set(Calendar.MONTH, monthOfYear);
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             //myCalendar.set(Calendar.MINUTE, minuteOfHour);
-            //  myCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+          //  myCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
             String myFormat = "MM/dd";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
             date.setText(sdf.format(myCalendar.getTime()));
@@ -186,10 +180,57 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void checkPermissions(String permission, String setting) {
+        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+        if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED)
+            System.out.println("we do have permission");
+        else startActivityForResult(new Intent(setting), 69);
+    }
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    /*@RequiresApi(api = Build.VERSION_CODES.M)
+    public void checkPermissions() {
+        if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.PACKAGE_USAGE_STATS) != PackageManager.PERMISSION_GRANTED) {
+            //if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS))
+            System.out.println("we require permission");
+            //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS}, PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
+            startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
+        } else
+            System.out.println("bro we are vibing");
+    }*/
+
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent data) {
+        System.out.println("are we ok?");
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == 69  && resultCode  == RESULT_OK) {
+                System.out.println("we gucci");
+            }
+        } catch (Exception ex) {
+            Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("congrats, we have permission");
+                } else
+                    System.out.println("ok, now everything fails");
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }*/
 }

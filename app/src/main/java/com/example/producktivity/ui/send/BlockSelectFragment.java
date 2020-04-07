@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.dbs.TempBlackListEntry;
 import com.example.producktivity.ui.usage_data.AppAdapter;
 import com.example.producktivity.ui.usage_data.DataViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;

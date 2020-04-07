@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.dbs.TempBlackListEntry;
 import com.example.producktivity.ui.usage_data.AppAdapter;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
@@ -100,12 +99,12 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         //if (holder.appSelect.getText().toString() != null) not necessary
                            // input.setAppName(holder.appSelect.getText().toString());
                         if (holder.dayLimit.getText().toString().length() > 0) {
-                            long length = TempBlackListEntry.stringToLong(holder.dayLimit.getText().toString());
+                            long length = BlacklistEntry.stringToLong(holder.dayLimit.getText().toString());
                             current.setDayLimit(length);
                             holder.dayLimit.setText(longToString(length));
                         }
                         if (holder.weekLimit.getText().toString().length() > 0) {
-                            long length = (TempBlackListEntry.stringToLong(holder.weekLimit.getText().toString()));
+                            long length = (BlacklistEntry.stringToLong(holder.weekLimit.getText().toString()));
                             current.setWeekLimit(length);
                             holder.weekLimit.setText(longToString(length));
                         }
