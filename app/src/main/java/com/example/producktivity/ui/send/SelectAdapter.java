@@ -96,6 +96,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.save.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){ //when done is clicked, hide and save the values
                         holder.card.setVisibility(View.INVISIBLE);
+                        holder.appSelect.setVisibility(View.VISIBLE);
                         //if (holder.appSelect.getText().toString() != null) not necessary
                            // input.setAppName(holder.appSelect.getText().toString());
                         if (holder.dayLimit.getText().toString().length() > 0) {
