@@ -107,11 +107,11 @@ public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             //holder.priority = current.getPriority(); not sure how to set the value for a radio button
         Priority p = current.getPriority();
         if (p == Priority.HIGH)
-            holder.high.toggle();
+            holder.high.setChecked(true);
         else if (p == Priority.MED)
-            holder.medium.toggle();
+            holder.medium.setChecked(false);
         else
-            holder.low.toggle();
+            holder.low.setChecked(false);
         int finalPosition = position;
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override

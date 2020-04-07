@@ -30,6 +30,7 @@ public class BlacklistEntry implements Serializable {
     @ColumnInfo(name = "week_limit")
     private long weekLimit;
 
+
     @ColumnInfo(name = "unrestricted")
     private boolean unrestricted;
 
@@ -73,11 +74,13 @@ public class BlacklistEntry implements Serializable {
         long hours = 0;
         long minutes = 0;
         int i = 0;
-        for (; i < s.length() && s.charAt(i) == ':'; i++); //finds the colon
-        if (i<s.length() && s.charAt(i) == ':'){
+        for (; i < s.length() && s.charAt(i) <= '9' && s.charAt(i) >= '0'; i++); //finds the colon
+        if (i<s.length() && s.charAt(i) <= '9' && s.charAt(i) >= '0'){
             hours = Long.parseLong(s.substring(0, i));
             minutes = Long.parseLong(s.substring(i+1));
         }
+        else
+            hours = Long.parseLong(s);
         return minutes * 60 * 1000 + hours * 60 * 60 * 1000;
     }
 
