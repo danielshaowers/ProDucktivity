@@ -23,7 +23,7 @@ public class ClassificationClient{
     }
 
     public String requestAppCategory(String appId) {
-        String url = URL + appId + ".json";
+        String url = URL + appId + ".json?country=US";
         final String[] category = {""};
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
