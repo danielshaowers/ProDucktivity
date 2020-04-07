@@ -19,12 +19,12 @@ public class ClassificationClient{
     private String UserName = "";
     private String PassWord = "X";
     public ClassificationClient(){
-
     }
 
     public String requestAppCategory(String appId) {
         String url = URL + appId + ".json?country=US";
         final String[] category = {""};
+        final String[] appType = {""};
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -32,7 +32,9 @@ public class ClassificationClient{
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            category[0] = parseJsonForCategory(response);
+                            category[0] = response.getString("genre_id");
+                            appType[0] = response.getString("app_type");
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -46,17 +48,16 @@ public class ClassificationClient{
                     }
                 }) {
                     @Override
-                    protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("User", UserName);
-                        params.put("Pass", PassWord);
-                        return params;
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Username", UserName);
+                        headers.put("Password", PassWord);
+                        return headers;
                     }
                 };
-        return category[0];
-    }
-
-    private String parseJsonForCategory(JSONObject Json) throws JSONException {
-        return Json.getString("genre_id");
+        if(appType[0].equalsIgnoreCase("GAME"))
+            return "GAME";
+        else
+            return category[0];
     }
 }
