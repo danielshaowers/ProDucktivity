@@ -3,24 +3,17 @@ package com.example.producktivity.ui.blocking;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.MainActivity;
 import com.example.producktivity.R;
-import com.example.producktivity.ui.home.HomeViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 public class BlockActivity extends AppCompatActivity {
@@ -41,8 +34,8 @@ public class BlockActivity extends AppCompatActivity {
         //Blocker blocker = new Blocker(this);
         //blocker.detect();
         //final TextView textView = findViewById(R.id.title_block);
-      //  Blocker blocker = new Blocker(this);
-      //  blocker.detect();
+        //  Blocker blocker = new Blocker(this);
+        //  blocker.detect();
         final TextView textView = findViewById(R.id.title_block);
         ImageButton duck = findViewById(R.id.continueDuck);
         Button returnButt = findViewById(R.id.ReturnButton);
@@ -52,19 +45,18 @@ public class BlockActivity extends AppCompatActivity {
                 Snackbar.make(view, "Good Choice!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-    });
-    duck.setOnClickListener(new View.OnClickListener(){
-       @Override
-       public void onClick(View view){
-           if (++duckClicks > 10){
-                   Intent startMain = new Intent(BlockActivity.this, MainActivity.class);
-                   startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                   startActivity(startMain);
-           }
-           else
-               Snackbar.make(view, "Noooo don't do it!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-       }
-    });
+        });
+        duck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (++duckClicks > 10) {
+                    Intent startMain = new Intent(BlockActivity.this, MainActivity.class);
+                    startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(startMain);
+                } else
+                    Snackbar.make(view, "Noooo don't do it!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+        });
     }
 
 }
