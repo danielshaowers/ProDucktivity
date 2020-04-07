@@ -17,7 +17,7 @@ public class BlacklistEntry implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @ColumnInfo(name = "app_ame")
+    @ColumnInfo(name = "app_name")
     private String appName;
 
     @ColumnInfo(name = "category")
@@ -53,4 +53,34 @@ public class BlacklistEntry implements Serializable {
     public long getWeekLimit() {return weekLimit;}
 
     public void setWeekLimit(long weekLimit) {this.weekLimit = weekLimit;}
+
+    public static long stringToLong(String s){
+        StringBuilder sb = new StringBuilder();
+        long hours = 0;
+        long minutes = 0;
+        int i = 0;
+        for (; i < s.length() && s.charAt(i) == ':'; i++); //finds the colon
+        if (i<s.length() && s.charAt(i) == ':'){
+            hours = Long.parseLong(s.substring(0, i));
+            minutes = Long.parseLong(s.substring(i+1));
+        }
+        return minutes * 60 * 1000 + hours * 60 * 60 * 1000;
+    }
+
+    public static String longToString(long millis) {
+        String output = "";
+        long minutes = millis / 60000;
+
+        if (minutes > 1440) {
+            output += (minutes / 1440) + "d ";
+            minutes %= 1440;
+        }
+        if (minutes > 60) {
+            output += (minutes / 60) + "h ";
+            minutes %= 60;
+        }
+        return output + minutes + "m";
+    }
+
+
 }

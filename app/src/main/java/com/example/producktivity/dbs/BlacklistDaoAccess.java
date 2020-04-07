@@ -21,9 +21,11 @@ public interface BlacklistDaoAccess {
     @TypeConverters({CategoryConverter.class})
     LiveData<List<BlacklistEntry>> getListByCategory(Category category);
 
-    @Query("SELECT time_limit FROM blacklist WHERE name = :appName")
-    @TypeConverters({DurationConverter.class})
-    LiveData<Duration> getAppTimeLimit(String appName);
+    @Query("SELECT day_limit FROM blacklist WHERE app_name = :appName")
+    LiveData<Long> getDayTimeLimit(String appName);
+
+    @Query("SELECT week_limit FROM blacklist WHERE app_name = :appName")
+    LiveData<Long> getWeekTimeLimit(String appName);
 
     @Insert
     void insert(BlacklistEntry entry);
