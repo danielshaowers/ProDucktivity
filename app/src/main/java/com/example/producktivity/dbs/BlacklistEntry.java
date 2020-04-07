@@ -30,6 +30,12 @@ public class BlacklistEntry implements Serializable {
     @ColumnInfo(name = "week_limit")
     private long weekLimit;
 
+    @ColumnInfo(name = "unrestricted")
+    private boolean unrestricted;
+
+    @ColumnInfo(name = "time_used")
+    private long timeUsed;
+
     public void setId(int id) {this.id = id;}
 
     public void setName(String appName) {
@@ -54,8 +60,16 @@ public class BlacklistEntry implements Serializable {
 
     public void setWeekLimit(long weekLimit) {this.weekLimit = weekLimit;}
 
+    public boolean isUnrestricted() {return unrestricted;}
+
+    public void setUnrestricted(boolean unrestricted) {this.unrestricted = unrestricted;}
+
+    public long getTimeUsed() {return timeUsed;}
+
+    public void setTimeUsed(long timeUsed) {this.timeUsed = timeUsed;}
+
+    //Converter methods for longs and input strings
     public static long stringToLong(String s){
-        StringBuilder sb = new StringBuilder();
         long hours = 0;
         long minutes = 0;
         int i = 0;
@@ -81,6 +95,5 @@ public class BlacklistEntry implements Serializable {
         }
         return output + minutes + "m";
     }
-
-
+    
 }
