@@ -16,9 +16,6 @@ public interface ToDoDaoAccess {
     @Query("SELECT * FROM tasks")
     LiveData<List<Task>> getTasks();
 
-    @Query("SELECT * FROM tasks GROUP BY priority")
-    LiveData<List<Task>> getTasksByPriority();
-
     @Query("SELECT * FROM tasks GROUP BY due_date")
     LiveData<List<Task>> getTasksByDueDate();
 

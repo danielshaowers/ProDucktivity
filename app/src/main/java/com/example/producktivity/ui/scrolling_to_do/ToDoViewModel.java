@@ -14,23 +14,17 @@ import java.util.List;
 public class ToDoViewModel extends AndroidViewModel {
     private ToDoRepo repo;
     private final LiveData<List<Task>> mAllTasks;
-    private final LiveData<List<Task>> mPrioritizedTasks;
 
     public ToDoViewModel(Application app) {
         super(app);
         repo = new ToDoRepo(app);
         mAllTasks = repo.getAllTasks();
-        mPrioritizedTasks = repo.getPrioritizedTasks();
     }
 
-    public LiveData<List<Task>> getAllTasks() {
-        return mAllTasks;
-    }
-
-    public LiveData<List<Task>> getPrioritizedTasks() {
-        return mPrioritizedTasks;
-    }
+    public LiveData<List<Task>> getAllTasks() {return mAllTasks;}
 
     public void insert(Task task) {repo.insert(task);}
+
+    public void delete(Task task) {repo.delete(task);}
 
 }
