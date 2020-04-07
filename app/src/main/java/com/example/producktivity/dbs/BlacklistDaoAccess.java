@@ -9,6 +9,7 @@ import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 import androidx.room.Update;
 
+import java.time.Duration;
 import java.util.List;
 @Dao
 public interface BlacklistDaoAccess {
@@ -19,6 +20,10 @@ public interface BlacklistDaoAccess {
     @Query("SELECT * FROM blacklist WHERE category = :category")
     @TypeConverters({CategoryConverter.class})
     LiveData<List<BlacklistEntry>> getListByCategory(Category category);
+
+    @Query("SELECT time_limit FROM blacklist WHERE name = :appName")
+    @TypeConverters({DurationConverter.class})
+    LiveData<Duration> getAppTimeLimit(String appName);
 
     @Insert
     void insert(BlacklistEntry entry);

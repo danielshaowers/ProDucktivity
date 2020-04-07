@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
+import com.example.producktivity.dbs.BlacklistEntry;
 import com.example.producktivity.dbs.TempBlackListEntry;
 import com.example.producktivity.ui.usage_data.AppAdapter;
 import com.example.producktivity.ui.usage_data.DataViewModel;
@@ -35,7 +36,7 @@ public class BlockSelectFragment extends Fragment {
         UsageDataHandler handler = new UsageDataHandler(this.getContext()); //don't want to do it this way later
         //passes to the viewmodel
         View root = inflater.inflate(R.layout.block_select_rcycler, container, false);
-        List<TempBlackListEntry> selectList = blockSelectViewModel.initializeList(handler.getStats());
+        List<BlacklistEntry> selectList = blockSelectViewModel.initializeList(handler.getStats());
         blockSelectViewModel.setSelectList(selectList);
         //observes if there are any modifications to the select list and automatically performs onChanged
         RecyclerView rView = root.findViewById(R.id.select_recycler);
@@ -43,9 +44,9 @@ public class BlockSelectFragment extends Fragment {
         adapter.setLimitList(selectList);
         rView.setAdapter(adapter);
         rView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        blockSelectViewModel.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<TempBlackListEntry>>() {
+        blockSelectViewModel.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<BlacklistEntry>>() {
             @Override
-            public void onChanged(@Nullable List<TempBlackListEntry> s) {
+            public void onChanged(@Nullable List<BlacklistEntry> s) {
                 adapter.setLimitList(s);
                 adapter.notifyDataSetChanged();
                 //I might also want to change the actual values within the recycler view, but to do that I need to inflate the single_select_recycler

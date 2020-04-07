@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.time.Duration;
 import java.util.List;
 
 public class BlacklistRepo {
@@ -24,6 +25,8 @@ public class BlacklistRepo {
     public LiveData<List<BlacklistEntry>> getEntriesByCategory(Category c) {
         return dao.getListByCategory(c);
     }
+
+    public LiveData<Duration> getAppTimeLimit(String appName) { return dao.getAppTimeLimit(appName);}
 
     public void insert(BlacklistEntry entry) {
         BlacklistDatabase.databaseWriteExecutor.execute(() ->
