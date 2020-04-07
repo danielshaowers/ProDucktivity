@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +41,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public class selectViewHolder extends RecyclerView.ViewHolder {
             private final TextView dayText;
             private final TextView weekText;
+            private final Switch setProductive;
             private final EditText weekLimit;
             private final EditText dayLimit;
             private final Button appSelect;
@@ -47,6 +50,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             public selectViewHolder(View itemView) {
                 super(itemView);
+                setProductive = itemView.findViewById(R.id.set_as_productive);
                 save = itemView.findViewById(R.id.save_select_button);
                 appSelect = itemView.findViewById(R.id.app_select_button);
                 dayText = itemView.findViewById(R.id.daily_limit_text);
@@ -89,31 +93,32 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public void onBindViewHolder(selectViewHolder holder, int position) {
             if (limits != null) {
                 BlacklistEntry current = limits.get(position);
-                holder.appSelect.setText(current.getAppName());
-                holder.weekLimit.setText(longToString(current.getWeekLimit()));
-                holder.dayLimit.setText(longToString(current.getDayLimit()));
-                holder.save.setOnClickListener(new View.OnClickListener(){
-                    public void onClick(View v){ //when done is clicked, hide and save the values
-                        holder.card.setVisibility(View.INVISIBLE);
-                        holder.appSelect.setVisibility(View.VISIBLE);
-                        //if (holder.appSelect.getText().toString() != null) not necessary
-                           // input.setAppName(holder.appSelect.getText().toString());
-                        if (holder.dayLimit.getText().toString().length() > 0) {
-                            long length = BlacklistEntry.stringToLong(holder.dayLimit.getText().toString());
-                            current.setDayLimit(length);
-                            holder.dayLimit.setText(longToString(length));
-                        }
-                        if (holder.weekLimit.getText().toString().length() > 0) {
-                            long length = (BlacklistEntry.stringToLong(holder.weekLimit.getText().toString()));
-                            current.setWeekLimit(length);
-                            holder.weekLimit.setText(longToString(length));
-                        }
-                        limits.set(position, current);
-                        notifyItemChanged(position); //this is useful if we want to display the limits
+                holder.setProductive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        current.setUnrestricted(isChecked);
                     }
-                });;
-            } else {
-                // Covers the case of data not being ready yet.
+                });
+                holder.setProductive.setChecked(current.isUnrestricted());
+                holder.appSelect.setText(current.getAppName());
+                holder.weekLimit.setText(BlacklistEntry.longToString(current.getWeekLimit()));
+                holder.dayLimit.setText(BlacklistEntry.longToString(current.getDayLimit()));
+                holder.save.setOnClickListener(v -> { //when done is clicked, hide and save the values
+                    holder.card.setVisibility(View.INVISIBLE);
+                    holder.appSelect.setVisibility(View.VISIBLE);
+                    if (holder.dayLimit.getText().toString().length() > 0) {
+                        long length = BlacklistEntry.stringToLong(holder.dayLimit.getText().toString());
+                        current.setDayLimit(length);
+                        holder.dayLimit.setText(BlacklistEntry.longToString(length));
+                    }
+                    if (holder.weekLimit.getText().toString().length() > 0) {
+                        long length = (BlacklistEntry.stringToLong(holder.weekLimit.getText().toString()));
+                        current.setWeekLimit(length);
+                        holder.weekLimit.setText(BlacklistEntry.longToString(length));
+                    }
+                    limits.set(position, current);
+                    notifyItemChanged(position); //this is useful if we want to display the limits
+                });
+            }else { //data not ready yet
                 holder.appSelect.setText("No apps found");
             }
         }
