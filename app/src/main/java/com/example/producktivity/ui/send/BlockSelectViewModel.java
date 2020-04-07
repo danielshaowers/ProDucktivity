@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.TempBlackListEntry;
+import com.example.producktivity.dbs.BlacklistEntry;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class BlockSelectViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
-    private MutableLiveData<List<TempBlackListEntry>> list;
+    private MutableLiveData<List<BlacklistEntry>> list;
     public BlockSelectViewModel() {
         list = new MutableLiveData<>();
         //set the stats from the database.
@@ -31,16 +31,16 @@ public class BlockSelectViewModel extends ViewModel {
         dayLimit = itemView.findViewById(R.id.daily_limit);
         card = itemView.findViewById(R.id.limit_card);*/
     }
-    public void setSelectList(List<TempBlackListEntry> entry){
+    public void setSelectList(List<BlacklistEntry> entry){
         list.setValue(entry);
     }
-    public LiveData<List<TempBlackListEntry>> getSelectList() {
+    public LiveData<List<BlacklistEntry>> getSelectList() {
         return list;
     }
-    public List<TempBlackListEntry> initializeList(List<UsageTime> usage){
-        List<TempBlackListEntry> list = new ArrayList<TempBlackListEntry>();
+    public List<BlacklistEntry> initializeList(List<UsageTime> usage){
+        List<BlacklistEntry> list = new ArrayList<BlacklistEntry>();
         for (UsageTime u: usage){
-            list.add(new TempBlackListEntry(u.appName));
+            list.add(new BlacklistEntry(u.appName));
         }
         return list;
     }

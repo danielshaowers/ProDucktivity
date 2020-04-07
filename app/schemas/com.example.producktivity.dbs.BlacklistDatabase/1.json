@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "879fa9a48ee441c1650b5956f111e11e",
+    "identityHash": "49c9603fc4d441beca2aec752af17741",
     "entities": [
       {
         "tableName": "blacklist",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `category` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_name` TEXT, `category` TEXT, `day_limit` INTEGER NOT NULL, `week_limit` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,8 +15,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "name",
-            "columnName": "name",
+            "fieldPath": "appName",
+            "columnName": "app_name",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -25,6 +25,18 @@
             "columnName": "category",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "dayLimit",
+            "columnName": "day_limit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weekLimit",
+            "columnName": "week_limit",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -40,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '879fa9a48ee441c1650b5956f111e11e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '49c9603fc4d441beca2aec752af17741')"
     ]
   }
 }

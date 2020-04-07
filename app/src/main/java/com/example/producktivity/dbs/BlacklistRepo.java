@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.time.Duration;
 import java.util.List;
 
 public class BlacklistRepo {
@@ -29,4 +30,13 @@ public class BlacklistRepo {
         BlacklistDatabase.databaseWriteExecutor.execute(() ->
                 dao.insert(entry));
     }
+
+    public LiveData<Long> getDayLimit(String appName) { return dao.getDayLimit(appName);}
+
+    public LiveData<Long> getWeekLimit(String appName) { return dao.getWeekLimit(appName);}
+
+    public void update(BlacklistEntry entry) { dao.update(entry);}
+
+    public void delete(BlacklistEntry entry) { dao.delete(entry);}
+
 }

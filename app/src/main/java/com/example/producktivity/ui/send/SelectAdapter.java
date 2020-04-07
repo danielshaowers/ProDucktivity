@@ -13,7 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.TempBlackListEntry;
+import com.example.producktivity.dbs.BlacklistEntry;
 import com.example.producktivity.ui.usage_data.AppAdapter;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
@@ -66,12 +66,12 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
         private final LayoutInflater mInflater;
-        private List<TempBlackListEntry> limits;
+        private List<BlacklistEntry> limits;
         SelectAdapter(Context context) {
             mInflater = LayoutInflater.from(context);
         }
 
-        public void setLimitList(List<TempBlackListEntry> l) {
+        public void setLimitList(List<BlacklistEntry> l) {
             limits = l;
         }
         @Override
@@ -88,7 +88,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         public void onBindViewHolder(selectViewHolder holder, int position) {
             if (limits != null) {
-                TempBlackListEntry current = limits.get(position);
+                BlacklistEntry current = limits.get(position);
                 holder.appSelect.setText(current.getAppName());
                 holder.weekLimit.setText(longToString(current.getWeekLimit()));
                 holder.dayLimit.setText(longToString(current.getDayLimit()));
@@ -99,12 +99,12 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         //if (holder.appSelect.getText().toString() != null) not necessary
                            // input.setAppName(holder.appSelect.getText().toString());
                         if (holder.dayLimit.getText().toString().length() > 0) {
-                            long length = TempBlackListEntry.stringToLong(holder.dayLimit.getText().toString());
+                            long length = BlacklistEntry.stringToLong(holder.dayLimit.getText().toString());
                             current.setDayLimit(length);
                             holder.dayLimit.setText(longToString(length));
                         }
                         if (holder.weekLimit.getText().toString().length() > 0) {
-                            long length = (TempBlackListEntry.stringToLong(holder.weekLimit.getText().toString()));
+                            long length = (BlacklistEntry.stringToLong(holder.weekLimit.getText().toString()));
                             current.setWeekLimit(length);
                             holder.weekLimit.setText(longToString(length));
                         }
