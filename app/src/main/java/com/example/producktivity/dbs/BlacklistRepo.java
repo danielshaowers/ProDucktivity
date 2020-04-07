@@ -26,10 +26,17 @@ public class BlacklistRepo {
         return dao.getListByCategory(c);
     }
 
-    public LiveData<Duration> getAppTimeLimit(String appName) { return dao.getAppTimeLimit(appName);}
-
     public void insert(BlacklistEntry entry) {
         BlacklistDatabase.databaseWriteExecutor.execute(() ->
                 dao.insert(entry));
     }
+
+    public LiveData<Long> getDayLimit(String appName) { return dao.getDayLimit(appName);}
+
+    public LiveData<Long> getWeekLimit(String appName) { return dao.getWeekLimit(appName);}
+
+    public void update(BlacklistEntry entry) { dao.update(entry);}
+
+    public void delete(BlacklistEntry entry) { dao.delete(entry);}
+
 }

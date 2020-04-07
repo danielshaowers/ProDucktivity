@@ -22,10 +22,10 @@ public interface BlacklistDaoAccess {
     LiveData<List<BlacklistEntry>> getListByCategory(Category category);
 
     @Query("SELECT day_limit FROM blacklist WHERE app_name = :appName")
-    LiveData<Long> getDayTimeLimit(String appName);
+    LiveData<Long> getDayLimit(String appName);
 
     @Query("SELECT week_limit FROM blacklist WHERE app_name = :appName")
-    LiveData<Long> getWeekTimeLimit(String appName);
+    LiveData<Long> getWeekLimit(String appName);
 
     @Insert
     void insert(BlacklistEntry entry);
