@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_APP_USAGE_SETTINGS);
+        checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
         checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -182,9 +182,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkPermissions(String permission, String setting) {
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-        if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED) {
+        if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED)
             System.out.println("we do have permission");
-        }
         else startActivityForResult(new Intent(setting), 69);
     }
     @Override
