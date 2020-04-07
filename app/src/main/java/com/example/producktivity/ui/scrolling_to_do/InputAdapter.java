@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -50,7 +51,7 @@ private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
        private RadioButton low;
        private RadioButton medium;
        private RadioButton high;
-
+        private Button remove;
 
        private TaskViewHolder(View itemView){
            super(itemView);
@@ -62,7 +63,9 @@ private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
            low = itemView.findViewById(R.id.high_todo);
            medium = itemView.findViewById(R.id.medium_todo);
            high = itemView.findViewById(R.id.low_todo);
+            remove = itemView.findViewById(R.id.remove_button);
        } //could set onclick listeners for the calendars here if i was motivated
+
    }
 
    private LayoutInflater mInflater;
@@ -90,23 +93,32 @@ private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
         System.out.println("current task at position " + position + " is " + tasks.get(position).getTitle());
         int i = -1;
         while (tasks.get(position + ++i).getTitle() == null && position + i < tasks.size());
-            Task current = tasks.get(position+i);
-            holder.title.setText(current.getTitle());
-            if (current.getDueDate() != null)
-                holder.date.setText(dateFormat.format(current.getDueDate())); //formats in mm/dd form //not sure if this one is correct
+        position = position + i;
+        Task current = tasks.get(position);
+        holder.title.setText(current.getTitle());
+        if (current.getDueDate() != null)
+            holder.date.setText(dateFormat.format(current.getDueDate())); //formats in mm/dd form //not sure if this one is correct
             //MainActivity.makeCalendar(holder.date, this.mContext);
-            holder.desc.setText(current.getDesc());
-            if (current.getReminderTime() != null)
-                holder.reminder.setText(dateFormat.format(current.getReminderTime())); //formats in mm/dd form
+        holder.desc.setText(current.getDesc());
+        if (current.getReminderTime() != null)
+            holder.reminder.setText(dateFormat.format(current.getReminderTime())); //formats in mm/dd form
             //MainActivity.makeCalendar(holder.reminder, this.mContext);
             //holder.priority = current.getPriority(); not sure how to set the value for a radio button
-            Priority p = current.getPriority();
-            if (p == Priority.HIGH)
-                holder.high.toggle();
-            else if (p == Priority.MED)
-                holder.medium.toggle();
-            else
-                holder.low.toggle();
+        Priority p = current.getPriority();
+        if (p == Priority.HIGH)
+            holder.high.toggle();
+        else if (p == Priority.MED)
+            holder.medium.toggle();
+        else
+            holder.low.toggle();
+        int finalPosition = position;
+        holder.remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tasks.remove(finalPosition);
+                notifyItemRemoved(finalPosition);
+            }
+        });
     }
     void setTasks(List<Task> t){
         tasks = t;

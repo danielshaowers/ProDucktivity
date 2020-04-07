@@ -11,6 +11,7 @@ import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -69,6 +70,7 @@ public class TaskFragment extends Fragment {
        recyclerView.setItemAnimator(new DefaultItemAnimator());
        return root;
     }
+
      /*   ImageButton buttonLoadImage = findViewById(R.id.photoButton);
         buttonLoadImage.setOnClickListener(new Set1.AddImageListener()); */
 /* //IF I WANT TO ADD IMAGES

@@ -44,6 +44,7 @@ public class UsageDataFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<UsageTime> s) {
                 adapter.setData(s);
+                adapter.notifyDataSetChanged();
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
