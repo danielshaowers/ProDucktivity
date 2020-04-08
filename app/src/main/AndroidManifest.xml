@@ -30,6 +30,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.blocking.BlockActivity" />
+
+        <service android:name=".ui.blocking.BlockerService" />
     </application>
 
 </manifest>
