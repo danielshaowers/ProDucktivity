@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.MainActivity;
 import com.example.producktivity.R;
+import com.example.producktivity.dbs.BlacklistEntry;
 import com.example.producktivity.dbs.Task;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -47,7 +48,7 @@ public class TaskFragment extends Fragment {
     private ToDoViewModel viewModel;
 
     //public View onCreateView()
-   @Override
+    @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
        super.onCreate(savedInstanceState);
         //get access to the TaskViewModel class and its infinite wisdom/data
@@ -60,7 +61,13 @@ public class TaskFragment extends Fragment {
         //find the view we need to attach data from TaskViewModel to
        recyclerView = root.findViewById(R.id.todo_recyclerview);
        //we set the task list to observe+reflect any changes in text of TaskViewModel
-       viewModel.getAllTasks().observe(getViewLifecycleOwner(), mAdapter::setTasks);
+       viewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+           @Override
+           public void onChanged(@Nullable List<Task> s) {
+               //update database
+               //I might also want to change the actual values within the recycler view, but to do that I need to inflate the single_select_recycler
+           }
+       });
         //based on https://stackoverflow.com/questions/44489235/update-recyclerview-with-android-livedata
 
        //now if tasks ever changes, we notify the adapter that the dataset has changed, calling setDataSet
