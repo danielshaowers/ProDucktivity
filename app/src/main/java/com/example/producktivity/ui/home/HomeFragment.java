@@ -1,28 +1,16 @@
 package com.example.producktivity.ui.home;
 
-import android.app.ActivityManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.R;
-import com.example.producktivity.ui.blocking.BlockActivity;
-import com.example.producktivity.ui.usage_data.UsageTime;
-
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -40,7 +28,7 @@ public class HomeFragment extends Fragment {
                 homeViewModel.setOn(s);
             }
         });*/
-        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /*sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 homeViewModel.setOn(true); //not how it's supposed to be done, but whtv
                 if (isChecked) {
@@ -55,7 +43,11 @@ public class HomeFragment extends Fragment {
                         getActivity().startActivity(startBlock);
                     }
                 }
-            }}); return root;}}
+            }
+        });*/
+        return root;
+    }
+}
         //} else {
 
         //}
