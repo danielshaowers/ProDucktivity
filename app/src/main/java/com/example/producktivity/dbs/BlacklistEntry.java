@@ -5,12 +5,14 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.example.producktivity.ui.usage_data.UsageTime;
+
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.Date;
 
 @Entity(tableName = "blacklist")
-public class BlacklistEntry implements Serializable {
+public class BlacklistEntry implements Serializable, Comparable{
 
     public BlacklistEntry(String appName) {this.appName = appName;}
 
@@ -23,6 +25,8 @@ public class BlacklistEntry implements Serializable {
     @ColumnInfo(name = "category")
     @TypeConverters({CategoryConverter.class})
     private Category category;
+    @ColumnInfo(name = "UsageTime")
+    private UsageTime usageTime;
 
     @ColumnInfo(name = "day_limit")
     private long dayLimit;
@@ -37,6 +41,13 @@ public class BlacklistEntry implements Serializable {
     @ColumnInfo(name = "time_used")
     private long timeUsed;
 
+    public UsageTime getUsageTime(){
+        return usageTime;
+    }
+
+    public void setUsageTime(UsageTime t){
+        this.usageTime = t;
+    }
     public void setId(int id) {this.id = id;}
 
     public void setName(String appName) {
@@ -70,8 +81,8 @@ public class BlacklistEntry implements Serializable {
     public void setTimeUsed(long timeUsed) {this.timeUsed = timeUsed;}
 
     @Override
-    public int compareTo(BlacklistEntry b){
-        return b.getTimeUsed()
+    public int compareTo(Object b){
+        return ((BlacklistEntry) b).getUsageTime().compareTo(getUsageTime());
     }
 
     //Converter methods for longs and input strings

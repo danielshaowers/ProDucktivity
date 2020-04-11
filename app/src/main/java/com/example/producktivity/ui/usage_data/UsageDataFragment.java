@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.BlacklistEntry;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class UsageDataFragment extends Fragment {
@@ -83,6 +84,7 @@ public class UsageDataFragment extends Fragment {
         dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageTime>>() {
             @Override //THIS IS REDUNDANT. SHOULD UPDATE DATABASE, NOT THIS
             public void onChanged(@Nullable List<UsageTime> s) {
+                dataViewModel.sortData(allData);
                 adapter.setData(allData);
                 adapter.notifyDataSetChanged(); //this does not currently sync with blacklist database :(
                 //Todo: sync with blacklist database
