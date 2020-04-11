@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab); //THE MAIL BUTTON
+        FloatingActionButton fab = findViewById(R.id.fab); //THE PLUS BUTTON
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //make this add a task in future

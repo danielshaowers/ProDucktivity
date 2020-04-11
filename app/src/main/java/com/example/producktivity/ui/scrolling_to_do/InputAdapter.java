@@ -40,7 +40,8 @@ import java.util.Locale;
 //this class creates views for data, and replaces the content of views when they are no longer available
 //dang it i can't figure out how to make the inputviewHolder work as a static class instead of nonstatic class
 public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
+
+    private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
 
     public class TaskViewHolder extends RecyclerView.ViewHolder {
        private CardView taskView;
@@ -51,25 +52,25 @@ private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
        private RadioButton low;
        private RadioButton medium;
        private RadioButton high;
-        private Button remove;
+       private Button remove;
 
        private TaskViewHolder(View itemView){
            super(itemView);
            taskView = itemView.findViewById(R.id.todo_card);
            title = itemView.findViewById(R.id.todo_title);
            date = itemView.findViewById(R.id.todo_date);
-          desc = itemView.findViewById(R.id.todo_description);
-          reminder = itemView.findViewById(R.id.todo_reminder);
+           desc = itemView.findViewById(R.id.todo_description);
+           reminder = itemView.findViewById(R.id.todo_reminder);
            low = itemView.findViewById(R.id.high_todo);
            medium = itemView.findViewById(R.id.medium_todo);
            high = itemView.findViewById(R.id.low_todo);
-            remove = itemView.findViewById(R.id.remove_button);
+           remove = itemView.findViewById(R.id.remove_button);
        } //could set onclick listeners for the calendars here if i was motivated
 
-   }
+    }
 
-   private LayoutInflater mInflater;
-   private List<Task> tasks; //cached copy of words
+    private LayoutInflater mInflater;
+    private List<Task> tasks; //cached copy of words
     //obtains the layoutinflater from the given context. layoutinflater converts the xml file into its corresponding view
     InputAdapter(Context context) { mInflater = LayoutInflater.from(context);}
 
@@ -115,6 +116,10 @@ private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
+
                 tasks.remove(finalPosition);
                 notifyItemRemoved(finalPosition);
             }

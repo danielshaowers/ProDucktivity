@@ -103,5 +103,5 @@ public class BlacklistEntry implements Serializable {
         }
         return output + minutes + "m";
     }
-    
+
 }

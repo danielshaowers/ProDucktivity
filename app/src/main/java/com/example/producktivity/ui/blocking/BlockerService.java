@@ -13,32 +13,42 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-public class BlockerService {
+public class BlockerService extends Service {
 
-    Context context;
+    public BlockerService() {}
 
-    public BlockerService(Context context) {
-        this.context = context;
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void detect() {
-       // while (true)
-           // if (System.currentTimeMillis() % 2000 == 0)
-              //  appOnScreen();
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startID) {
+        while (true)
+            if (System.currentTimeMillis() % 1000 == 0)
+                appOnScreen();
+        /*System.out.println("hey this is working");
+        return Service.START_NOT_STICKY;*/
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void appOnScreen() {
-        PackageManager pManager = context.getPackageManager();
-        UsageStatsManager usManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+        PackageManager pManager = this.getPackageManager();
+        UsageStatsManager usManager = (UsageStatsManager) this.getSystemService(Context.USAGE_STATS_SERVICE);
         UsageEvents events = usManager.queryEvents(System.currentTimeMillis() - 2500, System.currentTimeMillis());
-        System.out.println("testing");
         while (events.hasNextEvent()) {
             UsageEvents.Event event = new UsageEvents.Event();
             events.getNextEvent(event);
-            System.out.println(event.getClassName());
+
+
+            System.out.println(appName(event.getPackageName()));
+
+
             boolean isBlocked;
             try {
                 isBlocked = (pManager.getApplicationInfo(event.getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) == 0
@@ -54,15 +64,22 @@ public class BlockerService {
         }
     }
 
+    public String appName(String packageName) {
+        PackageManager pm = this.getPackageManager();
+        ApplicationInfo ai;
+        try {ai = pm.getApplicationInfo(packageName, 0);} catch (PackageManager.NameNotFoundException e) {ai = null;}
+        return ai == null ? "oh gosh oh darn" : pm.getApplicationLabel(ai).toString();
+    }
+
 
     public void showBlockScreen(){
         Intent startBlock = new Intent("com.example.producktivity.ui.blocking.BlockActivity");
         startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(startBlock);
+        this.startActivity(startBlock);
 
     }
 
-    /*public String[] getForegroundPackageNameClassNameByUsageStats() {
+        /*public String[] getForegroundPackageNameClassNameByUsageStats() {
         String packageNameByUsageStats = null;
         String classByUsageStats = null;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

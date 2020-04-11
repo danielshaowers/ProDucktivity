@@ -11,21 +11,15 @@ public class ToDoRepo {
 
     private ToDoDaoAccess mToDoDao;
     private LiveData<List<Task>> mAllTasks;
-    private LiveData<List<Task>> mPrioritizedTasks;
 
     public ToDoRepo(Application app) {
         ToDoDatabase db = ToDoDatabase.getDatabase(app);
         mToDoDao = db.daoAccess();
         mAllTasks = mToDoDao.getTasksByDueDate();
-        mPrioritizedTasks = mToDoDao.getTasksByPriority();
     }
 
     public LiveData<List<Task>> getAllTasks() {
         return mAllTasks;
-    }
-
-    public LiveData<List<Task>> getPrioritizedTasks() {
-        return mPrioritizedTasks;
     }
 
     public void insert(Task task) {
@@ -33,4 +27,7 @@ public class ToDoRepo {
                 mToDoDao.insert(task));
     }
 
+    public void update(Task task) {mToDoDao.update(task);}
+
+    public void delete(Task task) {mToDoDao.delete(task);}
 }
