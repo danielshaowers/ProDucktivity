@@ -69,6 +69,11 @@ public class BlacklistEntry implements Serializable {
 
     public void setTimeUsed(long timeUsed) {this.timeUsed = timeUsed;}
 
+    @Override
+    public int compareTo(BlacklistEntry b){
+        return b.getTimeUsed()
+    }
+
     //Converter methods for longs and input strings
     public static long stringToLong(String s){
         long hours = 0;

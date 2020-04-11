@@ -66,6 +66,7 @@ public class TaskFragment extends Fragment {
            public void onChanged(@Nullable List<Task> s) {
                //update database
                //I might also want to change the actual values within the recycler view, but to do that I need to inflate the single_select_recycler
+            mAdapter.setTasks(s);
            }
        });
         //based on https://stackoverflow.com/questions/44489235/update-recyclerview-with-android-livedata

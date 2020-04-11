@@ -108,9 +108,9 @@ private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
         if (p == Priority.HIGH)
             holder.high.setChecked(true);
         else if (p == Priority.MED)
-            holder.medium.setChecked(false);
+            holder.medium.setChecked(true);
         else
-            holder.low.setChecked(false);
+            holder.low.setChecked(true);
         int finalPosition = position;
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override

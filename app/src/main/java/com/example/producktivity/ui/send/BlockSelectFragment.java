@@ -35,8 +35,9 @@ public class BlockSelectFragment extends Fragment {
         UsageDataHandler handler = new UsageDataHandler(this.getContext()); //don't want to do it this way later
         //passes to the viewmodel
         View root = inflater.inflate(R.layout.block_select_rcycler, container, false);
-        List<BlacklistEntry> selectList = blockSelectViewModel.initializeList(handler.getStats());
-        blockSelectViewModel.setSelectList(selectList);
+        root.findViewById(R.id.) //todo: make a sortby button in recyclerview?
+        List<BlacklistEntry> selectList = blockSelectViewModel.initializeList(handler.getStats(UsageTime.MONTH)); //stores everything but shows month
+        blockSelectViewModel.setSelectList(selectList); //todo: instead of initializing the list here, pull from database?
         //observes if there are any modifications to the select list and automatically performs onChanged
         RecyclerView rView = root.findViewById(R.id.select_recycler);
         final SelectAdapter adapter = new SelectAdapter(this.getContext());
