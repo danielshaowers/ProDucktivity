@@ -81,7 +81,7 @@ public class BlockSelectFragment extends Fragment {
          blockSelectViewModel.setSelectList(selectList[0]); //todo: instead of initializing the list here, pull from database?
         //observes if there are any modifications to the select list and automatically performs onChanged
         RecyclerView rView = root.findViewById(R.id.select_recycler);
-     //   final SelectAdapter adapter = new SelectAdapter(this.getContext());
+        adapter = new SelectAdapter(this.getContext());
         adapter.setLimitList(selectList[0]);
         rView.setAdapter(adapter);
         rView.setLayoutManager(new LinearLayoutManager(this.getContext()));
