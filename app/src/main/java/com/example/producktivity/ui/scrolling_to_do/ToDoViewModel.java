@@ -21,7 +21,7 @@ public class ToDoViewModel extends AndroidViewModel {
         mAllTasks = repo.getAllTasks();
 
         System.out.println("get tasks from repo " + repo.getAllTasks());
-        mPrioritizedTasks = repo.getPrioritizedTasks();
+       // mPrioritizedTasks = repo.getPrioritizedTasks();
 
     }
 
