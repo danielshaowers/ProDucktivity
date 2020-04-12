@@ -63,9 +63,10 @@ public class BlacklistRepo {
     }
 
     public void repopulateDatabase(List<BlacklistEntry> newList){
-        for (BlacklistEntry old : Objects.requireNonNull(allEntries.getValue())){
-            delete(old);
-        }
+        if (allEntries != null && allEntries.getValue() != null)
+            for (BlacklistEntry old : allEntries.getValue()){
+                delete(old);
+            }
         for(BlacklistEntry newE: newList) {
             insert(newE);
         }
