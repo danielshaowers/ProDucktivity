@@ -36,8 +36,8 @@ public class UsageDataHandler {
         for (String key : usageStatsMap.get(2).keySet()){ //this is assuming all of the maps have the same entries
             /*UsageStats day = usageStatsMap.get(0).get(key);
             UsageStats week = usageStatsMap.get(1).get(key);*/
-            UsageStats m = usageStatsMap.get(0).get(key);
-            if (m.getTotalTimeInForeground() > 60000 && isApp(m)){ //if monthly use is over 1 minute: 60000
+            UsageStats m = usageStatsMap.get(2).get(key);
+            if (m.getTotalTimeInForeground() > 0 && isApp(m)){ //if monthly use is over 1 minute: 60000
                 output.add(getUsage(usageStatsMap.get(0).get(key), usageStatsMap.get(1).get(key), m, timeFlag));
             }
         }
