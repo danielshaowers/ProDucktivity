@@ -33,6 +33,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.producktivity.dbs.BlacklistEntry;
 import com.example.producktivity.dbs.Priority;
 import com.example.producktivity.dbs.Task;
+import com.example.producktivity.dbs.Category;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 import com.example.producktivity.ui.send.BlockSelectViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
@@ -42,6 +43,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -155,6 +157,16 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("onChanged called for the blockselect viewmodel");
                     List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
                     bsViewModel.updateList(usagetimes, s);
+                    ClassificationClient cClient = new ClassificationClient();
+                    BlacklistClient blacklistClient = new BlacklistClient(s);
+                    for(BlacklistEntry app: s){
+                        String appId = app.getPackageName();
+                        String cat = cClient.requestAppCategory(appId);
+                        app.setCategory(Category.valueOf(cat));
+                        Boolean productive = blacklistClient.classifyApp(cat);
+                        //TODO: add productive classification to app entry
+                    }
+                    bsViewModel.replaceDB(s);
                     updated[0] = true;
                 }
                 bsViewModel.getSelectList().removeObserver(this);

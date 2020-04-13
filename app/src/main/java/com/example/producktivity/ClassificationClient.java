@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class ClassificationClient{
     private String URL = "https://api.appmonsta.com/v1/stores/android/details/";
-    private String UserName = "";
+    private String UserName = "23bd817660d5852948f01392ffd4457dd549afa4";
     private String PassWord = "X";
     public ClassificationClient(){
     }
