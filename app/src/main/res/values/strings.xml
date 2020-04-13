@@ -9,10 +9,12 @@
 
     <string name="menu_home">User Hub</string>
     <string name="menu_gallery">Usage Data</string>
-    <string name="menu_slideshow">Block Apps</string>
+    <string name="menu_slideshow">Blocking Settings</string>
     <string name="menu_tools">To Do</string>
     <string name="menu_share">Calendar</string>
     <string name="menu_send">Block Apps</string>
+
+    <string name="block_button">Begin blocking</string>
 
     <string name="current_date">March, 2020</string>
     <string name="add_event">ADD CALENDAR EVENT</string>
