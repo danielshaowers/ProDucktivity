@@ -1,6 +1,11 @@
 package com.example.producktivity.ui.blocking;
 
+import android.app.usage.UsageEvents;
+import android.app.usage.UsageStatsManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -10,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.R;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class BlockActivity extends AppCompatActivity {
 
@@ -26,9 +34,15 @@ public class BlockActivity extends AppCompatActivity {
 
         blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
         System.out.println("creating a blocker");
-        Intent intent = new Intent(this, BlockerService.class);
-        startService(intent);
 
+        Thread thread = new Thread(new BlockerRunnable());
+        thread.start();
+
+
+
+        /*Intent intent = new Intent(this, BlockerService.class);
+        startService(intent);
+        */
 
         final TextView textView = findViewById(R.id.title_block);
 
@@ -57,5 +71,74 @@ public class BlockActivity extends AppCompatActivity {
             }
         });*/
     }
+
+    public class BlockerRunnable implements Runnable {
+
+        PackageManager pManager = BlockActivity.this.getPackageManager();
+        UsageStatsManager usManager = (UsageStatsManager) BlockActivity.this.getSystemService(Context.USAGE_STATS_SERVICE);
+
+        List<String> whiteList = Arrays.asList("Pixel Launcher", "ProDucktive");
+
+        public BlockerRunnable() {
+
+        }
+
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+        @Override
+        public void run() {
+            while (true)
+                if (System.currentTimeMillis() % 1000 == 0)
+                    appOnScreen();
+        /*System.out.println("hey this is working");
+        return Service.START_NOT_STICKY;*/
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        public void appOnScreen() {
+            UsageEvents events = usManager.queryEvents(System.currentTimeMillis() - 1000, System.currentTimeMillis());
+            while (events.hasNextEvent()) {
+                UsageEvents.Event event = new UsageEvents.Event();
+                events.getNextEvent(event);
+
+                if (event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED) {
+
+                    if (!whiteList.contains(appName(event.getPackageName())))
+                        System.out.println(appName(event.getPackageName()));
+
+
+                    /*boolean isBlocked;
+                    try {
+                        isBlocked = (pManager.getApplicationInfo(event.getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) == 0
+                                && event.getClassName() != "ProDucktive";
+                    } catch (Exception e) {
+                        isBlocked = false;
+                    }
+                    if (isBlocked) {
+                        System.out.println("hey that's not allowed");
+                        //TODO your own code of the window and whatnot
+
+                    }*/
+                }
+            }
+        }
+
+        public String appName(String packageName) {
+            PackageManager pm = BlockActivity.this.getPackageManager();
+            ApplicationInfo ai;
+            try {ai = pm.getApplicationInfo(packageName, 0);} catch (PackageManager.NameNotFoundException e) {ai = null;}
+            return ai == null ? "oh gosh oh darn" : pm.getApplicationLabel(ai).toString();
+        }
+
+
+        public void showBlockScreen(){
+            Intent startBlock = new Intent("com.example.producktivity.ui.blocking.BlockActivity");
+            startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            BlockActivity.this.startActivity(startBlock);
+
+        }
+    }
+
 
 }

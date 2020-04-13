@@ -1,9 +1,11 @@
 package com.example.producktivity.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.R;
+import com.example.producktivity.ui.blocking.BlockActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -28,10 +31,17 @@ public class HomeFragment extends Fragment {
                 homeViewModel.setOn(s);
             }
         });*/
-        /*sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 homeViewModel.setOn(true); //not how it's supposed to be done, but whtv
                 if (isChecked) {
+
+                    Intent startBlock = new Intent(HomeFragment.this.getActivity(), BlockActivity.class);
+                    startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getActivity().startActivity(startBlock);
+
+
+                    /*
                     //send to blockeractivity
                     ActivityManager mActivityManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
                     List<ActivityManager.RunningAppProcessInfo> RunningTask = mActivityManager.getRunningAppProcesses();
@@ -41,10 +51,10 @@ public class HomeFragment extends Fragment {
                         Intent startBlock = new Intent(HomeFragment.this.getActivity(), BlockActivity.class);
                         startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(startBlock);
-                    }
+                    }*/
                 }
             }
-        });*/
+        });
         return root;
     }
 }
