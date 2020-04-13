@@ -58,6 +58,10 @@ public class BlockSelectFragment extends Fragment {
                 if (position == 2){
                      adapter.setLimitList(BlockSelectFragment.changeSpan(UsageTime.MONTH, adapter.getLimits()));//technically, viewmodel should notice and notify adapter for us
                 }
+                //if (position == 3){ //todo: sort list by name
+
+                   // adapter.setLimitList(BlockSelectViewModel.sortData(adapter.getLimits()));
+                //}
             }
             //todo: make sure the viewmodel observer genuinely updates with any changes made
             @Override
@@ -84,7 +88,6 @@ public class BlockSelectFragment extends Fragment {
                     System.out.println(usagetimes.size() + " usage time size");
                 }
                 adapter.setLimitList(s);
-                adapter.notifyDataSetChanged();
                 //I might also want to change the actual values within the recycler view, but to do that I need to inflate the single_select_recycler
             }
         });
@@ -99,9 +102,10 @@ public class BlockSelectFragment extends Fragment {
 
     //when the flag is changed
     public static List<BlacklistEntry> changeSpan(int time_flag, List<BlacklistEntry> list){
-        for (BlacklistEntry u : list){
-            u.setSpan_flag(time_flag);
-        }
+        if (list != null)
+            for (BlacklistEntry u : list){
+                u.setSpan_flag(time_flag);
+            }
         return list;
     }
 

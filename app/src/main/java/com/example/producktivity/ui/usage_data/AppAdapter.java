@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.BlacklistEntry;
+import com.example.producktivity.ui.send.BlockSelectViewModel;
 
 import java.util.List;
 
@@ -62,8 +63,9 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
 public List<BlacklistEntry> getData(){return data;}
+
     public void setData(List<BlacklistEntry> datas) {
-        data = datas;
+        data = BlockSelectViewModel.sortData(datas);
         notifyDataSetChanged();
     }
 

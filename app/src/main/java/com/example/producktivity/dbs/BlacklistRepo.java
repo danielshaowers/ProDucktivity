@@ -71,7 +71,7 @@ public class BlacklistRepo {
             }
             newList.add(entry);
         }
-        this.allEntries = dao.getList();
+        this.allEntries = dao.getList(); //update allEntries
         return newList;
     }
 

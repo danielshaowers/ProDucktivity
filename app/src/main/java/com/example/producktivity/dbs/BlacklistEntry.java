@@ -165,7 +165,7 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
                 time.add(Long.parseLong(s.substring(nonchars.get(i - 1) + 1, nonchars.get(i))));
             }
             return  time.size() <= 0 ? 0:time.get(0) * 60 * 1000 + (time.size() <= 1 ? 0:time.get(1) * 3600000
-                    + (time.size() >= 3 ? time.get(3) * 3600000 * 24:0));
+                    + (time.size() >= 3 ? time.get(2) * 3600000 * 24:0));
         }
             return 0;
     }

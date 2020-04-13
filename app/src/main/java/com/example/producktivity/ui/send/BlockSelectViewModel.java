@@ -50,8 +50,9 @@ public class BlockSelectViewModel extends AndroidViewModel {
     public void replaceDB(List<BlacklistEntry> newList){
         repo.repopulateDatabase(newList);
     }
-    public List<BlacklistEntry> sortData(List<BlacklistEntry> a){
-        Collections.sort(a);
+    public static List<BlacklistEntry> sortData(List<BlacklistEntry> a){
+        if (a != null)
+            Collections.sort(a);
         return a;
     }
     //meant to create a list from an empty database, given a list of usage times

@@ -33,10 +33,12 @@ public class UsageDataHandler {
         usageStatsMap.add(manager.queryAndAggregateUsageStats(System.currentTimeMillis() - month, System.currentTimeMillis()));
         List<UsageTime> output = new ArrayList<UsageTime>();
 
-        for (String key : usageStatsMap.get(0).keySet()){ //this is assuming all of the maps have the same entries
-            UsageStats us = usageStatsMap.get(0).get(key);
-            if (us.getTotalTimeInForeground() > 60000 && isApp(us)){ //if monthly use is over 1 minute: 60000
-                output.add(getUsage(us, usageStatsMap.get(1).get(key), usageStatsMap.get(2).get(key), timeFlag));
+        for (String key : usageStatsMap.get(2).keySet()){ //this is assuming all of the maps have the same entries
+            /*UsageStats day = usageStatsMap.get(0).get(key);
+            UsageStats week = usageStatsMap.get(1).get(key);*/
+            UsageStats m = usageStatsMap.get(0).get(key);
+            if (m.getTotalTimeInForeground() > 60000 && isApp(m)){ //if monthly use is over 1 minute: 60000
+                output.add(getUsage(usageStatsMap.get(0).get(key), usageStatsMap.get(1).get(key), m, timeFlag));
             }
         }
          /*   output = usageStatsMap.get(0).values().stream()
@@ -66,8 +68,11 @@ public class UsageDataHandler {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public UsageTime getUsage(UsageStats day, UsageStats week, UsageStats month, int timeFlag) {
         System.out.println("day " + day + " week " + week + " month " + month);
+        long dayTime = day == null ? 0 : day.getTotalTimeInForeground();
+        long weekTime = week == null ? 0 : week.getTotalTimeInForeground();
+        long monthTime = month == null ? 0 : month.getTotalTimeInForeground();
         return new UsageTime(appName(month.getPackageName()),
-                day.getTotalTimeInForeground(), week.getTotalTimeInForeground(), month.getTotalTimeInForeground(),
+                dayTime, weekTime, monthTime,
                 month.getPackageName(), timeFlag); //timeFlag sets the primary time to be displayed
     }
 

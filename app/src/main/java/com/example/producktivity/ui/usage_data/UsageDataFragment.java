@@ -30,26 +30,27 @@ import java.util.List;
 
 public class UsageDataFragment extends Fragment {
 
-    private DataViewModel dataViewModel;
-    private List<UsageTime> allData;
-
+    private BlockSelectViewModel bsViewModel;
+    private AppAdapter adapter;
+    private UsageDataHandler handler;
+    private Spinner dropdown;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
-        System.out.println("creating a tracker");
-        UsageDataHandler handler = new UsageDataHandler(this.getContext());
+        handler = new UsageDataHandler(this.getContext());
+
         View root = inflater.inflate(R.layout.usage_data, container, false);
-        Spinner dropdown = root.findViewById(R.id.change_span); //the drop down
+        dropdown = root.findViewById(R.id.change_span); //the drop down
         System.out.println(dropdown + "sort by dropdown");
         //allData = handler.getStats(UsageTime.WEEK); //default
        // dataViewModel.setAllData(allData); //passes to the viewmodel
-        BlockSelectViewModel bsViewModel =  ViewModelProviders.of(this.getActivity()).get(BlockSelectViewModel.class);
+        bsViewModel =  ViewModelProviders.of(this.getActivity()).get(BlockSelectViewModel.class);
         RecyclerView recyclerView = root.findViewById(R.id.app_recyclerView);
-        final AppAdapter adapter = new AppAdapter(this.getContext());
+        adapter = new AppAdapter(this.getContext());
+
         recyclerView.setAdapter(adapter);
         String[] items = new String[]{"Day", "Week", "Month"};
         ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
@@ -59,15 +60,9 @@ public class UsageDataFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0){
                    adapter.setData(BlockSelectFragment.changeSpan(UsageTime.DAY, adapter.getData()));
-
-                    //adapter.setData(UsageDataFragment.changeSpan(UsageTime.DAY, allData));
-                    //adapter.notifyDataSetChanged();
-
                 }
                 if (position == 1){
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.WEEK, adapter.getData()));
-                    //adapter.setData(UsageDataFragment.changeSpan(UsageTime.DAY, allData));
-                    //adapter.notifyDataSetChanged();
                 }
                 if (position == 2){ //does this notify the observer? what does the observer even observe??
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.MONTH, adapter.getData()));
@@ -94,7 +89,6 @@ public class UsageDataFragment extends Fragment {
                           System.out.println(usagetimes.size() + " usage time size");
                       }
                   }
-                  bsViewModel.sortData(s);
                   adapter.setData(s);
           };});
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -107,4 +101,16 @@ public class UsageDataFragment extends Fragment {
         }
         return list;
    }
+    @Override
+    public void onPause(){
+        super.onPause();
+        Object selected = dropdown.getSelectedItem();
+        int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
+        bsViewModel.updateList(handler.getStats(timeFrame), adapter.getData());
+        //todo: probably want to move this to the main activity, or just add an "update" button.
+        //todo: add daily average calculator, should be very easy just divide by 24 hours
+       /* Object selected = dropdown.getSelectedItem();
+        int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
+        bsViewModel.updateList(handler.getStats(timeFrame), adapter.getData()); */
+    }
 }
