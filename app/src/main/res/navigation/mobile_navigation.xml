@@ -17,9 +17,9 @@
         android:label="@string/menu_gallery"
         tools:layout="@layout/usage_data" />
 
-    <activity
+    <fragment
         android:id="@+id/nav_block"
-        android:name="com.example.producktivity.ui.blocking.BlockActivity"
+        android:name="com.example.producktivity.ui.blocking.BlockingSettingsFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/block_apps" />
 

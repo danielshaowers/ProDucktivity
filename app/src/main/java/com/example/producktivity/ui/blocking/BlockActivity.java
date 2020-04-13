@@ -138,62 +138,6 @@ public class BlockActivity extends AppCompatActivity {
             BlockActivity.this.startActivity(startBlock);
 
         }
-
-        /*public String[] getForegroundPackageNameClassNameByUsageStats() {
-        String packageNameByUsageStats = null;
-        String classByUsageStats = null;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            UsageStatsManager mUsageStatsManager = (UsageStatsManager)getSystemService("usagestats");
-            final long INTERVAL = 1000;
-            final long end = System.currentTimeMillis();
-            final long begin = end - INTERVAL;
-            final UsageEvents usageEvents = mUsageStatsManager.queryEvents(begin, end);
-            while (usageEvents.hasNextEvent()) {
-                UsageEvents.Event event = new UsageEvents.Event();
-                usageEvents.getNextEvent(event);
-                if (event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
-                    packageNameByUsageStats = event.getPackageName();
-                    classByUsageStats = event.getClassName();
-                    Log.d(TAG, "packageNameByUsageStats is" + packageNameByUsageStats + ", classByUsageStats is " + classByUsageStats);
-                }
-            }
-        }
-        return new String[]{packageNameByUsageStats,classByUsageStats};
-    }*/
-
-    /*public void appOnScreen() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                System.out.println("time: " + System.currentTimeMillis());
-                System.out.println(activeApps().get(0).processName);
-                System.out.println(activeApps().size());
-                handler.postDelayed(this, 1000);
-            }
-        }, 1000);
-    }
-
-    private List<ActivityManager.RunningAppProcessInfo> activeApps() {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        return manager.getRunningAppProcesses();
-    }*/
-
-    /*
-    public boolean showBlockScreen(){
-    Intent startBlock = new Intent(this, BlockActivity.class);
-    startBlock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    context.startActivity(startBlock);
-    return true;
-    }
-     */
-
-
-
-
-
-
-
-
     }
 
 
