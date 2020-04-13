@@ -104,7 +104,7 @@ public class UsageDataFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
-        Object selected = dropdown.getSelectedItem();
+       /* Object selected = dropdown.getSelectedItem();
         int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
         bsViewModel.updateList(handler.getStats(timeFrame), adapter.getData());
         //todo: probably want to move this to the main activity, or just add an "update" button.

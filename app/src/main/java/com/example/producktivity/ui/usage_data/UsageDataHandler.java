@@ -44,8 +44,8 @@ public class UsageDataHandler {
          /*   output = usageStatsMap.get(0).values().stream()
                     .filter(v -> v.getTotalTimeInForeground() > 60000 && isApp(v)) //previously  v.getTotalTimeInForeground() > 60000
                     .map(v -> getUsage(v)).collect(Collectors.toList());*/
-            for (UsageTime a : output)
-                System.out.println(a.toString());
+           /* for (UsageTime a : output)
+                System.out.println(a.toString());*/
         return output;
     }
 
