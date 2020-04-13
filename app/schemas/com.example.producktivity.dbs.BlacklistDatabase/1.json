@@ -2,23 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "60bfc2666d5423ecd30c13700deedc53",
+    "identityHash": "4d342ada70d08cd0e332b4a1c89d0d49",
     "entities": [
       {
         "tableName": "blacklist",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_name` TEXT, `package_name` TEXT, `month_use` INTEGER NOT NULL, `week_use` INTEGER NOT NULL, `day_use` INTEGER NOT NULL, `span_flag` INTEGER NOT NULL, `category` TEXT, `day_limit` INTEGER NOT NULL, `week_limit` INTEGER NOT NULL, `unrestricted` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`app_name` TEXT NOT NULL, `package_name` TEXT, `month_use` INTEGER NOT NULL, `week_use` INTEGER NOT NULL, `day_use` INTEGER NOT NULL, `span_flag` INTEGER NOT NULL, `category` TEXT, `day_limit` INTEGER NOT NULL, `week_limit` INTEGER NOT NULL, `unrestricted` INTEGER NOT NULL, PRIMARY KEY(`app_name`))",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "appName",
             "columnName": "app_name",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "packageName",
@@ -77,9 +71,9 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "app_name"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -88,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '60bfc2666d5423ecd30c13700deedc53')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4d342ada70d08cd0e332b4a1c89d0d49')"
     ]
   }
 }
