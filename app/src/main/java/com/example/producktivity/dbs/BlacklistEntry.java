@@ -188,7 +188,7 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
 
     @Override
     public int compareTo(BlacklistEntry o) {
-        return Long.compare(getTimeOfFlag(this.span_flag), o.getTimeOfFlag(this.span_flag));
+        return -Long.compare(getTimeOfFlag(this.span_flag), o.getTimeOfFlag(this.span_flag));
     }
 
     @Override
