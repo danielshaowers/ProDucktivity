@@ -24,19 +24,26 @@ import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.producktivity.dbs.BlacklistEntry;
 import com.example.producktivity.dbs.Priority;
 import com.example.producktivity.dbs.Task;
+import com.example.producktivity.dbs.Category;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
+import com.example.producktivity.ui.send.BlockSelectViewModel;
+import com.example.producktivity.ui.usage_data.UsageDataHandler;
+import com.example.producktivity.ui.usage_data.UsageTime;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -52,9 +59,8 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final boolean[] updated = {false};
         super.onCreate(savedInstanceState);
-        checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
-        checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
                     if (title.getText() != null){
                         task.setTitle(title.getText().toString());
                         RadioGroup priorities = findViewById(R.id.priority_group);
-
                         RadioButton priority = findViewById(priorities.getCheckedRadioButtonId());
                         if (priority != null) {
                             if (priority.getId() == R.id.high_priority)
@@ -108,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         toDoVM.getAllTasks().observe(MainActivity.this, new Observer<List<Task>>(){
                             @Override
                             public void onChanged(@Nullable final List<Task> tasks){
-
+                                //is this necessary??
                             }
                         }
                         );
@@ -142,6 +147,39 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        BlockSelectViewModel bsViewModel =  ViewModelProviders.of(this).get(BlockSelectViewModel.class);
+        UsageDataHandler handler = new UsageDataHandler(this);
+        //I am hoping this updates the values every time main activity is created, so we don't have to during the usage stats
+        bsViewModel.getSelectList().observe(this, new Observer<List<BlacklistEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<BlacklistEntry> s) {
+                if (!updated[0]) {
+                    System.out.println("onChanged called for the blockselect viewmodel");
+                    List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
+                    bsViewModel.updateList(usagetimes, s);
+                    ClassificationClient cClient = new ClassificationClient();
+                    BlacklistClient blacklistClient = new BlacklistClient(s);
+                    for(BlacklistEntry app: s){
+                        String appId = app.getPackageName();
+                        String cat = cClient.requestAppCategory(appId);
+                        app.setCategory(Category.valueOf(cat));
+                        Boolean productive = blacklistClient.classifyApp(cat);
+                        //TODO: add productive classification to app entry
+                        //app.setInferredProductive(productive);
+                    }
+                    bsViewModel.replaceDB(s);
+                    updated[0] = true;
+                }
+                bsViewModel.getSelectList().removeObserver(this);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
     }
 
     private void clearInputs(){

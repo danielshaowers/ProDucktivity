@@ -71,6 +71,8 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         private final LayoutInflater mInflater;
         private List<BlacklistEntry> limits;
+
+        public List<BlacklistEntry> getLimits(){return limits;}
         SelectAdapter(Context context) {
             mInflater = LayoutInflater.from(context);
         }
@@ -117,6 +119,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     }
                     limits.set(position, current);
                     notifyItemChanged(position); //this is useful if we want to display the limits
+                    //todo: how do we update the database given this change?
                 });
             }else { //data not ready yet
                 holder.appSelect.setText("No apps found");

@@ -44,7 +44,6 @@ public class TaskFragment extends Fragment {
     private RecyclerView recyclerView;
     private InputAdapter mAdapter;
     private ArrayList<Task> data = new ArrayList<>();
-    public static final int GET_FROM_GALLERY = 1;
     private ToDoViewModel viewModel;
 
     //public View onCreateView()
@@ -66,6 +65,7 @@ public class TaskFragment extends Fragment {
            public void onChanged(@Nullable List<Task> s) {
                //update database
                //I might also want to change the actual values within the recycler view, but to do that I need to inflate the single_select_recycler
+            mAdapter.setTasks(s);
            }
        });
         //based on https://stackoverflow.com/questions/44489235/update-recyclerview-with-android-livedata
@@ -77,53 +77,4 @@ public class TaskFragment extends Fragment {
        recyclerView.setItemAnimator(new DefaultItemAnimator());
        return root;
     }
-
-     /*   ImageButton buttonLoadImage = findViewById(R.id.photoButton);
-        buttonLoadImage.setOnClickListener(new Set1.AddImageListener()); */
-/* //IF I WANT TO ADD IMAGES
-    public class AddImageListener implements ImageButton.OnClickListener{
-        @Override
-        public void onClick (View view){
-        //starts an activity that opens the gallery
-        //new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-        //get the image and set the image
-        view.findViewById(R.id.imgView).setVisibility(View.VISIBLE);
-    }
-    }
-    */
-    /*IF I WANT TO SEND THIS INFO TO ANOTHER CLASS LIKE CALENDAR*/
-   /* public void studyNow(View view){
-        Intent parcelIntent = new Intent(this, Calendar.class);
-        parcelIntent.putParcelableArrayListExtra("success", data);
-        startActivity(parcelIntent);
-    } */
-
-    //when the user is done with the gallery and returns, this method is called
-  /*  @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //Detects request codes
-        if(requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {    //if we got an image from the gallery and the user didn't back out
-            //get uri that points to the selected contact
-            Uri selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);    //the camera returns a bitmap, so here we store
-                BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-                Info current = this.data.get(mAdapter.getPos());
-                //setImageDrawable(bitmapDrawable);
-                //have to determine at which position it was clicked, get that imageView from the data arraylist, and set its imagedrawable
-                current.setImage(bitmapDrawable);
-                // current.setUri(current.getImageUri((Context) this, bitmap));
-                current.setUri(selectedImage);
-                mAdapter.notifyItemChanged(mAdapter.getPos()); //should i mess with payload? because it's specifically the image that changed
-                //i need to do this one AFTER i convert the bitmap into an image.
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    } */
 }
