@@ -1,5 +1,6 @@
 package com.example.producktivity.dbs;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -13,11 +14,12 @@ import java.util.ArrayList;
 @Entity(tableName = "blacklist")
 public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> {
 
-    public BlacklistEntry(String appName) {this.appName = appName;}
+    public BlacklistEntry(String appName) {this.appName = appName; this.category = Category.BEAUTY;}
+    //todo: remove the default category!!
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+   // @PrimaryKey(autoGenerate = true)
+    //private int id;
+    @PrimaryKey @NonNull
     @ColumnInfo(name = "app_name")
     private String appName;
 
@@ -65,7 +67,7 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
         return packageName;
     }
 
-    public int getId(){return id;}
+    //public int getId(){return id;}
     public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
@@ -97,7 +99,7 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     public int getSpan_flag() {
         return span_flag;
     }
-    public void setId(int id){this.id = id;}
+    //public void setId(int id){this.id = id;}
 
     public void setSpan_flag(int span_flag) {
         this.span_flag = span_flag;
@@ -186,7 +188,7 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
 
     @Override
     public int compareTo(BlacklistEntry o) {
-        return Long.compare(getTimeOfFlag(this.span_flag), o.getTimeOfFlag(this.span_flag));
+        return -Long.compare(getTimeOfFlag(this.span_flag), o.getTimeOfFlag(this.span_flag));
     }
 
     @Override

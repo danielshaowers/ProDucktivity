@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
@@ -27,7 +28,7 @@ public interface BlacklistDaoAccess {
     @Query("SELECT week_limit FROM blacklist WHERE app_name = :appName")
     LiveData<Long> getWeekLimit(String appName);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(BlacklistEntry entry);
 
     @Update
@@ -35,4 +36,7 @@ public interface BlacklistDaoAccess {
 
     @Delete
     void delete(BlacklistEntry entry);
+
+    @Query("DELETE FROM blacklist")
+    void deleteAll();
 }

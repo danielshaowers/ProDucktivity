@@ -3,6 +3,7 @@ package com.example.producktivity.dbs;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.producktivity.ui.usage_data.UsageTime;
 
@@ -16,11 +17,21 @@ public class BlacklistRepo {
 
     private BlacklistDaoAccess dao;
     private LiveData<List<BlacklistEntry>> allEntries;
+    private static BlacklistRepo instance;
+   /* public static BlacklistRepo getInstance(){
+        if (instance == null){
+            synchronized (BlacklistRepo.class){
+                if (instance == null)
+                    instance = new BlacklistRepo()
+            }
+        }
+    }*/
 
     public BlacklistRepo(Application app) {
-        BlacklistDatabase db = BlacklistDatabase.getDatabase(app);
+        BlacklistDatabase db = BlacklistDatabase.getDatabase(app); //this should create the database
         dao = db.daoAccess();
         allEntries = dao.getList();
+        allEntries = dao.getListByCategory(Category.BEAUTY);
     }
 
     public LiveData<List<BlacklistEntry>> getAllEntries() {
@@ -42,8 +53,10 @@ public class BlacklistRepo {
         //create a hashmap
         HashMap<String, BlacklistEntry> map = new HashMap<>();
         List<BlacklistEntry> newList = new ArrayList<>();
-        for (BlacklistEntry b : allEntries){
-            map.put(b.getAppName(), b);
+        if (allEntries != null) {
+            for (BlacklistEntry b : allEntries) {
+                map.put(b.getAppName(), b);
+            }
         }
         for (UsageTime time : ut){
             BlacklistEntry entry = map.get(time.appName);
@@ -51,7 +64,6 @@ public class BlacklistRepo {
                 entry = new BlacklistEntry(time.appName);
                 entry = updateEntry(entry, time);
                 insert(entry);
-                newList.add(entry);
             }
             else{
                 entry = updateEntry(entry, time);
@@ -59,17 +71,15 @@ public class BlacklistRepo {
             }
             newList.add(entry);
         }
+        this.allEntries = dao.getList();
         return newList;
     }
 
     public void repopulateDatabase(List<BlacklistEntry> newList){
-        if (allEntries != null && allEntries.getValue() != null)
-            for (BlacklistEntry old : allEntries.getValue()){
-                delete(old);
-            }
         for(BlacklistEntry newE: newList) {
-            insert(newE);
+            insert(newE); //something that already exists is being inserted. make that method that deletes everything in the database because individual deletions are failing
         }
+        this.allEntries = dao.getList(); //updates based on the new database I hopeeee
     }
 
     public BlacklistEntry updateEntry(BlacklistEntry entry, UsageTime time){
@@ -86,8 +96,16 @@ public class BlacklistRepo {
 
     public LiveData<Long> getWeekLimit(String appName) { return dao.getWeekLimit(appName);}
 
-    public void update(BlacklistEntry entry) { dao.update(entry);}
+    public void update(BlacklistEntry entry) {   BlacklistDatabase.databaseWriteExecutor.execute(() ->
+            dao.update(entry));}
 
-    public void delete(BlacklistEntry entry) { dao.delete(entry);}
+    public void delete(BlacklistEntry entry) {   BlacklistDatabase.databaseWriteExecutor.execute(() ->
+            dao.delete(entry));}
 
+    public void deleteAll(){ BlacklistDatabase.databaseWriteExecutor.execute(() ->
+            dao.deleteAll());}
+
+     public int getItemId(BlacklistEntry entry){
+        return 1000000000;
+     }
 }
