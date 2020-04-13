@@ -9,7 +9,9 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,23 +19,34 @@ import java.util.stream.Collectors;
 public class UsageDataHandler {
 
     Context context;
-
     public UsageDataHandler(Context context) {this.context = context;}
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<UsageTime> getStats() {
-
+    public List<UsageTime> getStats(int timeFlag) {
+        long day = 1000 * 60 * 60 * 24; //milliseconds in a day
+        long month = day * 30;
+        long week = day * 7;
         UsageStatsManager manager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-        System.out.println("handling"); //one month in the past
-        Map<String, UsageStats> usageStatsMap = manager.queryAndAggregateUsageStats(System.currentTimeMillis() - 2628000000L, System.currentTimeMillis());
-        System.out.println(usageStatsMap.size());
-        List<UsageTime> output = usageStatsMap.values().stream()
-                .filter(v -> v.getTotalTimeInForeground() > 60000 && isApp(v))
-                .map(v -> getUsage(v)).collect(Collectors.toList());
-        for (UsageTime a:output)
-            System.out.println(a.toString());
+        List<Map<String, UsageStats>> usageStatsMap = new ArrayList<Map<String, UsageStats>>();
+        usageStatsMap.add(manager.queryAndAggregateUsageStats(System.currentTimeMillis() - day, System.currentTimeMillis()));
+        usageStatsMap.add(manager.queryAndAggregateUsageStats(System.currentTimeMillis() - week, System.currentTimeMillis()));
+        usageStatsMap.add(manager.queryAndAggregateUsageStats(System.currentTimeMillis() - month, System.currentTimeMillis()));
+        List<UsageTime> output = new ArrayList<UsageTime>();
+
+        for (String key : usageStatsMap.get(0).keySet()){ //this is assuming all of the maps have the same entries
+            UsageStats us = usageStatsMap.get(0).get(key);
+            if (us.getTotalTimeInForeground() > 60000 && isApp(us)){ //if monthly use is over 1 minute: 60000
+                output.add(getUsage(us, usageStatsMap.get(1).get(key), usageStatsMap.get(2).get(key), timeFlag));
+            }
+        }
+         /*   output = usageStatsMap.get(0).values().stream()
+                    .filter(v -> v.getTotalTimeInForeground() > 60000 && isApp(v)) //previously  v.getTotalTimeInForeground() > 60000
+                    .map(v -> getUsage(v)).collect(Collectors.toList());*/
+            for (UsageTime a : output)
+                System.out.println(a.toString());
         return output;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private ApplicationInfo info(UsageStats stats) {
@@ -51,8 +64,11 @@ public class UsageDataHandler {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public UsageTime getUsage(UsageStats data) {
-        return new UsageTime(appName(data.getPackageName()), data.getTotalTimeInForeground());
+    public UsageTime getUsage(UsageStats day, UsageStats week, UsageStats month, int timeFlag) {
+        System.out.println("day " + day + " week " + week + " month " + month);
+        return new UsageTime(appName(month.getPackageName()),
+                day.getTotalTimeInForeground(), week.getTotalTimeInForeground(), month.getTotalTimeInForeground(),
+                month.getPackageName(), timeFlag); //timeFlag sets the primary time to be displayed
     }
 
     private boolean isApp(UsageStats app) {                     //more can always be added

@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                     if (title.getText() != null){
                         task.setTitle(title.getText().toString());
                         RadioGroup priorities = findViewById(R.id.priority_group);
-
                         RadioButton priority = findViewById(priorities.getCheckedRadioButtonId());
                         if (priority != null) {
                             if (priority.getId() == R.id.high_priority)
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                         toDoVM.getAllTasks().observe(MainActivity.this, new Observer<List<Task>>(){
                             @Override
                             public void onChanged(@Nullable final List<Task> tasks){
-
+                                //is this necessary??
                             }
                         }
                         );
