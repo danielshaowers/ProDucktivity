@@ -1,6 +1,10 @@
 package com.example.producktivity.ui.blocking;
 
-import android.content.Intent;
+import android.app.usage.UsageEvents;
+import android.app.usage.UsageStatsManager;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -26,9 +30,51 @@ public class BlockActivity extends AppCompatActivity {
 
         blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
         System.out.println("creating a blocker");
-        Intent intent = new Intent(this, BlockerService.class);
-        startService(intent);
 
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                while (true)
+                    if (System.currentTimeMillis() % 1000 == 0)
+                        doStuff();
+            }
+
+            public void doStuff() {
+                PackageManager pManager = BlockActivity.this.getPackageManager();
+                UsageStatsManager usManager = (UsageStatsManager) BlockActivity.this.getSystemService(Context.USAGE_STATS_SERVICE);
+                UsageEvents events = usManager.queryEvents(System.currentTimeMillis() - 2500, System.currentTimeMillis());
+                while (events.hasNextEvent()) {
+                    UsageEvents.Event event = new UsageEvents.Event();
+                    events.getNextEvent(event);
+
+
+                    System.out.println(event.getPackageName());
+
+
+                    boolean isBlocked;
+                    try {
+                        isBlocked = (pManager.getApplicationInfo(event.getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) == 0
+                                && event.getClassName() != "Producktive";
+                    } catch (Exception e) {
+                        isBlocked = false;
+                    }
+                    if (isBlocked) {
+                        System.out.println("hey that's not allowed");
+                        //TODO your own code of the window and whatnot
+
+                    }
+                }
+            }
+
+        });
+        thread.start();
+
+
+
+        /*Intent intent = new Intent(this, BlockerService.class);
+        startService(intent);
+        */
 
         final TextView textView = findViewById(R.id.title_block);
 

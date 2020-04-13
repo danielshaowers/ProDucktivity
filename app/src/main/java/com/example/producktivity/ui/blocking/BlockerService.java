@@ -57,7 +57,7 @@ public class BlockerService extends Service {
                 isBlocked = false;
             }
             if (isBlocked) {
-
+                System.out.println("hey that's not allowed");
                 //TODO your own code of the window and whatnot
 
             }
