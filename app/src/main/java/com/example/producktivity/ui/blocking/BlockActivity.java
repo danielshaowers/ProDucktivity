@@ -16,6 +16,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.R;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class BlockActivity extends AppCompatActivity {
 
     private BlockViewModel blockViewModel;
@@ -71,7 +74,14 @@ public class BlockActivity extends AppCompatActivity {
 
     public class BlockerRunnable implements Runnable {
 
-        public BlockerRunnable() {}
+        PackageManager pManager = BlockActivity.this.getPackageManager();
+        UsageStatsManager usManager = (UsageStatsManager) BlockActivity.this.getSystemService(Context.USAGE_STATS_SERVICE);
+
+        List<String> whiteList = Arrays.asList("Pixel Launcher", "ProDucktive");
+
+        public BlockerRunnable() {
+
+        }
 
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -87,28 +97,29 @@ public class BlockActivity extends AppCompatActivity {
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         public void appOnScreen() {
-            PackageManager pManager = BlockActivity.this.getPackageManager();
-            UsageStatsManager usManager = (UsageStatsManager) BlockActivity.this.getSystemService(Context.USAGE_STATS_SERVICE);
-            UsageEvents events = usManager.queryEvents(System.currentTimeMillis() - 2500, System.currentTimeMillis());
+            UsageEvents events = usManager.queryEvents(System.currentTimeMillis() - 1000, System.currentTimeMillis());
             while (events.hasNextEvent()) {
                 UsageEvents.Event event = new UsageEvents.Event();
                 events.getNextEvent(event);
 
+                if (event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED) {
 
-                System.out.println(appName(event.getPackageName()));
+                    if (!whiteList.contains(appName(event.getPackageName())))
+                        System.out.println(appName(event.getPackageName()));
 
 
-                boolean isBlocked;
-                try {
-                    isBlocked = (pManager.getApplicationInfo(event.getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) == 0
-                            && event.getClassName() != "Producktive";
-                } catch (Exception e) {
-                    isBlocked = false;
-                }
-                if (isBlocked) {
-                    System.out.println("hey that's not allowed");
-                    //TODO your own code of the window and whatnot
+                    /*boolean isBlocked;
+                    try {
+                        isBlocked = (pManager.getApplicationInfo(event.getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) == 0
+                                && event.getClassName() != "ProDucktive";
+                    } catch (Exception e) {
+                        isBlocked = false;
+                    }
+                    if (isBlocked) {
+                        System.out.println("hey that's not allowed");
+                        //TODO your own code of the window and whatnot
 
+                    }*/
                 }
             }
         }
