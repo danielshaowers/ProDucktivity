@@ -1,42 +1,26 @@
 package com.example.producktivity.ui.blocking;
 
-import android.app.usage.UsageEvents;
-import android.app.usage.UsageStatsManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-
-import com.example.producktivity.R;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class BlockActivity extends AppCompatActivity {
 
-    private BlockViewModel blockViewModel;
-    private int duckClicks = 0;
+    //private BlockViewModel blockViewModel;
+    //private int duckClicks = 0;
 
-    private final int PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1;
+    //private final int PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.block_page);
+        //setContentView(R.layout.block_page);
 
-        blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
+        //blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
         System.out.println("creating a blocker");
-
-        Thread thread = new Thread(new BlockerRunnable());
-        thread.start();
 
 
 
@@ -44,7 +28,7 @@ public class BlockActivity extends AppCompatActivity {
         startService(intent);
         */
 
-        final TextView textView = findViewById(R.id.title_block);
+        //final TextView textView = findViewById(R.id.title_block);
 
 
 
@@ -72,7 +56,12 @@ public class BlockActivity extends AppCompatActivity {
         });*/
     }
 
-    public class BlockerRunnable implements Runnable {
+    /*public void block() {
+        Thread thread = new Thread(new BlockerRunnable());
+        thread.start();
+    }*/
+
+    /*public class BlockerRunnable implements Runnable {
 
         PackageManager pManager = BlockActivity.this.getPackageManager();
         UsageStatsManager usManager = (UsageStatsManager) BlockActivity.this.getSystemService(Context.USAGE_STATS_SERVICE);
@@ -91,8 +80,8 @@ public class BlockActivity extends AppCompatActivity {
             while (true)
                 if (System.currentTimeMillis() % 1000 == 0)
                     appOnScreen();
-        /*System.out.println("hey this is working");
-        return Service.START_NOT_STICKY;*/
+        //System.out.println("hey this is working");
+        //return Service.START_NOT_STICKY;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -108,18 +97,18 @@ public class BlockActivity extends AppCompatActivity {
                         System.out.println(appName(event.getPackageName()));
 
 
-                    /*boolean isBlocked;
-                    try {
-                        isBlocked = (pManager.getApplicationInfo(event.getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) == 0
-                                && event.getClassName() != "ProDucktive";
-                    } catch (Exception e) {
-                        isBlocked = false;
-                    }
-                    if (isBlocked) {
-                        System.out.println("hey that's not allowed");
-                        //TODO your own code of the window and whatnot
-
-                    }*/
+//                    boolean isBlocked;
+//                    try {
+//                        isBlocked = (pManager.getApplicationInfo(event.getPackageName(), 0).flags & ApplicationInfo.FLAG_SYSTEM) == 0
+//                                && event.getClassName() != "ProDucktive";
+//                    } catch (Exception e) {
+//                        isBlocked = false;
+//                    }
+//                    if (isBlocked) {
+//                        System.out.println("hey that's not allowed");
+//                        //TODO your own code of the window and whatnot
+//
+//                    }
                 }
             }
         }
@@ -138,7 +127,7 @@ public class BlockActivity extends AppCompatActivity {
             BlockActivity.this.startActivity(startBlock);
 
         }
-    }
+    }*/
 
 
 }

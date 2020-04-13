@@ -31,6 +31,10 @@
         </activity>
         <activity android:name=".ui.blocking.BlockActivity" />
 
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>
