@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         app.setCategory(Category.valueOf(cat));
                         Boolean productive = blacklistClient.classifyApp(cat);
                         //TODO: add productive classification to app entry
+                        //app.setInferredProductive(productive);
                     }
                     bsViewModel.replaceDB(s);
                     updated[0] = true;
