@@ -7,12 +7,12 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">User Hub</string>
-    <string name="menu_gallery">Usage Data</string>
-    <string name="menu_slideshow">Blocking Settings</string>
-    <string name="menu_tools">To Do</string>
-    <string name="menu_share">Calendar</string>
-    <string name="menu_send">Block Apps</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_data">Usage Data</string>
+    <string name="menu_settings">Blocking Settings</string>
+    <string name="menu_todo">To Do</string>
+    <string name="menu_calendar">Calendar</string>
+    <string name="menu_block">Block Apps</string>
 
     <string name="block_button">Begin blocking</string>
 

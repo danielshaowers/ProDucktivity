@@ -14,30 +14,30 @@
     <fragment
         android:id="@+id/nav_usage_data"
         android:name="com.example.producktivity.ui.usage_data.UsageDataFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_data"
         tools:layout="@layout/usage_data" />
 
     <fragment
         android:id="@+id/nav_block"
         android:name="com.example.producktivity.ui.blocking.BlockingSettingsFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_settings"
         tools:layout="@layout/block_apps" />
 
     <fragment
         android:id="@+id/nav_todo"
         android:name="com.example.producktivity.ui.scrolling_to_do.TaskFragment"
-        android:label="@string/menu_tools"
+        android:label="@string/menu_todo"
         tools:layout="@layout/to_do" />
 
     <fragment
         android:id="@+id/nav_calendar"
         android:name="com.example.producktivity.ui.share.CalendarFragment"
-        android:label="@string/menu_share"
+        android:label="@string/menu_calendar"
         tools:layout="@layout/calendar" />
 
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.example.producktivity.ui.send.BlockSelectFragment"
-        android:label="@string/menu_send"
+        android:label="@string/menu_block"
         tools:layout="@layout/profile" />
 </navigation>
