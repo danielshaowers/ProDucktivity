@@ -103,6 +103,9 @@ public class BlockSelectFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
+        System.out.println("saving the following");
+        for (BlacklistEntry e: adapter.getLimits())
+            System.out.println(e.getAppName() + "is unrestricted? " + e.isUnrestricted());
         blockSelectViewModel.replaceDB(adapter.getLimits());
     }
 

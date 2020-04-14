@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("onChanged called for the blockselect viewmodel");
                     List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
                     bsViewModel.updateList(usagetimes, s);
-                    ClassificationClient cClient = new ClassificationClient();
+                  /*  ClassificationClient cClient = new ClassificationClient();
                     BlacklistClient blacklistClient = new BlacklistClient();
                     for(BlacklistEntry app: s){
                         String appId = app.getPackageName();
@@ -160,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
                         app.setCategory(Category.valueOf(cat));
                         //Boolean productive = blacklistClient.classifyApp(cat);
                         //TODO: add productive classification to app entry
-                        //app.setInferredProductive(productive);
-                    }
+                        //app.setInferredProductive(productive);*/
+                  //  }
                     bsViewModel.replaceDB(s);
                     updated[0] = true;
                 }

@@ -65,10 +65,11 @@ public class BlockSelectViewModel extends AndroidViewModel {
             if (sort_flag == NAME_SORT) {
                 NameCompare nameComp = new NameCompare();
                 Collections.sort(a, nameComp);
+            } else {
+                TimeCompare timeComp = new TimeCompare();
+                Collections.sort(a, timeComp);
             }
         }
-        else
-            Collections.sort(a);
         return a;
     }
     //meant to create a list from an empty database, given a list of usage times
