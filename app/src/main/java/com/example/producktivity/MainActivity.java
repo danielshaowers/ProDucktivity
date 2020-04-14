@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
         BlockSelectViewModel bsViewModel =  ViewModelProviders.of(this).get(BlockSelectViewModel.class);
         UsageDataHandler handler = new UsageDataHandler(this);
         //I am hoping this updates the values every time main activity is created, so we don't have to during the usage stats

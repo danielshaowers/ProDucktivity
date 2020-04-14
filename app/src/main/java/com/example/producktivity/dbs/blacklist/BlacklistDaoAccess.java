@@ -9,6 +9,8 @@ import androidx.room.Query;
 import androidx.room.TypeConverters;
 import androidx.room.Update;
 
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
+
 import java.util.List;
 @Dao
 public interface BlacklistDaoAccess {

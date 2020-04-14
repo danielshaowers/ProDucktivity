@@ -1,5 +1,6 @@
 package com.example.producktivity.dbs.blacklist;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -8,15 +9,14 @@ import androidx.room.TypeConverters;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @Entity(tableName = "blacklist")
 public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> {
 
-    public BlacklistEntry(String appName) {this.appName = appName;}
+    public BlacklistEntry(@NonNull String appName) {this.appName = appName; this.category = Category.BEAUTY;}
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    @PrimaryKey @NonNull
     @ColumnInfo(name = "app_name")
     private String appName;
 
@@ -51,14 +51,6 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
 
     @ColumnInfo(name = "unrestricted")
     private boolean unrestricted;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getAppName() {
         return appName;
@@ -152,17 +144,28 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     public static long stringToLong(String s){
         long hours = 0;
         long minutes = 0;
-        int i = 0;
-        for (; i < s.length() && s.charAt(i) <= '9' && s.charAt(i) >= '0'; i++); //finds the colon
-        if (i<s.length() && s.charAt(i) <= '9' && s.charAt(i) >= '0'){
-            hours = Long.parseLong(s.substring(0, i));
-            minutes = Long.parseLong(s.substring(i+1));
+        if (s.length() > 0) {
+            ArrayList<Integer> nonchars = new ArrayList<>();
+            ArrayList<Long> time = new ArrayList<>();
+            nonchars.add(-1); //we have one at the start and end as base cases
+
+            for (int i = 0; i < s.length(); i++){
+                if ((s.charAt(i) > '9' || s.charAt(i) < '0')) {
+                    nonchars.add(i);
+                }
+            } //now we have an array of indices for non characters, find substrings using these as bounds
+            nonchars.add(s.length());
+            for (int i = nonchars.size() - 1; i > 0; i--){
+                if (nonchars.get(i) - nonchars.get(i - 1) > 1) //if the nonnumericals are not adjacent, then must have a num between
+                    time.add(Long.parseLong(s.substring(nonchars.get(i - 1) + 1, nonchars.get(i))));
+            }
+            return  time.size() <= 0 ? 0:time.get(0) * 60 * 1000 + (time.size() <= 1 ? 0:time.get(1) * 3600000
+                    + (time.size() >= 3 ? time.get(2) * 3600000 * 24:0));
         }
-        else
-            hours = Long.parseLong(s);
-        return minutes * 60 * 1000 + hours * 60 * 60 * 1000;
+        return 0;
     }
 
+    //todo: fix this so it actually works with our string parser stringToLong
     public static String longToString(long millis) {
         String output = "";
         long minutes = millis / 60000;
@@ -186,3 +189,4 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     @Override
     public String toString() {return appName + ",\t" + getTimeOfFlag(this.span_flag);}
 }
+//need a method to update the select fragment
