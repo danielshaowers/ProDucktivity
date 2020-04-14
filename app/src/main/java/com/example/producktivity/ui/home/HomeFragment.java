@@ -23,7 +23,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 import com.example.producktivity.ui.blocking.BlockActivity;
 import com.example.producktivity.ui.send.BlockSelectViewModel;
 

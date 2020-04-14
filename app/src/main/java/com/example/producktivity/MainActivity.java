@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                     bsViewModel.updateList(usagetimes, s);
                     ClassificationClient cClient = new ClassificationClient();
                     BlacklistClient blacklistClient = new BlacklistClient();
-                    for(BlacklistEntry app: s){
+                    /*for(BlacklistEntry app: s){
                         String appId = app.getPackageName();
                         String cat = cClient.requestAppCategory(appId);
                         app.setCategory(Category.valueOf(cat));
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                         //app.setInferredProductive(productive);
                     }
                     bsViewModel.replaceDB(s);
-                    updated[0] = true;
+                    updated[0] = true;*/
                 }
                 bsViewModel.getSelectList().removeObserver(this);
             }
