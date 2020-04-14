@@ -58,7 +58,6 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             // Covers the case of data not being ready yet.
             holder.usageView.setText("No apps found");
         }
-
     }
 
 
