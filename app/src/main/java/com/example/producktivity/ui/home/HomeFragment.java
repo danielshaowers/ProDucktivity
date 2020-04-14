@@ -40,15 +40,28 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.block_apps, container, false);
         Switch sw = root.findViewById(R.id.activate_blocker);
+        Switch smart_bl = root.findViewById(R.id.smart_blocker);
         SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
         boolean checked = settings.getBoolean("switch",  false);  //not sure what this false does
+        boolean smart_checked = settings.getBoolean("smart_switch",  false);
         sw.setChecked(checked);
+        smart_bl.setChecked(smart_checked);
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                  //not how it's supposed to be done, but whtv
                 SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean("switch", isChecked);
+                editor.apply();
+            }
+        });
+
+        smart_bl.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //not how it's supposed to be done, but whtv
+                SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean("smart_switch", isChecked);
                 editor.apply();
             }
         });
@@ -62,13 +75,11 @@ public class HomeFragment extends Fragment {
 
 
     public class BlockerRunnable implements Runnable {
-        HomeViewModel homeViewModel  = ViewModelProviders.of(getActivity()).get(HomeViewModel.class);
-        PackageManager pManager = HomeFragment.this.getContext().getPackageManager();
         UsageStatsManager usManager = (UsageStatsManager) HomeFragment.this.getContext().getSystemService(Context.USAGE_STATS_SERVICE);
         //List<String> whiteList = Arrays.asList("Pixel Launcher", "ProDucktive");
         BlockSelectViewModel bsvm = ViewModelProviders.of(getActivity()).get(BlockSelectViewModel.class);
         List<BlacklistEntry> blE;
-        private boolean checked;
+        private boolean checked, smart_checked;
         public BlockerRunnable() {
             bsvm.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<BlacklistEntry>>() { //just obtains the list but I don't think we need to make any changes
                 @Override
@@ -79,7 +90,8 @@ public class HomeFragment extends Fragment {
             });
             SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
             BlockerRunnable.this.checked = settings.getBoolean("switch",  false);
-            System.out.println("productivity mode activated? " + checked);
+            smart_checked = settings.getBoolean("smart_switch", false);
+            System.out.println("dumb productivity mode activated? " + checked + "\nSmart productivity mode activated? " + smart_checked);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -110,8 +122,7 @@ public class HomeFragment extends Fragment {
                             System.out.println(entry.getAppName() + " is unrestricted? " + entry.isUnrestricted());
                         if (entry != null && !entry.isUnrestricted()) {
                             //check if productivity mode is active. if it is, then check if the app is marked as productive by the database
-                            boolean productive = entry.isInferredProductive();
-                            if (checked && !productive) { // if productivity mode is activated and the app was marked as unproductive, then block!
+                            if (checked || (!entry.isInferredProductive() && smart_checked)) { // if productivity mode is activated and the app was marked as unproductive, then block!
                                 showBlockScreen();
                             } else { //we need to check if we passed the time limit
                             //how do we check the time used right here?
