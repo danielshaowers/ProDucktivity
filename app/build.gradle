@@ -65,6 +65,9 @@ dependencies {
     def work_version = "2.3.2"
     implementation "androidx.work:work-runtime:$work_version"   //for my app blocking
 
+    implementation 'com.jjoe64:graphview:4.2.2'  //For making the graph for the usage stats
+
+
     // calendar dependencies
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'pub.devrel:easypermissions:0.3.0'

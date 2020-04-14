@@ -14,7 +14,7 @@ import com.example.producktivity.dbs.todo.ToDoDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {com.example.producktivity.dbs.blacklist.BlacklistEntry.class}, version = 2)
+@Database(entities = {com.example.producktivity.dbs.blacklist.BlacklistEntry.class}, version = 3)
 public abstract class BlacklistDatabase extends RoomDatabase {
     public abstract BlacklistDaoAccess daoAccess();
 

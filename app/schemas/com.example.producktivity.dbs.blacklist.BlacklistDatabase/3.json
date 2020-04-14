@@ -1,0 +1,94 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "0d6e5f4d7c1969e8f3994fe359164e05",
+    "entities": [
+      {
+        "tableName": "blacklist",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`app_name` TEXT NOT NULL, `package_name` TEXT, `month_use` INTEGER NOT NULL, `inferred_productive` INTEGER NOT NULL, `week_use` INTEGER NOT NULL, `day_use` INTEGER NOT NULL, `span_flag` INTEGER NOT NULL, `category` TEXT, `day_limit` INTEGER NOT NULL, `week_limit` INTEGER NOT NULL, `unrestricted` INTEGER NOT NULL, PRIMARY KEY(`app_name`))",
+        "fields": [
+          {
+            "fieldPath": "appName",
+            "columnName": "app_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "package_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "monthUse",
+            "columnName": "month_use",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "inferredProductive",
+            "columnName": "inferred_productive",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weekUse",
+            "columnName": "week_use",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dayUse",
+            "columnName": "day_use",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "span_flag",
+            "columnName": "span_flag",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dayLimit",
+            "columnName": "day_limit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weekLimit",
+            "columnName": "week_limit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unrestricted",
+            "columnName": "unrestricted",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "app_name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d6e5f4d7c1969e8f3994fe359164e05')"
+    ]
+  }
+}

@@ -92,4 +92,9 @@ public class Task implements Serializable {
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Task && ((Task) o).getId()== this.getId();
+    }
 }

@@ -1,9 +1,12 @@
 package com.example.producktivity.dbs.todo;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Room;
 
 import java.util.List;
 
@@ -13,9 +16,11 @@ public class ToDoRepo {
     private LiveData<List<Task>> mAllTasks;
     private LiveData<List<Task>> mCompleteTasks;
     private LiveData<List<Task>> mIncompleteTasks;
+    private ToDoDatabase db;
 
     public ToDoRepo(Application app) {
-        ToDoDatabase db = ToDoDatabase.getDatabase(app);
+        db = Room.databaseBuilder(app.getApplicationContext(),
+                ToDoDatabase.class, "todo_db").build();
         mToDoDao = db.daoAccess();
         mAllTasks = mToDoDao.getTasksByDueDate();
         mCompleteTasks = mToDoDao.getTasksWithComplete(true);
@@ -23,24 +28,44 @@ public class ToDoRepo {
     }
 
     public LiveData<List<Task>> getAllTasks() {
-        return mAllTasks;
+        return mToDoDao.getTasksByDueDate();
     }
 
     public LiveData<List<Task>> getTaskWithComplete(boolean complete) {
         return complete? mCompleteTasks : mIncompleteTasks;
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void insert(Task task) {
-        ToDoDatabase.databaseWriteExecutor.execute(() ->
-                mToDoDao.insert(task));
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                db.daoAccess().insert(task);
+                return null;
+            }
+        }.execute();
         Log.i("congrats", "You inserted a task!");
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void update(Task task) {
-        ToDoDatabase.databaseWriteExecutor.execute(() ->mToDoDao.update(task));
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                db.daoAccess().update(task);
+                return null;
+            }
+        }.execute();
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void delete(Task task) {
-        ToDoDatabase.databaseWriteExecutor.execute(()->mToDoDao.delete(task));
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                db.daoAccess().delete(task);
+                return null;
+            }
+        }.execute();
     }
 }

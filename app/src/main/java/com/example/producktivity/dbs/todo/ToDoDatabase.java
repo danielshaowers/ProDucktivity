@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 @Database(entities = {Task.class}, version = 1)
 public abstract class ToDoDatabase extends RoomDatabase {
     public abstract ToDoDaoAccess daoAccess();
-
+/*
     private static volatile ToDoDatabase INSTANCE;
     private static final int NUM_THREADS = 4;
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUM_THREADS);
@@ -27,5 +27,5 @@ public abstract class ToDoDatabase extends RoomDatabase {
             }
         }
         return INSTANCE;
-    }
+    }*/
 }
