@@ -1,9 +1,5 @@
 package com.example.producktivity;
 
-import com.example.producktivity.ClassificationClient;
-import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.dbs.BlacklistRepo;
-
 public class BlacklistClient {
     private ClassificationClient categorizer;
     public BlacklistClient(){

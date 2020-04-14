@@ -52,7 +52,7 @@ public class UsageDataHandler {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public UsageTime getUsage(UsageStats data) {
-        return new UsageTime(appName(data.getPackageName()), data.getTotalTimeInForeground());
+        return new UsageTime(appName(data.getPackageName()), data.getTotalTimeInForeground(), 2, 2, "hi", 2);
     }
 
     private boolean isApp(UsageStats app) {                     //more can always be added

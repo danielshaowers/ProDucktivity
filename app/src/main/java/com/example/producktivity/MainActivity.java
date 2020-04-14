@@ -29,8 +29,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.producktivity.dbs.Priority;
-import com.example.producktivity.dbs.Task;
+import com.example.producktivity.dbs.todo.Priority;
+import com.example.producktivity.dbs.todo.Task;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -105,13 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         task.setComplete(task.getTitle() != null && task.getDesc() != null && task.getPriority() != null &&
                             task.getDueDate() != null); //task.getReminderTime() != null
                         toDoVM = new ViewModelProvider(MainActivity.this).get(ToDoViewModel.class);
-                        toDoVM.getAllTasks().observe(MainActivity.this, new Observer<List<Task>>(){
-                            @Override
-                            public void onChanged(@Nullable final List<Task> tasks){
 
-                            }
-                        }
-                        );
                         toDoVM.insert(task);
                         taskCard.setVisibility(View.GONE);
                         isFabOpen = false;

@@ -1,13 +1,13 @@
 package com.example.producktivity.ui.scrolling_to_do;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import com.example.producktivity.dbs.Task;
-import com.example.producktivity.dbs.ToDoRepo;
+import com.example.producktivity.dbs.todo.Task;
+import com.example.producktivity.dbs.todo.ToDoRepo;
 
 import java.util.List;
 
@@ -21,10 +21,14 @@ public class ToDoViewModel extends AndroidViewModel {
         mAllTasks = repo.getAllTasks();
     }
 
-    public LiveData<List<Task>> getAllTasks() {return mAllTasks;}
+    public LiveData<List<Task>> getAllTasks() {
+        Log.i("dbs", "got task list: " + repo.getAllTasks().getValue());
+        return repo.getAllTasks();}
 
     public void insert(Task task) {repo.insert(task);}
 
     public void delete(Task task) {repo.delete(task);}
+
+    public void update(Task task) {repo.update(task);}
 
 }

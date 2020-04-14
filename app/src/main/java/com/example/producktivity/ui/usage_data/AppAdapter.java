@@ -51,7 +51,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (data != null) {
             UsageTime current = data.get(position);
             holder.appView.setText(current.appName);
-            holder.usageView.setText(longToString(current.millisUsed)); //converts milliseconds to
+            //holder.usageView.setText(longToString(current.millisUsed)); //converts milliseconds to
         } else {
             // Covers the case of data not being ready yet.
             holder.usageView.setText("No apps found");

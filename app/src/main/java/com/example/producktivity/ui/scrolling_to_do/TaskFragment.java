@@ -1,129 +1,158 @@
 package com.example.producktivity.ui.scrolling_to_do;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.producktivity.MainActivity;
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.dbs.Task;
-import com.google.android.material.textfield.TextInputEditText;
+import com.example.producktivity.dbs.todo.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 //implements InputAdapter.ItemClickListener if i want it to register button clicks
-//public class TaskFragment extends AppCompatActivity {
-public class TaskFragment extends Fragment {
-    private RecyclerView recyclerView;
+public class TaskFragment extends AppCompatActivity implements InputAdapter.OnTaskItemClick{
     private InputAdapter mAdapter;
-    private ArrayList<Task> data = new ArrayList<>();
-    public static final int GET_FROM_GALLERY = 1;
+    private List<Task> taskList;
+    //public static final int GET_FROM_GALLERY = 1;
     private ToDoViewModel viewModel;
+    private int pos;
 
-    //public View onCreateView()
     @Override
-    public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-       super.onCreate(savedInstanceState);
-        //get access to the TaskViewModel class and its infinite wisdom/data
-       viewModel = new ViewModelProvider(this).get(ToDoViewModel.class);
-       final InputAdapter mAdapter = new InputAdapter(this.getContext());
-       mAdapter.setTasks(viewModel.getAllTasks().getValue());
-       //create the overall view specified by the to_do xml file.
-       //the layout inflater converts a layout xml file into the Views that constitute it. Lets us interact with the xml contents
-       View root = inflater.inflate(R.layout.to_do, container, false);
-        //find the view we need to attach data from TaskViewModel to
-       recyclerView = root.findViewById(R.id.todo_recyclerview);
-       //we set the task list to observe+reflect any changes in text of TaskViewModel
-       viewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
-           @Override
-           public void onChanged(@Nullable List<Task> s) {
-               //update database
-               //I might also want to change the actual values within the recycler view, but to do that I need to inflate the single_select_recycler
-           }
-       });
-        //based on https://stackoverflow.com/questions/44489235/update-recyclerview-with-android-livedata
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(ToDoViewModel.class);
 
-       //now if tasks ever changes, we notify the adapter that the dataset has changed, calling setDataSet
-       //on the new list
-       recyclerView.setAdapter(mAdapter);
-       recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext())); //used to be root's context
-       recyclerView.setItemAnimator(new DefaultItemAnimator());
-       return root;
+        taskList = new ArrayList<>();
+        mAdapter = new InputAdapter(this, taskList);
+
+        viewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                taskList = tasks;
+                mAdapter.setTasks(tasks);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
+        setContentView(R.layout.to_do);
+
+        FloatingActionButton fab = findViewById(R.id.fab2);
+        fab.setOnClickListener(listener);
+
+        RecyclerView recyclerView = findViewById(R.id.todo_recyclerview);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); //used to be root's context
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        displayList();
+
     }
 
-     /*   ImageButton buttonLoadImage = findViewById(R.id.photoButton);
-        buttonLoadImage.setOnClickListener(new Set1.AddImageListener()); */
-/* //IF I WANT TO ADD IMAGES
-    public class AddImageListener implements ImageButton.OnClickListener{
+    private View.OnClickListener listener = new View.OnClickListener() {
         @Override
-        public void onClick (View view){
-        //starts an activity that opens the gallery
-        //new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-        //get the image and set the image
-        view.findViewById(R.id.imgView).setVisibility(View.VISIBLE);
-    }
-    }
-    */
-    /*IF I WANT TO SEND THIS INFO TO ANOTHER CLASS LIKE CALENDAR*/
-   /* public void studyNow(View view){
-        Intent parcelIntent = new Intent(this, Calendar.class);
-        parcelIntent.putParcelableArrayListExtra("success", data);
-        startActivity(parcelIntent);
-    } */
+        public void onClick(View view) {
+            startActivityForResult(new Intent(TaskFragment.this, ModifyTaskListActivity.class), 100);
+        }
+    };
 
-    //when the user is done with the gallery and returns, this method is called
-  /*  @Override
+    private void displayList() {
+        new RetrieveToDosTask(this).execute();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Detects request codes
-        if(requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {    //if we got an image from the gallery and the user didn't back out
-            //get uri that points to the selected contact
-            Uri selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);    //the camera returns a bitmap, so here we store
-                BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-                Info current = this.data.get(mAdapter.getPos());
-                //setImageDrawable(bitmapDrawable);
-                //have to determine at which position it was clicked, get that imageView from the data arraylist, and set its imagedrawable
-                current.setImage(bitmapDrawable);
-                // current.setUri(current.getImageUri((Context) this, bitmap));
-                current.setUri(selectedImage);
-                mAdapter.notifyItemChanged(mAdapter.getPos()); //should i mess with payload? because it's specifically the image that changed
-                //i need to do this one AFTER i convert the bitmap into an image.
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (requestCode == 100 && resultCode > 0) {
+            if (resultCode == 1) {
+                taskList.add((Task) data.getSerializableExtra("task"));
+            } else if (resultCode == 2) {
+                taskList.add((Task) data.getSerializableExtra("task"));
+            }
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onTaskClick(final int pos) {
+        new AlertDialog.Builder(Objects.requireNonNull(TaskFragment.this))
+                .setTitle("Select Options")
+                .setItems( new String[]{"Complete", "Edit", "Delete"}, (dialogInterface, i) ->{
+                    switch(i) {
+                        case 0:
+                            setTaskCompleted(taskList.get(pos));
+                        case 1:
+                            TaskFragment.this.pos = pos;
+                            updateTask(taskList.get(pos));
+                        case 2:
+                            deleteTask(taskList.get(pos));
+                    }
+                }).show();
+    }
+
+    private void setTaskCompleted(Task t) {
+        t.setComplete(true);
+        viewModel.update(t);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void updateTask(Task t) {
+        startActivityForResult(
+                new Intent(TaskFragment.this,
+                        ModifyTaskListActivity.class).putExtra("task", t),
+                100
+        );
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void deleteTask(Task t) {
+        viewModel.delete(t);
+        taskList.remove(t);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private static class RetrieveToDosTask extends AsyncTask<Void, Void, LiveData<List<Task>>> {
+
+        private WeakReference<TaskFragment> fragReference;
+
+        RetrieveToDosTask(TaskFragment context) {fragReference = new WeakReference<>(context);}
+
+        @Override
+        protected LiveData<List<Task>> doInBackground(Void... voids) {
+            if(fragReference.get() != null)
+                return fragReference.get().viewModel.getAllTasks();
+
+            else
+                return null;
+        }
+
+        @Override
+        protected void onPostExecute(LiveData<List<Task>> taskList) {
+            List<Task> list = taskList.getValue();
+            if(list != null && !list.isEmpty()) {
+                fragReference.get().taskList.clear();
+                fragReference.get().taskList.addAll(list);
+
+                fragReference.get().mAdapter.notifyDataSetChanged();
             }
         }
-    } */
+
+    }
+
 }

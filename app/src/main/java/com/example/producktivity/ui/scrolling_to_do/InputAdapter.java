@@ -1,149 +1,124 @@
 package com.example.producktivity.ui.scrolling_to_do;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.producktivity.MainActivity;
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.Priority;
-import com.example.producktivity.dbs.Task;
-import com.google.android.material.textfield.TextInputEditText;
+import com.example.producktivity.dbs.todo.Task;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
 
 //import static com.example.flashcards.TaskFragment.GET_FROM_GALLERY; //not sure if it should be input activity
 
 //this class creates views for data, and replaces the content of views when they are no longer available
 //dang it i can't figure out how to make the inputviewHolder work as a static class instead of nonstatic class
-public class InputAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHolder> {
 
     private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
 
-    public class TaskViewHolder extends RecyclerView.ViewHolder {
-       private CardView taskView;
-       private EditText title;
-       private EditText date;
-       private EditText desc;
-       private EditText reminder;
-       private RadioButton low;
-       private RadioButton medium;
-       private RadioButton high;
-       private Button remove;
-
-       private TaskViewHolder(View itemView){
-           super(itemView);
-           taskView = itemView.findViewById(R.id.todo_card);
-           title = itemView.findViewById(R.id.todo_title);
-           date = itemView.findViewById(R.id.todo_date);
-           desc = itemView.findViewById(R.id.todo_description);
-           reminder = itemView.findViewById(R.id.todo_reminder);
-           low = itemView.findViewById(R.id.high_todo);
-           medium = itemView.findViewById(R.id.medium_todo);
-           high = itemView.findViewById(R.id.low_todo);
-           remove = itemView.findViewById(R.id.remove_button);
-       } //could set onclick listeners for the calendars here if i was motivated
-
-    }
-
     private LayoutInflater mInflater;
     private List<Task> tasks; //cached copy of words
+    private OnTaskItemClick onTaskItemClick;
+
+
     //obtains the layoutinflater from the given context. layoutinflater converts the xml file into its corresponding view
-    InputAdapter(Context context) { mInflater = LayoutInflater.from(context);}
+    InputAdapter(Context context, List<Task> tasks) {
+        Objects.requireNonNull(tasks);
+
+        mInflater = LayoutInflater.from(context);
+        this.tasks = tasks;
+
+        onTaskItemClick = (OnTaskItemClick)context;
+    }
 
     @Override @NonNull
-    public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         View itemView = mInflater.inflate(R.layout.single_task_rcyclr,  parent, false);
         return new TaskViewHolder(itemView);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        onBindViewHolder((TaskViewHolder)holder, position); //bruh idk why mine doesn't work
-    }
-
-
     //TaskViewHolder is the current view of our cardview
-    public void onBindViewHolder( TaskViewHolder holder, int position){
+    @Override
+    public void onBindViewHolder(TaskViewHolder holder, int position){
         if (tasks == null) {
             holder.title.setText("Enter tasks and View Tasks Here");
         }
-        System.out.println("current task at position " + position + " is " + tasks.get(position).getTitle());
-        int i = -1;
-        while (tasks.get(position + ++i).getTitle() == null && position + i < tasks.size());
-        position = position + i;
         Task current = tasks.get(position);
+        System.out.println("current task at position " + position + " is " + current.getTitle());
         holder.title.setText(current.getTitle());
+
         if (current.getDueDate() != null)
             holder.date.setText(dateFormat.format(current.getDueDate())); //formats in mm/dd form //not sure if this one is correct
             //MainActivity.makeCalendar(holder.date, this.mContext);
         holder.desc.setText(current.getDesc());
         if (current.getReminderTime() != null)
             holder.reminder.setText(dateFormat.format(current.getReminderTime())); //formats in mm/dd form
-            //MainActivity.makeCalendar(holder.reminder, this.mContext);
-            //holder.priority = current.getPriority(); not sure how to set the value for a radio button
-        Priority p = current.getPriority();
-        if (p == Priority.HIGH)
-            holder.high.setChecked(true);
-        else if (p == Priority.MED)
-            holder.medium.setChecked(false);
-        else
-            holder.low.setChecked(false);
-        int finalPosition = position;
-        holder.remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-
-
-
-                tasks.remove(finalPosition);
-                notifyItemRemoved(finalPosition);
-            }
-        });
-    }
-    void setTasks(List<Task> t){
-        tasks = t;
-        notifyDataSetChanged();
+        switch(current.getPriority()) {
+            case HIGH:
+                holder.priority.setText("High Priority");
+            case MED:
+                holder.priority.setText("Medium Priority");
+            case LOW:
+                holder.priority.setText("Low Priority");
+        }
     }
 
     @Override
-    public int getItemCount(){
-        if (tasks != null)
-            return tasks.size();
-        return 0;
+    public int getItemCount() {
+        return tasks.size();
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public interface OnTaskItemClick {
+        void onTaskClick(int pos);
+    }
+
+    public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private TextView title;
+        private TextView date;
+        private TextView desc;
+        private TextView reminder;
+        private TextView priority;
+
+        private TaskViewHolder(View itemView){
+            super(itemView);
+            itemView.setOnClickListener(this);
+            title = itemView.findViewById(R.id.todo_title_view);
+            date = itemView.findViewById(R.id.todo_date_view);
+            desc = itemView.findViewById(R.id.todo_description_view);
+            reminder = itemView.findViewById(R.id.todo_reminder_view);
+            priority = itemView.findViewById(R.id.priority_view);
+
+        } //could set onclick listeners for the calendars here if i was motivated
+
+        //Clicking pulls up the other menu
+        @Override
+        public void onClick(View v) {
+            Log.i("yike", "im trying here");
+            onTaskItemClick.onTaskClick(getAdapterPosition());
+        }
+
     }
 
 
 
 
-
-
-
-
+/*
     private ArrayList<Task> allData;
     private Context mContext;
     private int focusPosition = 0;

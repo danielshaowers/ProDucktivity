@@ -52,6 +52,14 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     @ColumnInfo(name = "unrestricted")
     private boolean unrestricted;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getAppName() {
         return appName;
     }

@@ -1,10 +1,12 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.blacklist;
 
 import android.content.Context;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+
+import com.example.producktivity.dbs.todo.ToDoDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

@@ -37,7 +37,7 @@ public class DataViewModel extends ViewModel {
         data.setValue(allData);
     }
     public void insert(String app, Long time){
-        data.getValue().add(new UsageTime(app, time));
+        //data.getValue().add(new UsageTime(app, time));
     }
 
 }

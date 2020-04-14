@@ -30,6 +30,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.blocking.BlockActivity" />
+        <activity android:name=".ui.scrolling_to_do.ModifyTaskListActivity" />
+        <activity android:name=".ui.scrolling_to_do.TaskFragment" />
 
         <service android:name=".ui.blocking.BlockerService" />
     </application>

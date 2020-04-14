@@ -1,14 +1,10 @@
 package com.example.producktivity.ui.send;
 
-import android.app.Activity;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.ui.usage_data.UsageDataHandler;
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.util.ArrayList;

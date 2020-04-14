@@ -1,10 +1,9 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.blacklist;
 
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import java.time.Duration;
 import java.util.List;
 
 public class BlacklistRepo {
