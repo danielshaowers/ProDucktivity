@@ -7,12 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.producktivity.ui.usage_data.UsageTime;
 
-<<<<<<< HEAD:app/src/main/java/com/example/producktivity/dbs/blacklist/BlacklistRepo.java
-=======
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
->>>>>>> c78f5d1d8370a1907fb8923a8073bac7c9a4a5c4:app/src/main/java/com/example/producktivity/dbs/BlacklistRepo.java
+
 import java.util.List;
 import java.util.Objects;
 

@@ -1,24 +1,23 @@
 package com.example.producktivity.ui.send;
 
-<<<<<<< HEAD
-=======
+
 import android.app.Activity;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
->>>>>>> c78f5d1d8370a1907fb8923a8073bac7c9a4a5c4
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-<<<<<<< HEAD
+
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
-=======
+
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.dbs.BlacklistRepo;
+
+import com.example.producktivity.dbs.blacklist.BlacklistRepo;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
->>>>>>> c78f5d1d8370a1907fb8923a8073bac7c9a4a5c4
+
 import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.util.ArrayList;

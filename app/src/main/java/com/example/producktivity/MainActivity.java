@@ -29,16 +29,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-<<<<<<< HEAD
 import com.example.producktivity.dbs.todo.Priority;
 import com.example.producktivity.dbs.todo.Task;
-=======
-import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.dbs.Priority;
-import com.example.producktivity.dbs.Task;
-import com.example.producktivity.dbs.Category;
->>>>>>> c78f5d1d8370a1907fb8923a8073bac7c9a4a5c4
+
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
+import com.example.producktivity.dbs.blacklist.Category;
+
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 import com.example.producktivity.ui.send.BlockSelectViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
@@ -156,12 +152,12 @@ public class MainActivity extends AppCompatActivity {
                     List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
                     bsViewModel.updateList(usagetimes, s);
                     ClassificationClient cClient = new ClassificationClient();
-                    BlacklistClient blacklistClient = new BlacklistClient(s);
+                    BlacklistClient blacklistClient = new BlacklistClient();
                     for(BlacklistEntry app: s){
                         String appId = app.getPackageName();
                         String cat = cClient.requestAppCategory(appId);
                         app.setCategory(Category.valueOf(cat));
-                        Boolean productive = blacklistClient.classifyApp(cat);
+                        //Boolean productive = blacklistClient.classifyApp(cat);
                         //TODO: add productive classification to app entry
                         //app.setInferredProductive(productive);
                     }

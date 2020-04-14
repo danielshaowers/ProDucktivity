@@ -6,6 +6,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.example.producktivity.dbs.blacklist.Category;
+import com.example.producktivity.dbs.blacklist.CategoryConverter;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.io.Serializable;

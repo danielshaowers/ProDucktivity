@@ -4,13 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-<<<<<<< HEAD
-=======
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
->>>>>>> c78f5d1d8370a1907fb8923a8073bac7c9a4a5c4
+
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -23,16 +22,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
-<<<<<<< HEAD
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
-=======
-import com.example.producktivity.dbs.BlacklistEntry;
+
 import com.example.producktivity.ui.usage_data.AppAdapter;
 import com.example.producktivity.ui.usage_data.DataViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataFragment;
->>>>>>> c78f5d1d8370a1907fb8923a8073bac7c9a4a5c4
-import com.example.producktivity.ui.usage_data.UsageDataHandler;
 
+import com.example.producktivity.ui.usage_data.UsageDataHandler;
+import com.example.producktivity.ui.usage_data.UsageTime;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlockSelectFragment extends Fragment {

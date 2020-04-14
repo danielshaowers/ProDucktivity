@@ -66,10 +66,6 @@ public class UsageDataHandler {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-<<<<<<< HEAD
-    public UsageTime getUsage(UsageStats data) {
-        return new UsageTime(appName(data.getPackageName()), data.getTotalTimeInForeground(), 2, 2, "hi", 2);
-=======
     public UsageTime getUsage(UsageStats day, UsageStats week, UsageStats month, int timeFlag) {
         System.out.println("day " + day + " week " + week + " month " + month);
         long dayTime = day == null ? 0 : day.getTotalTimeInForeground();
@@ -78,7 +74,6 @@ public class UsageDataHandler {
         return new UsageTime(appName(month.getPackageName()),
                 dayTime, weekTime, monthTime,
                 month.getPackageName(), timeFlag); //timeFlag sets the primary time to be displayed
->>>>>>> c78f5d1d8370a1907fb8923a8073bac7c9a4a5c4
     }
 
     private boolean isApp(UsageStats app) {                     //more can always be added

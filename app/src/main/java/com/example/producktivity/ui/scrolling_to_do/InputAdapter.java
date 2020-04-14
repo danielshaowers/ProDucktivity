@@ -65,6 +65,7 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
         if (current.getReminderTime() != null)
             holder.reminder.setText(dateFormat.format(current.getReminderTime())); //formats in mm/dd form
 
+
         switch(current.getPriority()) {
             case HIGH:
                 holder.priority.setText("High Priority");

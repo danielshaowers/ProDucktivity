@@ -29,12 +29,17 @@ import java.util.Objects;
 //implements InputAdapter.ItemClickListener if i want it to register button clicks
 public class TaskFragment extends AppCompatActivity implements InputAdapter.OnTaskItemClick{
     private InputAdapter mAdapter;
+
     private List<Task> taskList;
     //public static final int GET_FROM_GALLERY = 1;
+
+    private ArrayList<Task> data = new ArrayList<>();
+
     private ToDoViewModel viewModel;
     private int pos;
 
     @Override
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ToDoViewModel.class);
@@ -154,5 +159,4 @@ public class TaskFragment extends AppCompatActivity implements InputAdapter.OnTa
         }
 
     }
-
 }
