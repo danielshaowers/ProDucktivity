@@ -9,7 +9,6 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.producktivity.dbs.BlacklistEntry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
