@@ -21,9 +21,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
+
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
+
 import com.example.producktivity.ui.send.BlockSelectFragment;
 import com.example.producktivity.ui.send.BlockSelectViewModel;
+
 
 import java.util.Comparator;
 import java.util.List;

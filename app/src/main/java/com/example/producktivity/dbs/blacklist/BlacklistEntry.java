@@ -1,4 +1,4 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.blacklist;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -15,11 +15,8 @@ import java.util.Comparator;
 @Entity(tableName = "blacklist")
 public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> {
 
-    public BlacklistEntry(String appName) {this.appName = appName; this.category = Category.BEAUTY;}
-    //todo: remove the default category!!
+    public BlacklistEntry(@NonNull String appName) {this.appName = appName; this.category = Category.BEAUTY;}
 
-   // @PrimaryKey(autoGenerate = true)
-    //private int id;
     @PrimaryKey @NonNull
     @ColumnInfo(name = "app_name")
     private String appName;
@@ -77,7 +74,6 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
         return packageName;
     }
 
-    //public int getId(){return id;}
     public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
@@ -109,7 +105,6 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     public int getSpan_flag() {
         return span_flag;
     }
-    //public void setId(int id){this.id = id;}
 
     public void setSpan_flag(int span_flag) {
         this.span_flag = span_flag;
@@ -174,13 +169,14 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
             nonchars.add(s.length());
             for (int i = nonchars.size() - 1; i > 0; i--){
                 if (nonchars.get(i) - nonchars.get(i - 1) > 1) //if the nonnumericals are not adjacent, then must have a num between
-                time.add(Long.parseLong(s.substring(nonchars.get(i - 1) + 1, nonchars.get(i))));
+                    time.add(Long.parseLong(s.substring(nonchars.get(i - 1) + 1, nonchars.get(i))));
             }
             return  time.size() <= 0 ? 0:time.get(0) * 60 * 1000 + (time.size() <= 1 ? 0:time.get(1) * 3600000
                     + (time.size() >= 3 ? time.get(2) * 3600000 * 24:0));
         }
-            return 0;
+        return 0;
     }
+
     //todo: fix this so it actually works with our string parser stringToLong
     public static String longToString(long millis) {
         if (millis == NO_LIMIT)
@@ -201,7 +197,7 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
 
     @Override
     public int compareTo(BlacklistEntry o) {
-        return -Long.compare(getTimeOfFlag(this.span_flag), o.getTimeOfFlag(this.span_flag));
+        return Long.compare(getTimeOfFlag(this.span_flag), o.getTimeOfFlag(this.span_flag));
     }
 
     @Override

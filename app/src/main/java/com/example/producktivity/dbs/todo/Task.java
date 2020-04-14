@@ -1,9 +1,8 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.todo;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 import java.io.Serializable;

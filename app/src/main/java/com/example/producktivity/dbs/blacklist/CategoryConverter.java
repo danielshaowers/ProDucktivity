@@ -1,8 +1,8 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.blacklist;
 
 import androidx.room.TypeConverter;
 
-class CategoryConverter {
+public class CategoryConverter {
 
     @TypeConverter
     public static Category fromCategory(String value) {

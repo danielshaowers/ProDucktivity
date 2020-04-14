@@ -1,4 +1,4 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.todo;
 
 import androidx.room.TypeConverter;
 

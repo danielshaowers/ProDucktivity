@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 import com.example.producktivity.ui.send.BlockSelectViewModel;
 
 import java.util.List;
@@ -51,9 +51,11 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void onBindViewHolder(appViewHolder holder, int position) {
         if (data != null) {
+
             BlacklistEntry current = data.get(position);
             holder.appView.setText(current.getAppName());
             holder.usageView.setText(longToString(current.getTimeOfFlag(current.getSpan_flag()))); //converts milliseconds to
+
         } else {
             // Covers the case of data not being ready yet.
             holder.usageView.setText("No apps found");

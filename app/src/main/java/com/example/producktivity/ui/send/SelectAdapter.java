@@ -15,22 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.ui.usage_data.AppAdapter;
-import com.example.producktivity.ui.usage_data.UsageTime;
-
-import java.util.List;
-
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.producktivity.R;
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
 import java.util.List;
 

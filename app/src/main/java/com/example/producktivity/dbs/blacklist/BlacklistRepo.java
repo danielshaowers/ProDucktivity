@@ -1,4 +1,4 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.blacklist;
 
 import android.app.Application;
 
@@ -7,9 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.producktivity.ui.usage_data.UsageTime;
 
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Objects;
 

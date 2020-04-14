@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -20,10 +22,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
+
 import com.example.producktivity.ui.usage_data.AppAdapter;
 import com.example.producktivity.ui.usage_data.DataViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataFragment;
+
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
 import com.example.producktivity.ui.usage_data.UsageTime;
 

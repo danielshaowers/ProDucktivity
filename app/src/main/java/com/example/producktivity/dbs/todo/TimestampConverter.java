@@ -1,4 +1,4 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.todo;
 
 import androidx.room.TypeConverter;
 
@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-class TimestampConverter {
+public class TimestampConverter {
 
     private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
