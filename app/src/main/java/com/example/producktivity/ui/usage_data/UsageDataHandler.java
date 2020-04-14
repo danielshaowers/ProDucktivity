@@ -36,18 +36,11 @@ public class UsageDataHandler {
         usageStatsMap.add(manager.queryAndAggregateUsageStats(System.currentTimeMillis() - month, System.currentTimeMillis()));
         List<UsageTime> output = new ArrayList<UsageTime>();
         for (String key : usageStatsMap.get(2).keySet()){ //this is assuming all of the maps have the same entries
-            /*UsageStats day = usageStatsMap.get(0).get(key);
-            UsageStats week = usageStatsMap.get(1).get(key);*/
             UsageStats m = usageStatsMap.get(2).get(key);
             if (m.getTotalTimeInForeground() > 0 && isApp(m)){ //if monthly use is over 1 minute: 60000
                 output.add(getUsage(usageStatsMap.get(0).get(key), usageStatsMap.get(1).get(key), m, timeFlag));
             }
         }
-         /*   output = usageStatsMap.get(0).values().stream()
-                    .filter(v -> v.getTotalTimeInForeground() > 60000 && isApp(v)) //previously  v.getTotalTimeInForeground() > 60000
-                    .map(v -> getUsage(v)).collect(Collectors.toList());*/
-           /* for (UsageTime a : output)
-                System.out.println(a.toString());*/
         return output;
     }
 
@@ -79,7 +72,7 @@ public class UsageDataHandler {
 
     private boolean isApp(UsageStats app) {                     //more can always be added
         List<String> notApps = Arrays.asList("oh gosh oh darn", "Pixel Launcher", "Permission Controller",
-                "com.google.android.sdksetup", "Data Transfer Tool", "Android Setup");
+                "com.google.android.sdksetup", "Data Transfer Tool", "Android Setup", "Android System", "AppAssistant", "AppAdvisor", "AppGallery", "Dual SIM settings", "Cell broadcast");
         return !notApps.contains(appName(app.getPackageName()));
     }
 

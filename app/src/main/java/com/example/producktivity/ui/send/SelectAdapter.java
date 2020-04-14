@@ -103,6 +103,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         current.setWeekLimit(length);
                         holder.weekLimit.setText(BlacklistEntry.longToString(length));
                     }
+                    current.setUnrestricted(holder.setProductive.isChecked());
                     limits.set(position, current);
                     notifyItemChanged(position); //this is useful if we want to display the limits
                 });
