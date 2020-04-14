@@ -62,17 +62,50 @@ public class BlacklistClient {
         return "NO CATEGORY IN DATABASE";
     }
 
+    private BlacklistEntry getEntryFromList(String appId) {
+        for(BlacklistEntry element : this.listOfApps) {
+            if(element.getAppName().equalsIgnoreCase(appId)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    private Boolean categoryVote(BlacklistEntry app){
+        int countProductive = 0;
+        for(BlacklistEntry iter: this.listOfApps){
+            if(iter.getCategory().equals(app.getCategory())){
+                if (iter.isInferredProductive() || iter.isUnrestricted())
+                    countProductive++;
+                else
+                    countProductive--;
+            }
+        }
+        return countProductive >= 0;
+    }
+
     //returns false if unproductive, true if productive
-    public Boolean classifyApp(String appCategory) {
+    public Boolean classifyApp(String appId) {
+        BlacklistEntry app = getEntryFromList(appId);
         //determine if the app is productive or unproductive based on category and database information
-        if(appCategory.equalsIgnoreCase("PRODUCTIVITY") || appCategory.equalsIgnoreCase("BUSINESS") || appCategory.equalsIgnoreCase("EDUCATION") || appCategory.equalsIgnoreCase("BOOKS_AND_REFERENCE"))
-            return true;
-        else
-            return false;
+        //if(appCategory.equalsIgnoreCase("PRODUCTIVITY") || appCategory.equalsIgnoreCase("BUSINESS") || appCategory.equalsIgnoreCase("EDUCATION") || appCategory.equalsIgnoreCase("BOOKS_AND_REFERENCE"))
+          //  return true;
+        //else
+          //  return false;
 
         //if user marks as productive it's productive
+        if(app.isUnrestricted()) {
+            return true;
+        }
         //if user sets time limit it's unproductive
+        else if(app.getDayLimit() != BlacklistEntry.NO_LIMIT || app.getWeekLimit() != BlacklistEntry.NO_LIMIT){
+            return false;
+        }
+
         //if neither, majority vote of category
+        else {
+            return categoryVote(app);
+        }
     }
 
 }
