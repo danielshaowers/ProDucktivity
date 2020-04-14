@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4d342ada70d08cd0e332b4a1c89d0d49",
+    "identityHash": "0d6e5f4d7c1969e8f3994fe359164e05",
     "entities": [
       {
         "tableName": "blacklist",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`app_name` TEXT NOT NULL, `package_name` TEXT, `month_use` INTEGER NOT NULL, `week_use` INTEGER NOT NULL, `day_use` INTEGER NOT NULL, `span_flag` INTEGER NOT NULL, `category` TEXT, `day_limit` INTEGER NOT NULL, `week_limit` INTEGER NOT NULL, `unrestricted` INTEGER NOT NULL, PRIMARY KEY(`app_name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`app_name` TEXT NOT NULL, `package_name` TEXT, `month_use` INTEGER NOT NULL, `inferred_productive` INTEGER NOT NULL, `week_use` INTEGER NOT NULL, `day_use` INTEGER NOT NULL, `span_flag` INTEGER NOT NULL, `category` TEXT, `day_limit` INTEGER NOT NULL, `week_limit` INTEGER NOT NULL, `unrestricted` INTEGER NOT NULL, PRIMARY KEY(`app_name`))",
         "fields": [
           {
             "fieldPath": "appName",
@@ -23,6 +23,12 @@
           {
             "fieldPath": "monthUse",
             "columnName": "month_use",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "inferredProductive",
+            "columnName": "inferred_productive",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -82,7 +88,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4d342ada70d08cd0e332b4a1c89d0d49')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d6e5f4d7c1969e8f3994fe359164e05')"
     ]
   }
 }

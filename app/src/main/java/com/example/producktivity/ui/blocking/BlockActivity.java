@@ -1,39 +1,43 @@
 package com.example.producktivity.ui.blocking;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.producktivity.MainActivity;
+import com.example.producktivity.R;
+import com.google.android.material.snackbar.Snackbar;
+
 public class BlockActivity extends AppCompatActivity {
 
     //private BlockViewModel blockViewModel;
-    //private int duckClicks = 0;
+    private int duckClicks = 0;
 
-    //private final int PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1;
+    private final int PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.block_page);
+        setContentView(R.layout.block_page);
 
         //blockViewModel = ViewModelProviders.of(this).get(BlockViewModel.class);
         System.out.println("creating a blocker");
-
-
+        Intent intent = getIntent(); // get intent that started this activity
 
         /*Intent intent = new Intent(this, BlockerService.class);
         startService(intent);
         */
 
         //final TextView textView = findViewById(R.id.title_block);
-
-
-
-
-        /*final TextView textView = findViewById(R.id.title_block);
+        final TextView textView = findViewById(R.id.title_block);
         ImageButton duck = findViewById(R.id.continueDuck);
         Button returnButt = findViewById(R.id.ReturnButton);
         returnButt.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +57,7 @@ public class BlockActivity extends AppCompatActivity {
                 } else
                     Snackbar.make(view, "Noooo don't do it!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
-        });*/
+        });
     }
 
     /*public void block() {

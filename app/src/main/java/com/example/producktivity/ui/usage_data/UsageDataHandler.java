@@ -9,6 +9,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.producktivity.dbs.BlacklistEntry;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -32,7 +34,6 @@ public class UsageDataHandler {
         usageStatsMap.add(manager.queryAndAggregateUsageStats(System.currentTimeMillis() - week, System.currentTimeMillis()));
         usageStatsMap.add(manager.queryAndAggregateUsageStats(System.currentTimeMillis() - month, System.currentTimeMillis()));
         List<UsageTime> output = new ArrayList<UsageTime>();
-
         for (String key : usageStatsMap.get(2).keySet()){ //this is assuming all of the maps have the same entries
             /*UsageStats day = usageStatsMap.get(0).get(key);
             UsageStats week = usageStatsMap.get(1).get(key);*/
@@ -67,7 +68,6 @@ public class UsageDataHandler {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public UsageTime getUsage(UsageStats day, UsageStats week, UsageStats month, int timeFlag) {
-        System.out.println("day " + day + " week " + week + " month " + month);
         long dayTime = day == null ? 0 : day.getTotalTimeInForeground();
         long weekTime = week == null ? 0 : week.getTotalTimeInForeground();
         long monthTime = month == null ? 0 : month.getTotalTimeInForeground();

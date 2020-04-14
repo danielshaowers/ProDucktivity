@@ -16,10 +16,13 @@ import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BlockSelectViewModel extends AndroidViewModel {
 
+    public static final int TIME_SORT = 0;
+    public static final int NAME_SORT = 1;
     private LiveData<List<BlacklistEntry>> list;
     private BlacklistRepo repo;
     public BlockSelectViewModel(Application app) {
@@ -50,8 +53,15 @@ public class BlockSelectViewModel extends AndroidViewModel {
     public void replaceDB(List<BlacklistEntry> newList){
         repo.repopulateDatabase(newList);
     }
-    public static List<BlacklistEntry> sortData(List<BlacklistEntry> a){
-        if (a != null)
+
+    public static List<BlacklistEntry> sortData(List<BlacklistEntry> a, int sort_flag){
+        if (a != null) {
+            if (sort_flag == NAME_SORT) {
+                NameCompare nameComp = new NameCompare();
+                Collections.sort(a, nameComp);
+            }
+        }
+        else
             Collections.sort(a);
         return a;
     }
@@ -72,5 +82,22 @@ public class BlockSelectViewModel extends AndroidViewModel {
         }
 
         return list;
+    }
+
+    static class TimeCompare implements Comparator<BlacklistEntry>
+    {
+        public int compare(BlacklistEntry m1, BlacklistEntry m2)
+        {
+            return -Long.compare(m1.getTimeOfFlag(m1.getSpan_flag()), m2.getTimeOfFlag(m1.getSpan_flag()));
+        }
+    }
+
+    // Class to compare apps by name
+    static class NameCompare implements Comparator<BlacklistEntry>
+    {
+        public int compare(BlacklistEntry m1, BlacklistEntry m2)
+        {
+            return m1.getAppName().compareTo(m2.getAppName());
+        }
     }
 }

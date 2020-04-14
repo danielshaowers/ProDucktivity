@@ -65,7 +65,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 public List<BlacklistEntry> getData(){return data;}
 
     public void setData(List<BlacklistEntry> datas) {
-        data = BlockSelectViewModel.sortData(datas);
+        data = BlockSelectViewModel.sortData(datas, BlockSelectViewModel.TIME_SORT);
         notifyDataSetChanged();
     }
 

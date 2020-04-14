@@ -11,14 +11,14 @@ public class BlacklistClient {
     }
 
     //called when an app is opened to determine whether or not to block it
-    public Boolean shouldAppBeBlocked(String AppName) {
+   /* public Boolean shouldAppBeBlocked(String AppName) {
         //Get app ID from app name
 
         //check if app is in database, if yes use the recorded classification.  if no call getAppCategory and classifyApp
 
         //Make a determination about whether the app should be blocked
         return Boolean.TRUE;
-    }
+    } */
 
     //get the category of the app
     public String getAppCategory(String appId) {
@@ -33,9 +33,5 @@ public class BlacklistClient {
 
         return "";
     }
-
-
-
-
 
 }

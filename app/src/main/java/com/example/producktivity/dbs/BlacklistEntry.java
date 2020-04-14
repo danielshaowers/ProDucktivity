@@ -10,6 +10,7 @@ import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 @Entity(tableName = "blacklist")
 public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> {
@@ -29,6 +30,8 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     @ColumnInfo(name = "month_use")
     private long monthUse;
 
+    @ColumnInfo(name = "inferred_productive")
+    private boolean inferredProductive;
     @ColumnInfo(name = "week_use")
     private long weekUse;
 
@@ -41,20 +44,27 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     public static final int MONTH = 2;
     public static final int WEEK = 1;
     public static final int DAY = 0;
+    public static final long NO_LIMIT = 1000000000;
 
     @ColumnInfo(name = "category")
     @TypeConverters({CategoryConverter.class})
     private Category category;
 
     @ColumnInfo(name = "day_limit")
-    private long dayLimit;
+    private long dayLimit = NO_LIMIT;
 
     @ColumnInfo(name = "week_limit")
-    private long weekLimit;
+    private long weekLimit = NO_LIMIT;
 
     @ColumnInfo(name = "unrestricted")
     private boolean unrestricted;
 
+    public boolean isInferredProductive(){
+        return inferredProductive;
+    }
+    public void setInferredProductive(boolean i){
+        this.inferredProductive = i;
+    }
     public String getAppName() {
         return appName;
     }
@@ -147,6 +157,8 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
 
     //Converter methods for longs and input strings
     public static long stringToLong(String s){
+        if (s.equals("None"))
+            return NO_LIMIT;
         long hours = 0;
         long minutes = 0;
         if (s.length() > 0) {
@@ -171,6 +183,8 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     }
     //todo: fix this so it actually works with our string parser stringToLong
     public static String longToString(long millis) {
+        if (millis == NO_LIMIT)
+            return "None";
         String output = "";
         long minutes = millis / 60000;
 
@@ -184,7 +198,6 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
         }
         return output + minutes + "m";
     }
-
 
     @Override
     public int compareTo(BlacklistEntry o) {

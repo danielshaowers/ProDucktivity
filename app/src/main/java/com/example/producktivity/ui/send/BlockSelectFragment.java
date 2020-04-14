@@ -93,6 +93,8 @@ public class BlockSelectFragment extends Fragment {
         });
         return root;
     }
+
+
     //called when the fragment is no longer in view
     @Override
     public void onPause(){
