@@ -17,14 +17,19 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 
 import com.example.producktivity.R;
+import com.example.producktivity.dbs.todo.Task;
+import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class CalendarFragment extends Fragment {
@@ -33,6 +38,7 @@ public class CalendarFragment extends Fragment {
     private ViewSwitcher calendarSwitcher;
     private TextView currentMonth;
     private CalendarAdaptor calendarAdapter;
+    private ToDoViewModel tasks;
 
     //Calendar Adaptor is where we show the switching between days and months etc, while the fragment here shows  the look
 
@@ -49,6 +55,7 @@ public class CalendarFragment extends Fragment {
         final GridView calendarDayGrid = (GridView) calendarLayout.findViewById(R.id.calendar_days_grid);
         final GestureDetector swipeDetector = new GestureDetector(getActivity(), new SwipeGesture(getActivity()));
         final GridView calendarGrid = (GridView) calendarLayout.findViewById(R.id.calendar_grid);
+        final ScrollView tasklist = (ScrollView) calendarLayout.findViewById(R.id.taskview);
         calendarSwitcher = (ViewSwitcher) calendarLayout.findViewById(R.id.calendar_switcher);
         currentMonth = (TextView) calendarLayout.findViewById(R.id.current_month);
         calendarAdapter = new CalendarAdaptor(getActivity(), calendar);
@@ -62,6 +69,7 @@ public class CalendarFragment extends Fragment {
         calendarGrid.setOnItemClickListener(new DayItemClickListener());
 
         calendarGrid.setAdapter(calendarAdapter);
+
 
         // allows for option of swipe through current month as well yo get to get to previous and next month
         calendarGrid.setOnTouchListener(new OnTouchListener() {
@@ -91,6 +99,10 @@ public class CalendarFragment extends Fragment {
             calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1);
         }
         updateCurrentMonth();
+    }
+
+    protected final LiveData<List<Task>> onGetTasks() {
+        return tasks.getAllTasks();
     }
 
     //to add calendar event for specific day chosen
