@@ -41,7 +41,6 @@ public class BlockSelectFragment extends Fragment {
 
     private BlockSelectViewModel blockSelectViewModel;
     private SelectAdapter adapter;
-    private List<BlacklistEntry> dontknowwhatimdoing = new ArrayList<>();
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         blockSelectViewModel =

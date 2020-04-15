@@ -39,6 +39,7 @@ public class BlockSelectViewModel extends AndroidViewModel {
 
        //do I need to initialize the list here? I don't think so
     }
+
    /* public void setSelectList(List<BlacklistEntry> entry){
         list.setValue(entry);
     }*/
