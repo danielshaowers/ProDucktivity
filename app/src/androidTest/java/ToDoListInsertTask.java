@@ -2,6 +2,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
@@ -19,6 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -31,6 +33,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
@@ -153,65 +156,25 @@ public class ToDoListInsertTask {
                         isDisplayed()));
         navigationMenuItemView.perform(click());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.todo_title_view), withText("Title"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.todo_card_view),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView.check(matches(withText("Title")));
+        DataInteraction textView = onData(
+                allOf(is(instanceOf(String.class)),
+                        is("Title")));
+        textView.check(matches(isDisplayed()));
 
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.todo_description_view), withText("desc"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.todo_card_view),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView2.check(matches(withText("desc")));
+        DataInteraction textView2 = onData(
+                allOf(is(instanceOf(String.class)),
+                        is("desc")));
+        textView2.check(matches(isDisplayed()));
 
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.todo_date_view), withText("00-15"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.todo_card_view),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView3.check(matches(withText("00-15")));
+        DataInteraction textView4 = onData(
+                allOf(is(instanceOf(String.class)),
+                        is("00-15")));
+        textView4.check(matches(isDisplayed()));
 
-        ViewInteraction textView4 = onView(
-                allOf(withId(R.id.todo_reminder_view), withText("00-15"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.todo_card_view),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView4.check(matches(withText("00-15")));
-
-        ViewInteraction textView5 = onView(
-                allOf(withId(R.id.priority_view), withText("High Priority"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.todo_card_view),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView5.check(matches(withText("High Priority")));
-
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.priority_view), withText("High Priority"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.todo_card_view),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView6.check(matches(withText("High Priority")));
+        DataInteraction textView5 = onData(
+                allOf(is(instanceOf(String.class)),
+                        is("High Priority")));
+        textView5.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(

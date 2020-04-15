@@ -96,8 +96,8 @@ public class UsagestateTest {
         blacklistDao.delete(data2);
 
         assertTrue(LiveDataTestUtil.getValue(blacklistDao.getList()).isEmpty());*/
-     assertTrue(1 == (1+0));
-    }
+     //assertTrue(1 == (1+0));
+    //}
 
   /*  @Test
     public void testUpdate6() throws InterruptedException {
