@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean isFabOpen = false;
-    private ToDoViewModel toDoVM;
+    public ToDoViewModel toDoVM;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab); //THE PLUS BUTTON
         toDoVM = new ViewModelProvider(MainActivity.this).get(ToDoViewModel.class);
+        Log.i("ToDoVM", "The todovm object is " + toDoVM.toString());
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //make this add a task in future
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
                     ClassificationClient cClient = new ClassificationClient();
                     BlacklistClient blacklistClient = new BlacklistClient(s);
-                    for(BlacklistEntry app: s){
+                    /*for(BlacklistEntry app: s){
 
                         String appId = app.getPackageName();
                         String cat = cClient.requestAppCategory(appId);
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
                         app.setInferredProductive(productive);
                     }
-                    bsViewModel.replaceDB(s);
+                    bsViewModel.replaceDB(s);*/
                     updated[0] = true;
                 }
                 bsViewModel.getSelectList().removeObserver(this);
@@ -256,6 +257,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
+
+        Log.i("MainAct", "Result code: " + resultCode);
 
         if (requestCode == 100 && resultCode > 0) {
             Task task = (Task) data.getSerializableExtra("task");

@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.producktivity.AppUtils;
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.todo.Task;
 
@@ -28,7 +30,6 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
 
     private final DateFormat dateFormat = new SimpleDateFormat("mm-dd");
 
-    private LayoutInflater mInflater;
     private List<Task> tasks; //cached copy of words
     private OnTaskItemClick onTaskItemClick;
 
@@ -36,8 +37,6 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
     //obtains the layoutinflater from the given context. layoutinflater converts the xml file into its corresponding view
     InputAdapter(Fragment frag, List<Task> tasks) {
         Objects.requireNonNull(tasks);
-
-        mInflater = LayoutInflater.from(frag.getContext());
         this.tasks = tasks;
 
         onTaskItemClick = (OnTaskItemClick)frag;
@@ -45,16 +44,13 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
 
     @Override @NonNull
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        View itemView = mInflater.inflate(R.layout.single_task_rcyclr,  parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_task_rcyclr,  parent, false);
         return new TaskViewHolder(itemView);
     }
 
     //TaskViewHolder is the current view of our cardview
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position){
-        if (tasks == null) {
-            holder.title.setText("Enter tasks and View Tasks Here");
-        }
         Task current = tasks.get(position);
         System.out.println("current task at position " + position + " is " + current.getTitle());
         holder.title.setText(current.getTitle());
@@ -82,9 +78,10 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
         return tasks.size();
     }
 
-    public void addTasks(List<Task> tasks) {
-        this.tasks.clear();
-        this.tasks.addAll(tasks);
+    public Task getItemAt(int pos) { return tasks.get(pos);}
+
+    public void addTasks(List<Task> newTasks) {
+        tasks = newTasks;
     }
 
     public interface OnTaskItemClick {
