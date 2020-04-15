@@ -1,5 +1,5 @@
-/*apply plugin: 'com.android.application'
 
+/*
 android {
     viewBinding.enabled = true
     compileSdkVersion 29
@@ -99,9 +99,9 @@ configurations {
 
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'jacoco'
+//apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'jacoco'
 
 android {
     viewBinding.enabled = true
@@ -212,7 +212,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
     implementation "androidx.core:core-ktx:+"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
 

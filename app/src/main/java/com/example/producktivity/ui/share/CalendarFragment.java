@@ -55,7 +55,7 @@ public class CalendarFragment extends Fragment {
         final GridView calendarDayGrid = (GridView) calendarLayout.findViewById(R.id.calendar_days_grid);
         final GestureDetector swipeDetector = new GestureDetector(getActivity(), new SwipeGesture(getActivity()));
         final GridView calendarGrid = (GridView) calendarLayout.findViewById(R.id.calendar_grid);
-        final ScrollView tasklist = (ScrollView) calendarLayout.findViewById(R.id.taskview);
+      //  final ScrollView tasklist = (ScrollView) calendarLayout.findViewById(R.id.taskview);
         calendarSwitcher = (ViewSwitcher) calendarLayout.findViewById(R.id.calendar_switcher);
         currentMonth = (TextView) calendarLayout.findViewById(R.id.current_month);
         calendarAdapter = new CalendarAdaptor(getActivity(), calendar);

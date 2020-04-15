@@ -94,6 +94,7 @@ public class UsageDataFragment extends Fragment {
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.MONTH, adapter.getData()));
                     span = UsageTime.MONTH;
                 }
+                barSeries.resetData(generatePoints(adapter.getData(), 6));
             }
 
             @Override

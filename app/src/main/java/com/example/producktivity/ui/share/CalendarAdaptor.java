@@ -32,7 +32,7 @@ public class CalendarAdaptor extends BaseAdapter {
 
     //get number of days for any month
     @Override
-    public static int getCount() {
+    public int getCount() {
         return days.length;
     }
 
