@@ -204,25 +204,6 @@ public class MainActivity extends AppCompatActivity {
         ((EditText)findViewById(R.id.reminder)).getText().clear();
         ((EditText)findViewById(R.id.description)).getText().clear();
     }
-    //sets the onclick listener and returns the calendar with the selected date
-    public static Calendar makeCalendar(EditText date, Context context) {
-        Calendar myCalendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener duedate = (view1, year, monthOfYear, dayOfMonth) -> {
-            //myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            //myCalendar.set(Calendar.MINUTE, minuteOfHour);
-          //  myCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-            String myFormat = "MM/dd";
-            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-            date.setText(sdf.format(myCalendar.getTime()));
-        };
-        // date.setOnClickListener(v -> new DatePickerDialog(MainActivity.this, date, myCalendar
-        date.setOnClickListener(v -> new DatePickerDialog(context, duedate, myCalendar
-                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show());
-        return myCalendar;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

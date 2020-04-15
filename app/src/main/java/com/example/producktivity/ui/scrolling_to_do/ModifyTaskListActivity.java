@@ -1,10 +1,15 @@
 package com.example.producktivity.ui.scrolling_to_do;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,7 +26,9 @@ import com.example.producktivity.dbs.todo.ToDoRepo;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ModifyTaskListActivity extends AppCompatActivity {
@@ -42,8 +49,8 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         EditText editTextDueDate = findViewById(R.id.todo_date);
         EditText editTextReminder = findViewById(R.id.todo_reminder);
 
-        reminderCalendar = MainActivity.makeCalendar(editTextReminder, ModifyTaskListActivity.this);
-        myCalendar = MainActivity.makeCalendar(editTextDueDate, ModifyTaskListActivity.this);
+        reminderCalendar = makeCalendar(editTextReminder, ModifyTaskListActivity.this);
+        myCalendar = makeCalendar(editTextDueDate, ModifyTaskListActivity.this);
 
         RadioButton high = findViewById(R.id.high_todo);
         RadioButton medium = findViewById(R.id.medium_todo);
@@ -109,36 +116,29 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         setResult(flag, new Intent().putExtra("task", task));
         finish();
     }
-/*
-    private static class InsertTask extends AsyncTask<Void, Void, Boolean> {
 
-        private WeakReference<ModifyTaskListActivity> activityReference;
-        private Task task;
+    public Calendar makeCalendar(EditText date, Context context) {
+        final DatePickerDialog[] picker = new DatePickerDialog[1];
+        Calendar myCalendar = Calendar.getInstance();
+        date.setInputType(InputType.TYPE_NULL);
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int day = myCalendar.get(Calendar.DAY_OF_MONTH);
+                int month = myCalendar.get(Calendar.MONTH);
+                int year = myCalendar.get(Calendar.YEAR);
+                picker[0] = new DatePickerDialog(ModifyTaskListActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        date.setText(dayOfMonth + "/" + (monthOfYear + 1));
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    }
+                }, year, month, day);
+                picker[0].show();
+            }});
 
-        // only retain a weak reference to the activity
-        InsertTask(ModifyTaskListActivity context, Task task) {
-            activityReference = new WeakReference<>(context);
-            this.task = task;
-        }
-
-        // doInBackground methods runs on a worker thread
-        @Override
-        protected Boolean doInBackground(Void... objs) {
-            // retrieve auto incremented note id
-            activityReference.get().repo.insert(task);
-            Log.e("ID ", "doInBackground: " + task.getId());
-            return true;
-        }
-
-        // onPostExecute runs on main thread
-        @Override
-        protected void onPostExecute(Boolean bool) {
-            if (bool) {
-                activityReference.get().setResult(task, 1);
-                activityReference.get().finish();
-            }
-        }
-    }*/
-
+        return myCalendar;
+    }
 
 }
