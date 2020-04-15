@@ -164,14 +164,14 @@ public class UsageDataFragment extends Fragment {
     }
 
     public void createGraph(GraphView graph, List<BlacklistEntry> list){
-
+        int size = Math.min(list.size(), 6);
         //Fill the series with the data and add it to the graph
-        DataPoint[] dps = generatePoints(list, 6);
+        DataPoint[] dps = generatePoints(list, size);
         Log.i("graph", "list size is " + dps.length);
 
 
         barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
-        barSeries.setDataWidth(100);
+        barSeries.setDataWidth(10);
         barSeries.setDrawValuesOnTop(true);
         barSeries.setValueDependentColor(new ValueDependentColor<DataPoint>() {
             @Override
@@ -179,8 +179,7 @@ public class UsageDataFragment extends Fragment {
                 return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
             }
         });
-        barSeries.setSpacing(50);
-        barSeries.setDrawValuesOnTop(true);
+        barSeries.setSpacing(150);
         barSeries.setValuesOnTopColor(Color.RED);
         graph.addSeries(barSeries);
         GridLabelRenderer format = graph.getGridLabelRenderer();
@@ -190,14 +189,14 @@ public class UsageDataFragment extends Fragment {
 
         graph.getGridLabelRenderer().setHumanRounding(false, true);
         graph.getGridLabelRenderer().setNumHorizontalLabels(dps.length);
-        format.setHorizontalLabelsAngle(30);
+        format.setHorizontalLabelsAngle(40);
         format.setLabelHorizontalHeight(-10);
 
         //format.draw();
         graph.getViewport().setScrollable(true); // enables horizontal scrolling
         graph.getViewport().setScrollableY(true); // enables vertical scrolling
-        graph.getViewport().setScalable(true); // enables horizontal zooming and scrolling
-        graph.getViewport().setScalableY(true); // enables vertical zooming and scrolling
+        graph.getViewport().setScalable(false); // enables horizontal zooming and scrolling
+        graph.getViewport().setScalableY(false); // enables vertical zooming and scrolling
         //Change graph format to show the name of the app
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
