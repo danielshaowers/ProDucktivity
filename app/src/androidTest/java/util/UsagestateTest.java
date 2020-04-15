@@ -10,6 +10,7 @@ import com.example.producktivity.dbs.blacklist.BlacklistDatabase;
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 import com.example.producktivity.dbs.blacklist.BlacklistRepo;
 import com.example.producktivity.dbs.blacklist.Category;
+import com.jjoe64.graphview.GraphView;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,6 +33,8 @@ public class UsagestateTest {
     private BlacklistDaoAccess blacklistDao;
     private BlacklistDatabase blacklistDatabase;
     private BlacklistRepo blacklistRepo;
+
+    private GraphView graph;
 
     private BlacklistEntry data1;
     private BlacklistEntry data2;
@@ -153,6 +156,7 @@ public class UsagestateTest {
 
         assertEquals(true, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(02).getSpan_flag(), 2));
     }
+
 
     @Test
     public void testGroupBy() throws InterruptedException {
