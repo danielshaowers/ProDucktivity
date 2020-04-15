@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
         checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+        checkPermissions(AppOpsManager.OPSTR_WRITE_EXTERNAL_STORAGE, Settings.ACTION_MANAGE_WRITE_SETTINGS);
     }
 
     private void clearInputs(){
@@ -157,10 +158,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkPermissions(String permission, String setting) {
-     /*   AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+        System.out.println(permission + "\t" + setting);
+        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
         if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED)
             System.out.println("we do have permission");
-        else startActivityForResult(new Intent(setting), 69);*/
+        else startActivityForResult(new Intent(setting), 69);
     }
     @Override
     public boolean onSupportNavigateUp() {
@@ -206,6 +208,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
+
+        System.out.println("reached onActivityResult");
 
         Log.i("MainAct", "Result code: " + resultCode);
 
