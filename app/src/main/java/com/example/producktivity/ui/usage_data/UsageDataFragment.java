@@ -22,16 +22,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-<<<<<<< HEAD
+
 import com.jjoe64.graphview.series.DataPoint;
-=======
+
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
->>>>>>> 3e60784e25a7132355d048120ff6197e6ded5bd6
 import com.example.producktivity.R;
 
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
@@ -45,14 +44,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-<<<<<<< HEAD
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
-
-=======
->>>>>>> 3e60784e25a7132355d048120ff6197e6ded5bd6
 
 public class UsageDataFragment extends Fragment {
 
