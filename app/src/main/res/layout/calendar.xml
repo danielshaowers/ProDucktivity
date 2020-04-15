@@ -42,7 +42,7 @@
 
     <GridView
         android:id="@+id/calendar_days_grid"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_below="@id/calendar_header"
         android:background="@android:color/black"
         android:layout_height="wrap_content"
@@ -52,15 +52,15 @@
 
     <ViewSwitcher
         android:id="@+id/calendar_switcher"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/calendar_days_grid"
-        android:background="@android:color/darker_gray">
+        android:background="@android:color/white">
 
         <GridView
             android:id="@+id/calendar_grid"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:horizontalSpacing="1dp"
             android:numColumns="7"
             android:stretchMode="columnWidth"

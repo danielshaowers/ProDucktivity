@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -20,6 +22,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.jjoe64.graphview.series.DataPoint;
+
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
@@ -40,6 +45,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
+
 public class UsageDataFragment extends Fragment {
 
     private BlockSelectViewModel bsViewModel;
@@ -47,6 +56,7 @@ public class UsageDataFragment extends Fragment {
     private UsageDataHandler handler;
     private Spinner dropdown;
     private int span;
+    private  BarGraphSeries<com.jjoe64.graphview.series.DataPoint> barSeries;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -74,6 +84,7 @@ public class UsageDataFragment extends Fragment {
                 if (position == 0){
                    adapter.setData(BlockSelectFragment.changeSpan(UsageTime.DAY, adapter.getData()));
                    span = UsageTime.DAY;
+                   barSeries.resetData(generatePoints(adapter.getData(), 6));
                 }
                 if (position == 1){
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.WEEK, adapter.getData()));
@@ -91,25 +102,27 @@ public class UsageDataFragment extends Fragment {
             }
         });
         //this line watches the data view model for any changes, adjusting accordingly
-        // dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageTime>>() {
-        bsViewModel.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<BlacklistEntry>>() {
-            @Override
-            public void onChanged(List<BlacklistEntry> s) {
-                if (s == null || s.size() == 0){
-                    System.out.println("creating a new list");
-                    Object selected = dropdown.getSelectedItem();
-                    int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
-                    List<UsageTime> usageTimes = handler.getStats(timeFrame);
-                    bsViewModel.updateList(usageTimes, s);
-                    System.out.println(usageTimes.size() + " usage time size");
-                }
-                adapter.setData(s);
-            };
-        });
 
-        GraphView graphView = root.findViewById(R.id.graph);
-        createGraph(graphView);
-
+       // dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageTime>>() {
+          bsViewModel.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<BlacklistEntry>>() {
+              @Override
+              public void onChanged(List<BlacklistEntry> s) {
+                  if (s == null || s.size() == 0){
+                      if (s == null || s.size() == 0){
+                          System.out.println("creating a new list");
+                          Object selected = dropdown.getSelectedItem();
+                          int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
+                          List<UsageTime> usagetimes = handler.getStats(timeFrame);
+                          bsViewModel.updateList(usagetimes, s);
+                          System.out.println(usagetimes.size() + " usage time size");
+                      }
+                  }
+                  adapter.setData(s);
+                  GraphView graphView = root.findViewById(R.id.graph);
+                  createGraph(graphView, adapter.getData());
+          }});
+        /*GraphView graphView = root.findViewById(R.id.graph);
+        createGraph(graphView);*/
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return root;
     }
@@ -133,26 +146,28 @@ public class UsageDataFragment extends Fragment {
         bsViewModel.updateList(handler.getStats(timeFrame), adapter.getData()); */
     }
 
-    public void createGraph(GraphView graph){
+    public DataPoint[] generatePoints (List<BlacklistEntry> list, int size){
+        DataPoint[] output = new DataPoint[size];
+        AtomicInteger n = new AtomicInteger(0); //For incrementing in a stream
+        List<DataPoint> dataPoints = list.stream().limit(size)
+                .map(d -> new DataPoint(n.getAndIncrement(), d.getTimeOfFlag(d.getSpan_flag())/60000))
+                .collect(Collectors.toList());
+        return output;
+    }
+
+    public void createGraph(GraphView graph, List<BlacklistEntry> list){
 
         //Fill the series with the data and add it to the graph
-        AtomicInteger n = new AtomicInteger(0); //For incrementing in a stream
-        List<DataPoint> dataPoints = bsViewModel.getSelectList().getValue().stream().limit(6)
-                .map(d -> new DataPoint(n.getAndIncrement(), d.getTimeOfFlag(span)/60000))
-                .collect(Collectors.toList());
+        DataPoint[] dps = generatePoints(list, 6);
+        Log.i("graph", "list size is " + dps.length);
 
-        Log.i("graph", "list size is " + dataPoints.size());
-        DataPoint[] dps = new DataPoint[dataPoints.size()];
-        for(int i = 0; i < dataPoints.size(); i++) {
-            dps[i] = dataPoints.get(i);
-        }
 
-        BarGraphSeries<DataPoint> barSeries = new BarGraphSeries<>(dps);
+        barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
         barSeries.setDataWidth(1);
         graph.addSeries(barSeries);
 
         graph.getGridLabelRenderer().setHumanRounding(false, true);
-        graph.getGridLabelRenderer().setNumHorizontalLabels(dataPoints.size());
+        graph.getGridLabelRenderer().setNumHorizontalLabels(dps.length);
         //Change graph format to show the name of the app
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
@@ -166,3 +181,4 @@ public class UsageDataFragment extends Fragment {
         });
     }
 }
+

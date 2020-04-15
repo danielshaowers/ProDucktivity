@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                     List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
                     bsViewModel.updateList(usagetimes, s);
 
-                    ClassificationClient cClient = new ClassificationClient();
+                   /* ClassificationClient cClient = new ClassificationClient();
                     BlacklistClient blacklistClient = new BlacklistClient(s);
                     /*for(BlacklistEntry app: s){
 
