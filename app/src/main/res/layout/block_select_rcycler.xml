@@ -6,59 +6,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/sort_blocked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/select_recycler"
-        app:layout_constraintStart_toStartOf="@+id/select_recycler" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/select_recycler"
-        android:layout_width="408dp"
-        android:layout_height="654dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category_limit_week" />
 
     <Spinner
         android:id="@+id/choose_cat"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/select_recycler"
-        app:layout_constraintStart_toEndOf="@+id/sort_blocked" />
+        android:layout_marginStart="10dp"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintStart_toEndOf="@+id/text_cat"
+        app:layout_constraintTop_toTopOf="@+id/text_cat" />
 
     <EditText
         android:id="@+id/category_limit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="hh:mm"
         android:inputType="time"
         android:textSize="10sp"
-        app:layout_constraintStart_toEndOf="@+id/choose_cat"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/choose_cat"
+        app:layout_constraintTop_toBottomOf="@+id/choose_cat" />
 
     <EditText
         android:id="@+id/category_limit_week"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="time"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="@+id/category_limit"
-        app:layout_constraintStart_toEndOf="@+id/choose_cat"
         app:layout_constraintTop_toBottomOf="@+id/category_limit" />
 
     <Button
@@ -66,10 +54,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="20dp"
         android:text="Update All"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/category_limit"
         app:layout_constraintTop_toTopOf="@+id/category_limit" />
+
+    <TextView
+        android:id="@+id/text_cat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="36dp"
+        android:text="Set limit for all apps in a category"
+        android:textSize="8sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Daily limit"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/text_cat"
+        app:layout_constraintTop_toTopOf="@+id/category_limit" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="Weekly limit"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/category_limit_week"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        tools:layout_editor_absoluteY="103dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

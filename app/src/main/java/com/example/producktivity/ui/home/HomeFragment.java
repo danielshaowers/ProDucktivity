@@ -124,11 +124,13 @@ public class HomeFragment extends Fragment {
                             //check if productivity mode is active. if it is, then check if the app is marked as productive by the database
                             if (checked || (!entry.isInferredProductive() && smart_checked)) { // if productivity mode is activated and the app was marked as unproductive, then block!
                                 showBlockScreen();
+                                return;
                             } else { //we need to check if we passed the time limit
                             //how do we check the time used right here?
                                 if (entry.getDayLimit() < entry.getDayUse() || entry.getWeekLimit() < entry.getWeekUse()) { //if exceeded max allowable time
-                                 System.out.println("we are trying to block " + name);
-                                showBlockScreen();
+                                    System.out.println("we are trying to block " + name);
+                                    showBlockScreen();
+                                    return;
                                 } else { //updates the usages if it's not already larger based on the database.
                                 //todo: I'm pretty sure this is super slow...might now want to do it
                                     long day = 1000 * 60 * 60 * 24;
@@ -139,6 +141,7 @@ public class HomeFragment extends Fragment {
                                        entry.setWeekUse(weekUse.getTotalTimeInForeground());
                                        entry.setDayUse(dayUse.getTotalTimeInForeground());
                                        showBlockScreen();
+                                       return;
                                  }
                             }
                         }

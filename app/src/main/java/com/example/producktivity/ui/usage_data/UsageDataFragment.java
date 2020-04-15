@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -20,6 +22,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.jjoe64.graphview.series.DataPoint;
+
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
@@ -39,6 +44,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
 
 public class UsageDataFragment extends Fragment {
 
@@ -91,25 +100,27 @@ public class UsageDataFragment extends Fragment {
             }
         });
         //this line watches the data view model for any changes, adjusting accordingly
-        // dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageTime>>() {
-        bsViewModel.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<BlacklistEntry>>() {
-            @Override
-            public void onChanged(List<BlacklistEntry> s) {
-                if (s == null || s.size() == 0){
-                    System.out.println("creating a new list");
-                    Object selected = dropdown.getSelectedItem();
-                    int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
-                    List<UsageTime> usageTimes = handler.getStats(timeFrame);
-                    bsViewModel.updateList(usageTimes, s);
-                    System.out.println(usageTimes.size() + " usage time size");
-                }
-                adapter.setData(s);
-            };
-        });
 
-        GraphView graphView = root.findViewById(R.id.graph);
-        createGraph(graphView);
-
+       // dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageTime>>() {
+          bsViewModel.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<BlacklistEntry>>() {
+              @Override
+              public void onChanged(List<BlacklistEntry> s) {
+                  if (s == null || s.size() == 0){
+                      if (s == null || s.size() == 0){
+                          System.out.println("creating a new list");
+                          Object selected = dropdown.getSelectedItem();
+                          int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
+                          List<UsageTime> usagetimes = handler.getStats(timeFrame);
+                          bsViewModel.updateList(usagetimes, s);
+                          System.out.println(usagetimes.size() + " usage time size");
+                      }
+                  }
+                  adapter.setData(s);
+                  GraphView graphView = root.findViewById(R.id.graph);
+                  createGraph(graphView, adapter.getData());
+          }});
+        /*GraphView graphView = root.findViewById(R.id.graph);
+        createGraph(graphView);*/
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return root;
     }
@@ -133,12 +144,12 @@ public class UsageDataFragment extends Fragment {
         bsViewModel.updateList(handler.getStats(timeFrame), adapter.getData()); */
     }
 
-    public void createGraph(GraphView graph){
+    public void createGraph(GraphView graph, List<BlacklistEntry> list){
 
         //Fill the series with the data and add it to the graph
         AtomicInteger n = new AtomicInteger(0); //For incrementing in a stream
-        List<DataPoint> dataPoints = bsViewModel.getSelectList().getValue().stream().limit(6)
-                .map(d -> new DataPoint(n.getAndIncrement(), d.getTimeOfFlag(span)/60000))
+        List<DataPoint> dataPoints = list.stream().limit(6)
+                .map(d -> new DataPoint(n.getAndIncrement(), d.getTimeOfFlag(d.getSpan_flag())/60000))
                 .collect(Collectors.toList());
 
         Log.i("graph", "list size is " + dataPoints.size());
@@ -147,7 +158,8 @@ public class UsageDataFragment extends Fragment {
             dps[i] = dataPoints.get(i);
         }
 
-        BarGraphSeries<DataPoint> barSeries = new BarGraphSeries<>(dps);
+        BarGraphSeries<com.jjoe64.graphview.series.DataPoint> barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
+
         barSeries.setDataWidth(1);
         graph.addSeries(barSeries);
 
@@ -166,3 +178,4 @@ public class UsageDataFragment extends Fragment {
         });
     }
 }
+
