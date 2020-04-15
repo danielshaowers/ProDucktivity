@@ -38,36 +38,4 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(AndroidJUnit4.class)
 class CalendarFragmentTest {
 
-    private CalendarAdaptor calendar;
-    private TextView currentMonth;
-    protected final Calendar calendar1;
-    private final Locale locale;
-    private ViewSwitcher calendarSwitcher;
-
-    public CalendarFragmentTest() {
-        calendar1 = Calendar.getInstance();
-        locale = Locale.getDefault();
-    }
-
-    void onCreateView() {
-    }
-
-    void updateCurrentMonth() {
-        calendar.refreshDays();
-
-    }
-
-    void onNextMonth() {
-        calendarSwitcher.setInAnimation(getActivity(), R.anim.in_from_left);
-        calendarSwitcher.setOutAnimation(getActivity(), R.anim.out_to_right);
-        calendarSwitcher.showPrevious();
-        if (calendar1.get(Calendar.MONTH) == Calendar.JANUARY) {
-            calendar1.set((calendar1.get(Calendar.YEAR) - 1), Calendar.DECEMBER, 1);
-        } else {
-            calendar1.set(Calendar.MONTH, calendar1.get(Calendar.MONTH) - 1);
-        }
-    }
-
-    void onPreviousMonth() {
-    }
 }
