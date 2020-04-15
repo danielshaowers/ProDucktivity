@@ -39,6 +39,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.producktivity.dbs.blacklist.Category;
 import com.example.producktivity.dbs.todo.Task;
 
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
@@ -116,24 +117,29 @@ public class MainActivity extends AppCompatActivity {
                     List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
                     bsViewModel.updateList(usagetimes, s);
                     System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
-                   /* ClassificationClient cClient = new ClassificationClient();
-                    BlacklistClient blacklistClient = new BlacklistClient(s);
-                    /*for(BlacklistEntry app: s){
-
-                        String appId = app.getPackageName();
-                        String cat = cClient.requestAppCategory(appId);
-                        app.setCategory(Category.valueOf(cat));
-                        Boolean productive = blacklistClient.classifyApp(appId);
-                        //TODO: add productive classification to app entry
-
-                        app.setInferredProductive(productive);
-                    }*/
-                    //bsViewModel.replaceDB(s);
+                    System.out.println("at cc");
+                    ClassificationClient cClient = new ClassificationClient(getApplicationContext());
+                    BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
+                    for(BlacklistEntry app: s){
+                        //strip this out into a new method to call when response arrives
+                        addInfoToEntry(app, cClient, blacklistClient);
+                    }
+                    bsViewModel.replaceDB(s);
                     updated[0] = true;
                 }
                 bsViewModel.getSelectList().removeObserver(this);
             }
         });
+    }
+
+    public void addInfoToEntry(BlacklistEntry app, ClassificationClient cClient, BlacklistClient blacklistClient){
+        System.out.println(app.getAppName());
+        String appId = app.getPackageName();
+        String cat = cClient.requestAppCategory(appId);
+        app.setCategory(Category.valueOf(cat));
+        Boolean productive = blacklistClient.classifyApp(appId);
+        //TODO: add productive classification to app entry
+        app.setInferredProductive(productive);
     }
 
 

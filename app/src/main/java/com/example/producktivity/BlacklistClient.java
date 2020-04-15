@@ -1,6 +1,8 @@
 package com.example.producktivity;
 
 
+import android.content.Context;
+
 import com.example.producktivity.ClassificationClient;
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
@@ -11,8 +13,8 @@ import androidx.lifecycle.LiveData;
 public class BlacklistClient {
     private ClassificationClient categorizer;
     private List<BlacklistEntry> listOfApps;
-    public BlacklistClient(List<BlacklistEntry> entries){
-        this.categorizer = new ClassificationClient();
+    public BlacklistClient(List<BlacklistEntry> entries, Context t){
+        this.categorizer = new ClassificationClient(t);
         this.listOfApps = entries;
 
     }
@@ -54,7 +56,7 @@ public class BlacklistClient {
 
     private String getCategoryFromDataList(String appId) {
         for(BlacklistEntry element : this.listOfApps) {
-            if(element.getAppName().equalsIgnoreCase(appId)) {
+            if(element.getPackageName().equalsIgnoreCase(appId)) {
                 if(element.getCategory() != null)
                     return element.getCategory().toString();
             }
@@ -64,7 +66,7 @@ public class BlacklistClient {
 
     private BlacklistEntry getEntryFromList(String appId) {
         for(BlacklistEntry element : this.listOfApps) {
-            if(element.getAppName().equalsIgnoreCase(appId)) {
+            if(element.getPackageName().equalsIgnoreCase(appId)) {
                 return element;
             }
         }
