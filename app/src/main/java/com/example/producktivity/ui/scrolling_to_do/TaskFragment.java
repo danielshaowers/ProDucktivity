@@ -113,10 +113,8 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
         if (requestCode == 100 && resultCode > 0) {
             Task task = (Task) data.getSerializableExtra("task");
             if (resultCode == 1) {
-
                 vm.insert(task);
             } else if (resultCode == 2) {
-
                 vm.update(task);
             }
         }
@@ -139,6 +137,7 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
     }
 
     private void setTaskCompleted(Task t) {
+        System.out.println("task marked as completed");
         t.setComplete(true);
         vm.update(t);
     }

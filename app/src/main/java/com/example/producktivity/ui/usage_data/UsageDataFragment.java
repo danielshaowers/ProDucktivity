@@ -153,6 +153,9 @@ public class UsageDataFragment extends Fragment {
         List<DataPoint> dataPoints = list.stream().limit(size)
                 .map(d -> new DataPoint(n.getAndIncrement(), d.getTimeOfFlag(d.getSpan_flag())/60000))
                 .collect(Collectors.toList());
+        int i = 0;
+        for (DataPoint d : dataPoints)
+            output[i++] = d;
         return output;
     }
 

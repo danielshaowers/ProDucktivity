@@ -52,6 +52,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
 
         Task oldTask;
         if ((oldTask = (Task) getIntent().getSerializableExtra("task")) != null) {
+            System.out.println("we are updating!");
             update = true;
             editTextTitle.setText(oldTask.getTitle());
             editTextDesc.setText(oldTask.getDesc());
@@ -62,7 +63,6 @@ public class ModifyTaskListActivity extends AppCompatActivity {
                 case MED: medium.setChecked(true);
                 case HIGH: high.setChecked(true);
             }
-
         }
         Button button = findViewById(R.id.done_button_edit);
         button.setOnClickListener(view -> {
@@ -104,6 +104,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
     }
 
     private void setResult(Task task, int flag) {
+        System.out.println("task being passed in setResult, next stop: main activity onActivityForResult");
         setResult(flag, new Intent().putExtra("task", task));
         finish();
     }
