@@ -32,14 +32,14 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTestFAB {
 
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+            @Rule
+            public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void mainActivityTestFAB() {
-        ViewInteraction floatingActionButton = onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.fab),
-                        childAtPosition(
+            @Test
+            public void mainActivityTestFAB() {
+                ViewInteraction floatingActionButton = onView(
+                        Matchers.allOf(ViewMatchers.withId(R.id.fab),
+                                childAtPosition(
                                 allOf(withId(R.id.coordinatorLayout),
                                         childAtPosition(
                                                 withId(R.id.drawer_layout),
@@ -67,7 +67,6 @@ public class MainActivityTestFAB {
                                 0),
                         isDisplayed()));
         editText2.check(matches(withText("Deadline")));
-
         ViewInteraction editText3 = onView(
                 allOf(withId(R.id.todo_reminder), withText("Reminder"),
                         childAtPosition(

@@ -27,6 +27,11 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class UsagestateTest {
 
+    @Test
+    public void test() {
+        assertEquals(1, 1);
+    }
+
    /* @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 

@@ -25,7 +25,7 @@ public class TaskInsertTest {
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    void setUpFragment() {
+    public void setUpFragment() {
         assertTrue(rule.getActivity().getSupportFragmentManager().getFragments().size() == 5);
     }
 
