@@ -2,6 +2,7 @@ package com.example.producktivity.ui.usage_data;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.jjoe64.graphview.series.DataPoint;
 import com.example.producktivity.R;
 
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
@@ -30,6 +33,13 @@ import com.example.producktivity.ui.send.BlockSelectViewModel;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
+
 
 public class UsageDataFragment extends Fragment {
 
@@ -93,7 +103,11 @@ public class UsageDataFragment extends Fragment {
                       }
                   }
                   adapter.setData(s);
-          };});
+                  GraphView graphView = root.findViewById(R.id.graph);
+                  createGraph(graphView, adapter.getData());
+          }});
+        /*GraphView graphView = root.findViewById(R.id.graph);
+        createGraph(graphView);*/
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return root;
     }
@@ -115,5 +129,37 @@ public class UsageDataFragment extends Fragment {
        /* Object selected = dropdown.getSelectedItem();
         int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
         bsViewModel.updateList(handler.getStats(timeFrame), adapter.getData()); */
+    }
+    public void createGraph(GraphView graph, List<BlacklistEntry> list){
+
+        //Fill the series with the data and add it to the graph
+        AtomicInteger n = new AtomicInteger(0); //For incrementing in a stream
+        List<DataPoint> dataPoints = list.stream().limit(6)
+                .map(d -> new DataPoint(n.getAndIncrement(), d.getTimeOfFlag(d.getSpan_flag())/60000))
+                .collect(Collectors.toList());
+
+        Log.i("graph", "list size is " + dataPoints.size());
+        DataPoint[] dps = new DataPoint[dataPoints.size()];
+        for(int i = 0; i < dataPoints.size(); i++) {
+            dps[i] = dataPoints.get(i);
+        }
+
+        BarGraphSeries<com.jjoe64.graphview.series.DataPoint> barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
+        barSeries.setDataWidth(1);
+        graph.addSeries(barSeries);
+
+        graph.getGridLabelRenderer().setHumanRounding(false, true);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(dataPoints.size());
+        //Change graph format to show the name of the app
+        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if(isValueX) {
+                    return bsViewModel.getSelectList().getValue().get((int)value).getAppName();
+                } else {
+                    return super.formatLabel(value, false);
+                }
+            }
+        });
     }
 }

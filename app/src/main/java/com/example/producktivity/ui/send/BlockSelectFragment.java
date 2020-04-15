@@ -26,6 +26,7 @@ import com.example.producktivity.R;
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
 import com.example.producktivity.dbs.blacklist.Category;
+import com.example.producktivity.dbs.blacklist.CategoryConverter;
 import com.example.producktivity.ui.usage_data.AppAdapter;
 import com.example.producktivity.ui.usage_data.DataViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataFragment;
@@ -47,7 +48,7 @@ public class BlockSelectFragment extends Fragment {
                 ViewModelProviders.of(this.getActivity()).get(BlockSelectViewModel.class);
         UsageDataHandler handler = new UsageDataHandler(this.getContext());
         View root = inflater.inflate(R.layout.block_select_rcycler, container, false);
-        Spinner spintowin = root.findViewById(R.id.sort_blocked);
+        Spinner spintowin = root.findViewById(R.id.choose_cat);
         String[] items = new String[]{ "ART_AND_DESIGN", "AUGMENTED_REALITY", "AUTO_AND_VEHICLES", "BEAUTY", "BOOKS_AND_REFERENCE", "BUSINESS",
                 "COMICS", "COMMUNICATION", "DATING", "EDUCATION", "ENTERTAINMENT", "EVENTS", "FAMILY", "FINANCE", "FOOD_AND_DRINK",
                 "GAMES", "GOOGLE_CAST", "HEALTH_AND_FITNESS", "HOUSE_AND_HOME", "LIBRARIES_AND_DEMO", "LIFESTYLE",
@@ -59,6 +60,25 @@ public class BlockSelectFragment extends Fragment {
         Button save_cat = root.findViewById(R.id.save_cat); //todo: override onclick to update all in list
         TextView dayLim = root.findViewById(R.id.category_limit);
         TextView weekLim = root.findViewById(R.id.category_limit_week);
+        save_cat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String day = dayLim.getText().toString();
+                String week = weekLim.getText().toString();
+                List<BlacklistEntry> list = adapter.getLimits();
+                for(BlacklistEntry e : list) { //technically, viewmodel should notice and notify adapter for us
+                      if (e.getCategory() == selected[0]) {
+                         long dayL = BlacklistEntry.stringToLong(day);
+                         long weekL = BlacklistEntry.stringToLong(week);
+                         if (dayL > 0)
+                             e.setDayLimit(dayL);
+                         if (weekL > 0)
+                             e.setWeekLimit(weekL);
+                       }
+                   }
+                adapter.setLimitList(list); //this re-sorts everything
+            }
+        });
         //make sure you only update the day/week limits when something is actually entered
         //it may help to create a dummy blacklist entry just so you have access to some of the methods with converting strings to time (though they might be static methods, i forget)
 
@@ -66,6 +86,7 @@ public class BlockSelectFragment extends Fragment {
         spintowin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(items[position] + " selected");
                 selected[0] = Category.valueOf(items[position]);
                 /*List<BlacklistEntry> list = adapter.getLimits();
                    for(BlacklistEntry e : list) { //technically, viewmodel should notice and notify adapter for us
