@@ -89,6 +89,6 @@
         android:textSize="10sp"
         app:layout_constraintEnd_toStartOf="@+id/category_limit_week"
         app:layout_constraintStart_toStartOf="@+id/textView7"
-        tools:layout_editor_absoluteY="103dp" />
+        app:layout_constraintTop_toBottomOf="@+id/category_limit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
