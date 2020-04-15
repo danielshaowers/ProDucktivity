@@ -14,20 +14,30 @@ import java.util.List;
 public class ToDoViewModel extends AndroidViewModel {
     private ToDoRepo repo;
     private final LiveData<List<Task>> mAllTasks;
+    private final LiveData<List<Task>> mIncompleteTasks;
+    private final LiveData<List<Task>> mCompleteTasks;
 
     public ToDoViewModel(Application app) {
         super(app);
         repo = new ToDoRepo(app);
         mAllTasks = repo.getAllTasks();
-
+        mIncompleteTasks = repo.getTaskWithComplete(false);
+        mCompleteTasks = repo.getTaskWithComplete(true);
         System.out.println("get tasks from repo " + repo.getAllTasks());
-       // mPrioritizedTasks = repo.getPrioritizedTasks();
-
     }
 
+
     public LiveData<List<Task>> getAllTasks() {
-        Log.i("dbs", "got task list: " + mAllTasks.getValue());
-        return mAllTasks;}
+        return mAllTasks;
+    }
+
+    public LiveData<List<Task>> getIncompleteTasks() {
+        return mIncompleteTasks;
+    }
+
+    public LiveData<List<Task>> getCompleteTasks() {
+        return mCompleteTasks;
+    }
 
     public void insert(Task task) {repo.insert(task);}
 

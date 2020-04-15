@@ -65,11 +65,11 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
 
         switch(current.getPriority()) {
             case HIGH:
-                holder.priority.setText("High Priority");
+                holder.priority.setText("High Priority"); break;
             case MED:
-                holder.priority.setText("Medium Priority");
+                holder.priority.setText("Medium Priority"); break;
             case LOW:
-                holder.priority.setText("Low Priority");
+                holder.priority.setText("Low Priority"); break;
         }
     }
 

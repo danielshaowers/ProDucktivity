@@ -70,7 +70,7 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new InputAdapter(TaskFragment.this, new ArrayList<Task>());
+        mAdapter = new InputAdapter(TaskFragment.this, new ArrayList<>());
         new RetrieveToDosTask(this);
 
         recyclerView.setAdapter(mAdapter);
@@ -130,10 +130,13 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
                     switch(i) {
                         case 0:
                             setTaskCompleted(mAdapter.getItemAt(pos));
+                            break;
                         case 1:
                             updateTask(mAdapter.getItemAt(pos));
+                            break;
                         case 2:
                             deleteTask(mAdapter.getItemAt(pos));
+                            break;
                     }
                 }).show();
     }

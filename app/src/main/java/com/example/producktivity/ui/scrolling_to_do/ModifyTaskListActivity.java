@@ -88,7 +88,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         RadioGroup priorities = findViewById(R.id.todo_priority);
         RadioButton priority = findViewById(priorities.getCheckedRadioButtonId());
 
-        Log.i("todo", "checked: " + priorities.getCheckedRadioButtonId());
+
 
         if (priority != null) {
             if (priority.getId() == R.id.high_todo)
@@ -101,6 +101,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         else {
             t.setPriority(Priority.LOW);
         }
+        Log.i("todo", "checked: " + t.getPriority().toString());
     }
 
     private void setResult(Task task, int flag) {
