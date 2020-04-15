@@ -171,7 +171,7 @@ public class UsageDataFragment extends Fragment {
 
 
         barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
-        barSeries.setDataWidth(10);
+       // barSeries.setDataWidth(10);
         barSeries.setDrawValuesOnTop(true);
         barSeries.setValueDependentColor(new ValueDependentColor<DataPoint>() {
             @Override
@@ -183,6 +183,7 @@ public class UsageDataFragment extends Fragment {
         barSeries.setValuesOnTopColor(Color.RED);
         graph.addSeries(barSeries);
         GridLabelRenderer format = graph.getGridLabelRenderer();
+        format.resetStyles();
         format.setVerticalAxisTitle("Minutes");
         /*format.setLabelsSpace(100);
         format.setPadding(10);*/
