@@ -1,9 +1,8 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.todo;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 import java.io.Serializable;
@@ -92,5 +91,10 @@ public class Task implements Serializable {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Task && ((Task) o).getId()== this.getId();
     }
 }

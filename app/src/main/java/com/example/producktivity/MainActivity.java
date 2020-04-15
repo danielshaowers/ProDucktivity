@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -29,11 +30,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import com.example.producktivity.dbs.todo.Priority;
+import com.example.producktivity.dbs.todo.Task;
 
-import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.dbs.Priority;
-import com.example.producktivity.dbs.Task;
-import com.example.producktivity.dbs.Category;
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
+import com.example.producktivity.dbs.blacklist.Category;
+
+import com.example.producktivity.ui.scrolling_to_do.ModifyTaskListActivity;
+import com.example.producktivity.ui.scrolling_to_do.TaskFragment;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 import com.example.producktivity.ui.send.BlockSelectViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
@@ -47,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,73 +70,75 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab); //THE PLUS BUTTON
+        toDoVM = new ViewModelProvider(MainActivity.this).get(ToDoViewModel.class);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //make this add a task in future
                 Snackbar.make(view, "Create a task", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 //once the FAB is clicked
-            if (!isFabOpen){
-                isFabOpen = true;
-                CardView taskCard = findViewById(R.id.task_card);
-                taskCard.setVisibility(View.VISIBLE);
-                EditText dueDate = findViewById(R.id.task_date);
-                Calendar myCalendar = MainActivity.makeCalendar(dueDate, MainActivity.this);
-                EditText reminder = findViewById(R.id.reminder);
-                Calendar reminderCalendar = MainActivity.makeCalendar(reminder, MainActivity.this);
 
-                //done setting date
-                Button done = findViewById(R.id.done_button);
-                done.setOnClickListener(view12 -> {
-                    Task task = new Task();
-                    EditText title = findViewById(R.id.task_title);
-                    if (title.getText() != null){
-                        task.setTitle(title.getText().toString());
-                        RadioGroup priorities = findViewById(R.id.priority_group);
-                        RadioButton priority = findViewById(priorities.getCheckedRadioButtonId());
-                        if (priority != null) {
-                            if (priority.getId() == R.id.high_priority)
-                                task.setPriority(Priority.HIGH);
-                            if (priority.getId() == R.id.medium_priority)
-                                task.setPriority(Priority.MED);
-                            if (priority.getId() == R.id.low_priority)
+                startActivityForResult(new Intent(
+                                MainActivity.this,
+                                ModifyTaskListActivity.class),
+                        100
+                );
+
+                /*
+                if (!isFabOpen){
+                    isFabOpen = true;
+                    CardView taskCard = findViewById(R.id.task_card);
+                    taskCard.setVisibility(View.VISIBLE);
+                    EditText dueDate = findViewById(R.id.task_date);
+                    Calendar myCalendar = MainActivity.makeCalendar(dueDate, MainActivity.this);
+                    EditText reminder = findViewById(R.id.reminder);
+                    Calendar reminderCalendar = MainActivity.makeCalendar(reminder, MainActivity.this);
+
+                    //done setting date
+                    Button done = findViewById(R.id.done_button);
+                    done.setOnClickListener(view12 -> {
+                        Task task = new Task();
+                        EditText title = findViewById(R.id.task_title);
+                        if (title.getText() != null){
+                            task.setTitle(title.getText().toString());
+                            RadioGroup priorities = findViewById(R.id.priority_group);
+                            RadioButton priority = findViewById(priorities.getCheckedRadioButtonId());
+                            if (priority != null) {
+                                if (priority.getId() == R.id.high_priority)
+                                    task.setPriority(Priority.HIGH);
+                                if (priority.getId() == R.id.medium_priority)
+                                    task.setPriority(Priority.MED);
+                                if (priority.getId() == R.id.low_priority)
+                                    task.setPriority(Priority.LOW);
+                            } else
                                 task.setPriority(Priority.LOW);
-                        }
-                        else
-                            task.setPriority(Priority.LOW);
-                        EditText description = findViewById(R.id.description);
-                        if (!description.getText().toString().equals(""))
-                            task.setDesc(description.getText().toString());
-                        if (!myCalendar.getTime().toString().equals("")) {
-                            task.setDueDate(myCalendar.getTime());
-                        }
-                        task.setReminderTime(reminderCalendar.getTime());
-                        //also need to set reminder time. would prefer if it was an enum instead of a date
-                        task.setComplete(task.getTitle() != null && task.getDesc() != null && task.getPriority() != null &&
-                            task.getDueDate() != null); //task.getReminderTime() != null
-                        toDoVM = new ViewModelProvider(MainActivity.this).get(ToDoViewModel.class);
-                        toDoVM.getAllTasks().observe(MainActivity.this, new Observer<List<Task>>(){
-                            @Override
-                            public void onChanged(@Nullable final List<Task> tasks){
-                                //is this necessary??
+                            EditText description = findViewById(R.id.description);
+                            if (!description.getText().toString().equals(""))
+                                task.setDesc(description.getText().toString());
+                            if (!myCalendar.getTime().toString().equals("")) {
+                                task.setDueDate(myCalendar.getTime());
                             }
-                        }
-                        );
-                        toDoVM.insert(task);
-                        taskCard.setVisibility(View.GONE);
-                        isFabOpen = false;
-                        //clear all views
-                        clearInputs();
-                        Snackbar.make(view, "Task Saved", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }});
-            }
-            else{
-                isFabOpen = false;
-                CardView card= findViewById(R.id.task_card);
-                card.setVisibility(View.GONE); //if they entered something into the database
-                clearInputs();
-            }
+                            task.setReminderTime(reminderCalendar.getTime());
+                            //also need to set reminder time. would prefer if it was an enum instead of a date
+                            task.setComplete(task.getTitle() != null && task.getDesc() != null && task.getPriority() != null &&
+                            task.getDueDate() != null); //task.getReminderTime() != null
+                            toDoVM = new ViewModelProvider(MainActivity.this).get(ToDoViewModel.class);
+                            toDoVM.insert(task);
+
+                            taskCard.setVisibility(View.GONE);
+                            isFabOpen = false;
+                            //clear all views
+                            clearInputs();
+                            Snackbar.make(view, "Task Saved", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }});
+                }
+                else{
+                    isFabOpen = false;
+                    CardView card= findViewById(R.id.task_card);
+                    card.setVisibility(View.GONE); //if they entered something into the database
+                    clearInputs();
+                }*/
             }
         });
         //this is where the navigation bar is linking to all our pages
@@ -147,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
         BlockSelectViewModel bsViewModel =  ViewModelProviders.of(this).get(BlockSelectViewModel.class);
         UsageDataHandler handler = new UsageDataHandler(this);
         //I am hoping this updates the values every time main activity is created, so we don't have to during the usage stats
@@ -157,15 +165,18 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("onChanged called for the blockselect viewmodel");
                     List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
                     bsViewModel.updateList(usagetimes, s);
+
                     ClassificationClient cClient = new ClassificationClient();
                     BlacklistClient blacklistClient = new BlacklistClient(s);
                     for(BlacklistEntry app: s){
+
                         String appId = app.getPackageName();
                         String cat = cClient.requestAppCategory(appId);
                         app.setCategory(Category.valueOf(cat));
-                        Boolean productive = blacklistClient.classifyApp(cat);
+                        Boolean productive = blacklistClient.classifyApp(appId);
                         //TODO: add productive classification to app entry
-                        //app.setInferredProductive(productive);
+
+                        app.setInferredProductive(productive);
                     }
                     bsViewModel.replaceDB(s);
                     updated[0] = true;
@@ -174,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onResume() {
@@ -244,6 +256,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 100 && resultCode > 0) {
+            Task task = (Task) data.getSerializableExtra("task");
+            if (resultCode == 1) {
+                toDoVM.insert(task);
+            } else if (resultCode == 2) {
+                toDoVM.update(task);
+            }
+        }
+
         System.out.println("are we ok?");
         try {
             super.onActivityResult(requestCode, resultCode, data);

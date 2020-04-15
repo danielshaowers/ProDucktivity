@@ -21,10 +21,55 @@
         android:layout_height="654dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_limit_week" />
+
+    <Spinner
+        android:id="@+id/choose_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/select_recycler"
+        app:layout_constraintStart_toEndOf="@+id/sort_blocked" />
+
+    <EditText
+        android:id="@+id/category_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="hh:mm"
+        android:inputType="time"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/choose_cat"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/category_limit_week"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="time"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/category_limit"
+        app:layout_constraintStart_toEndOf="@+id/choose_cat"
+        app:layout_constraintTop_toBottomOf="@+id/category_limit" />
+
+    <Button
+        android:id="@+id/save_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Update All"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/category_limit"
+        app:layout_constraintTop_toTopOf="@+id/category_limit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

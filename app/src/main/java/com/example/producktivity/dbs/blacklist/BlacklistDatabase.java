@@ -1,4 +1,4 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.blacklist;
 
 import android.content.Context;
 
@@ -6,12 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.example.producktivity.dbs.todo.ToDoDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {BlacklistEntry.class}, version = 1)
+@Database(entities = {com.example.producktivity.dbs.blacklist.BlacklistEntry.class}, version = 3)
 public abstract class BlacklistDatabase extends RoomDatabase {
     public abstract BlacklistDaoAccess daoAccess();
 
@@ -24,12 +27,16 @@ public abstract class BlacklistDatabase extends RoomDatabase {
             synchronized (ToDoDatabase.class) {
                 if(INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            BlacklistDatabase.class, "blacklist_db").build();
+                            BlacklistDatabase.class, "blacklist_db")
+                            .fallbackToDestructiveMigration()
+                            .build();
                 }
             }
         }
         return INSTANCE;
     }
+
+
 // add before .build -> .addCallback(sRoomDatabaseCallback).
   /*  private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback(){
         @Override

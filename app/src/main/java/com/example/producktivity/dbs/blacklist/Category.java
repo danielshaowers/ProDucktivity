@@ -1,4 +1,4 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.blacklist;
 
 public enum Category {
     ART_AND_DESIGN, AUGMENTED_REALITY, AUTO_AND_VEHICLES, BEAUTY, BOOKS_AND_REFERENCE, BUSINESS,

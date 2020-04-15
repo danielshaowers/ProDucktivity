@@ -15,22 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.ui.usage_data.AppAdapter;
-import com.example.producktivity.ui.usage_data.UsageTime;
-
-import java.util.List;
-
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.producktivity.R;
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
 import java.util.List;
 
@@ -58,13 +43,6 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 weekLimit = itemView.findViewById(R.id.weekly_limit);
                 dayLimit = itemView.findViewById(R.id.daily_limit);
                 card = itemView.findViewById(R.id.limit_card);
-                appSelect.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        card.setVisibility(View.VISIBLE);
-                        appSelect.setVisibility(View.INVISIBLE);
-                    }
-                });
             }
         }
 
@@ -78,7 +56,8 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         public void setLimitList(List<BlacklistEntry> l) {
-            limits = l;
+            limits = BlockSelectViewModel.sortData(l, BlockSelectViewModel.NAME_SORT);
+            notifyDataSetChanged();
         }
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -95,6 +74,13 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public void onBindViewHolder(selectViewHolder holder, int position) {
             if (limits != null) {
                 BlacklistEntry current = limits.get(position);
+                holder.appSelect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        holder.card.setVisibility(View.VISIBLE);
+                        holder.appSelect.setVisibility(View.INVISIBLE);
+                    }
+                });
                 holder.setProductive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         current.setUnrestricted(isChecked);
@@ -117,16 +103,19 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         current.setWeekLimit(length);
                         holder.weekLimit.setText(BlacklistEntry.longToString(length));
                     }
+                    current.setUnrestricted(holder.setProductive.isChecked());
                     limits.set(position, current);
                     notifyItemChanged(position); //this is useful if we want to display the limits
-                    //todo: how do we update the database given this change?
                 });
-            }else { //data not ready yet
+            } else { //data not ready yet
                 holder.appSelect.setText("No apps found");
             }
         }
 
-
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
         // getItemCount() is called many times, and when it is first called,
         // mWords has not been updated (means initially, it's null, and we can't return null).
         @Override

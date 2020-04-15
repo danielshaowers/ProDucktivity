@@ -37,6 +37,7 @@ public class DataViewModel extends ViewModel {
         sortData(allData);
         data.setValue(allData);
     }
+
     public void insert(String app, Long day, Long week, Long month, String packageName, int flag){
         data.getValue().add(new UsageTime(app, day, week, month, packageName, flag));
     }

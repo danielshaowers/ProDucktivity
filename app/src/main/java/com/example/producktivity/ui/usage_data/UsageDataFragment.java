@@ -2,6 +2,7 @@ package com.example.producktivity.ui.usage_data;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +21,24 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
+
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
+
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
+
 import com.example.producktivity.ui.send.BlockSelectFragment;
 import com.example.producktivity.ui.send.BlockSelectViewModel;
 
+
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class UsageDataFragment extends Fragment {
 
@@ -34,6 +46,7 @@ public class UsageDataFragment extends Fragment {
     private AppAdapter adapter;
     private UsageDataHandler handler;
     private Spinner dropdown;
+    private int span;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -60,12 +73,15 @@ public class UsageDataFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0){
                    adapter.setData(BlockSelectFragment.changeSpan(UsageTime.DAY, adapter.getData()));
+                   span = UsageTime.DAY;
                 }
                 if (position == 1){
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.WEEK, adapter.getData()));
+                    span = UsageTime.WEEK;
                 }
                 if (position == 2){ //does this notify the observer? what does the observer even observe??
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.MONTH, adapter.getData()));
+                    span = UsageTime.MONTH;
                 }
             }
 
@@ -75,22 +91,25 @@ public class UsageDataFragment extends Fragment {
             }
         });
         //this line watches the data view model for any changes, adjusting accordingly
-       // dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageTime>>() {
-          bsViewModel.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<BlacklistEntry>>() {
-              @Override
-              public void onChanged(List<BlacklistEntry> s) {
-                  if (s == null || s.size() == 0){
-                      if (s == null || s.size() == 0){
-                          System.out.println("creating a new list");
-                          Object selected = dropdown.getSelectedItem();
-                          int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
-                          List<UsageTime> usagetimes = handler.getStats(timeFrame);
-                          bsViewModel.updateList(usagetimes, s);
-                          System.out.println(usagetimes.size() + " usage time size");
-                      }
-                  }
-                  adapter.setData(s);
-          };});
+        // dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageTime>>() {
+        bsViewModel.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<BlacklistEntry>>() {
+            @Override
+            public void onChanged(List<BlacklistEntry> s) {
+                if (s == null || s.size() == 0){
+                    System.out.println("creating a new list");
+                    Object selected = dropdown.getSelectedItem();
+                    int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
+                    List<UsageTime> usageTimes = handler.getStats(timeFrame);
+                    bsViewModel.updateList(usageTimes, s);
+                    System.out.println(usageTimes.size() + " usage time size");
+                }
+                adapter.setData(s);
+            };
+        });
+
+        GraphView graphView = root.findViewById(R.id.graph);
+        createGraph(graphView);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return root;
     }
@@ -112,5 +131,38 @@ public class UsageDataFragment extends Fragment {
        /* Object selected = dropdown.getSelectedItem();
         int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
         bsViewModel.updateList(handler.getStats(timeFrame), adapter.getData()); */
+    }
+
+    public void createGraph(GraphView graph){
+
+        //Fill the series with the data and add it to the graph
+        AtomicInteger n = new AtomicInteger(0); //For incrementing in a stream
+        List<DataPoint> dataPoints = bsViewModel.getSelectList().getValue().stream().limit(6)
+                .map(d -> new DataPoint(n.getAndIncrement(), d.getTimeOfFlag(span)/60000))
+                .collect(Collectors.toList());
+
+        Log.i("graph", "list size is " + dataPoints.size());
+        DataPoint[] dps = new DataPoint[dataPoints.size()];
+        for(int i = 0; i < dataPoints.size(); i++) {
+            dps[i] = dataPoints.get(i);
+        }
+
+        BarGraphSeries<DataPoint> barSeries = new BarGraphSeries<>(dps);
+        barSeries.setDataWidth(1);
+        graph.addSeries(barSeries);
+
+        graph.getGridLabelRenderer().setHumanRounding(false, true);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(dataPoints.size());
+        //Change graph format to show the name of the app
+        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if(isValueX) {
+                    return bsViewModel.getSelectList().getValue().get((int)value).getAppName();
+                } else {
+                    return super.formatLabel(value, false);
+                }
+            }
+        });
     }
 }

@@ -1,25 +1,34 @@
 package com.example.producktivity.ui.send;
 
+
 import android.app.Activity;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+
+import com.example.producktivity.dbs.blacklist.BlacklistEntry;
+
 import com.example.producktivity.R;
-import com.example.producktivity.dbs.BlacklistEntry;
-import com.example.producktivity.dbs.BlacklistRepo;
+
+import com.example.producktivity.dbs.blacklist.BlacklistRepo;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
+
 import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BlockSelectViewModel extends AndroidViewModel {
 
+    public static final int TIME_SORT = 0;
+    public static final int NAME_SORT = 1;
     private LiveData<List<BlacklistEntry>> list;
     private BlacklistRepo repo;
     public BlockSelectViewModel(Application app) {
@@ -50,9 +59,17 @@ public class BlockSelectViewModel extends AndroidViewModel {
     public void replaceDB(List<BlacklistEntry> newList){
         repo.repopulateDatabase(newList);
     }
-    public static List<BlacklistEntry> sortData(List<BlacklistEntry> a){
-        if (a != null)
-            Collections.sort(a);
+
+    public static List<BlacklistEntry> sortData(List<BlacklistEntry> a, int sort_flag){
+        if (a != null) {
+            if (sort_flag == NAME_SORT) {
+                NameCompare nameComp = new NameCompare();
+                Collections.sort(a, nameComp);
+            } else {
+                TimeCompare timeComp = new TimeCompare();
+                Collections.sort(a, timeComp);
+            }
+        }
         return a;
     }
     //meant to create a list from an empty database, given a list of usage times
@@ -72,5 +89,22 @@ public class BlockSelectViewModel extends AndroidViewModel {
         }
 
         return list;
+    }
+
+    static class TimeCompare implements Comparator<BlacklistEntry>
+    {
+        public int compare(BlacklistEntry m1, BlacklistEntry m2)
+        {
+            return -Long.compare(m1.getTimeOfFlag(m1.getSpan_flag()), m2.getTimeOfFlag(m1.getSpan_flag()));
+        }
+    }
+
+    // Class to compare apps by name
+    static class NameCompare implements Comparator<BlacklistEntry>
+    {
+        public int compare(BlacklistEntry m1, BlacklistEntry m2)
+        {
+            return m1.getAppName().compareTo(m2.getAppName());
+        }
     }
 }

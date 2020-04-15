@@ -19,6 +19,7 @@ public class UsageTime implements Comparable<UsageTime>{
         packageName = pName;
         this.span_flag = span_flag;
     }
+
     public long getTimeOfFlag(){
         if (span_flag == MONTH)
             return monthUse;
@@ -26,6 +27,7 @@ public class UsageTime implements Comparable<UsageTime>{
             return weekUse;
         return dayUse;
     }
+
     //we want the longer time. is negative correct?
     @Override
     public int compareTo(UsageTime o){

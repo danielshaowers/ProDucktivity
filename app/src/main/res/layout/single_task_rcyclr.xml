@@ -12,9 +12,9 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/todo_card"
+        android:id="@+id/todo_card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#DA1C1C"
         android:fadingEdge="none"
         android:visibility="visible"
@@ -25,147 +25,80 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/todo_title"
-                android:layout_width="213dp"
+            <TextView
+                android:id="@+id/todo_title_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="4dp"
                 android:ems="10"
-                android:hint="Enter title"
-                android:inputType="textPersonName"
-                app:layout_constraintEnd_toEndOf="@+id/todo_description"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/todo_date"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <TextView
+                android:id="@+id/todo_date_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:ems="10"
                 android:focusable="true"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@+id/todo_description_view"
+                app:layout_constraintStart_toEndOf="@id/textView3"
+                app:layout_constraintVertical_bias="1.0" />
 
-                android:hint="deadline"
-                android:inputType="date"
-                android:textSize="8sp"
-                app:layout_constraintBottom_toBottomOf="@+id/todo_title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/todo_title"
-                app:layout_constraintTop_toTopOf="@+id/todo_title" />
-
-            <EditText
-                android:id="@+id/todo_reminder"
+            <TextView
+                android:id="@+id/todo_reminder_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:ems="10"
                 android:focusable="true"
-                android:hint="reminder"
-                android:inputType="time"
-                android:textSize="8sp"
-                app:layout_constraintEnd_toEndOf="parent"
+
+                android:textSize="12sp"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/todo_description"
-                app:layout_constraintTop_toBottomOf="@+id/todo_date" />
+                app:layout_constraintStart_toEndOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/todo_date_view" />
 
-            <EditText
-                android:id="@+id/todo_description"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/priority_view"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:ems="10"
-                android:hint="Description"
-                android:inputType="textLongMessage"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/todo_reminder"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintStart_toEndOf="@id/todo_reminder_view"
+                app:layout_constraintTop_toTopOf="@+id/todo_reminder_view"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-            <RadioGroup
-                android:id="@+id/todo_priority"
+            <TextView
+                android:id="@+id/todo_description_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:ems="10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/todo_title_view"
+                app:layout_constraintTop_toBottomOf="@+id/todo_title_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/todo_description"
-                app:layout_constraintTop_toBottomOf="@+id/todo_reminder">
-
-                <RadioButton
-                    android:id="@+id/high_todo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="High Priority"
-                    android:textSize="8sp" />
-
-                <RadioButton
-                    android:id="@+id/medium_todo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Medium Priority"
-                    android:textSize="8sp" />
-
-                <RadioButton
-                    android:id="@+id/low_todo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Low Priority"
-                    android:textSize="8sp" />
-
-            </RadioGroup>
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="@+id/todo_date"
-                app:layout_constraintEnd_toEndOf="@+id/todo_date"
-                app:layout_constraintStart_toStartOf="@+id/todo_description"
-                app:layout_constraintTop_toBottomOf="@+id/todo_title" />
-
-            <Button
-                android:id="@+id/remove_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Remove"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/todo_priority"
-                app:layout_constraintStart_toEndOf="@+id/todo_description"
-                app:layout_constraintTop_toBottomOf="@+id/todo_priority" />
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/todo_description"
-                app:layout_constraintStart_toEndOf="@+id/todo_description"
-                app:layout_constraintTop_toTopOf="@+id/todo_title" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Due Date"
-                android:textSize="6sp"
-                app:layout_constraintStart_toEndOf="@+id/todo_title"
-                app:layout_constraintTop_toTopOf="@+id/todo_date" />
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/todo_title_view"
+                app:layout_constraintTop_toTopOf="@+id/todo_date_view" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
                 android:text="Reminder"
-                android:textSize="6sp"
-                app:layout_constraintStart_toEndOf="@+id/todo_description"
-                app:layout_constraintTop_toTopOf="@+id/todo_reminder" />
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/todo_title_view"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,4 +1,4 @@
-package com.example.producktivity.dbs;
+package com.example.producktivity.dbs.blacklist;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -10,15 +10,13 @@ import com.example.producktivity.ui.usage_data.UsageTime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 @Entity(tableName = "blacklist")
 public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> {
 
-    public BlacklistEntry(String appName) {this.appName = appName; this.category = Category.BEAUTY;}
-    //todo: remove the default category!!
+    public BlacklistEntry(@NonNull String appName) {this.appName = appName; this.category = Category.BEAUTY;}
 
-   // @PrimaryKey(autoGenerate = true)
-    //private int id;
     @PrimaryKey @NonNull
     @ColumnInfo(name = "app_name")
     private String appName;
@@ -29,6 +27,8 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     @ColumnInfo(name = "month_use")
     private long monthUse;
 
+    @ColumnInfo(name = "inferred_productive")
+    private boolean inferredProductive;
     @ColumnInfo(name = "week_use")
     private long weekUse;
 
@@ -41,20 +41,27 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     public static final int MONTH = 2;
     public static final int WEEK = 1;
     public static final int DAY = 0;
+    public static final long NO_LIMIT = 1000000000;
 
     @ColumnInfo(name = "category")
     @TypeConverters({CategoryConverter.class})
     private Category category;
 
     @ColumnInfo(name = "day_limit")
-    private long dayLimit;
+    private long dayLimit = NO_LIMIT;
 
     @ColumnInfo(name = "week_limit")
-    private long weekLimit;
+    private long weekLimit = NO_LIMIT;
 
     @ColumnInfo(name = "unrestricted")
     private boolean unrestricted;
 
+    public boolean isInferredProductive(){
+        return inferredProductive;
+    }
+    public void setInferredProductive(boolean i){
+        this.inferredProductive = i;
+    }
     public String getAppName() {
         return appName;
     }
@@ -67,7 +74,6 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
         return packageName;
     }
 
-    //public int getId(){return id;}
     public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
@@ -99,7 +105,6 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     public int getSpan_flag() {
         return span_flag;
     }
-    //public void setId(int id){this.id = id;}
 
     public void setSpan_flag(int span_flag) {
         this.span_flag = span_flag;
@@ -147,6 +152,8 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
 
     //Converter methods for longs and input strings
     public static long stringToLong(String s){
+        if (s.equals("None"))
+            return NO_LIMIT;
         long hours = 0;
         long minutes = 0;
         if (s.length() > 0) {
@@ -162,15 +169,18 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
             nonchars.add(s.length());
             for (int i = nonchars.size() - 1; i > 0; i--){
                 if (nonchars.get(i) - nonchars.get(i - 1) > 1) //if the nonnumericals are not adjacent, then must have a num between
-                time.add(Long.parseLong(s.substring(nonchars.get(i - 1) + 1, nonchars.get(i))));
+                    time.add(Long.parseLong(s.substring(nonchars.get(i - 1) + 1, nonchars.get(i))));
             }
             return  time.size() <= 0 ? 0:time.get(0) * 60 * 1000 + (time.size() <= 1 ? 0:time.get(1) * 3600000
                     + (time.size() >= 3 ? time.get(2) * 3600000 * 24:0));
         }
-            return 0;
+        return 0;
     }
+
     //todo: fix this so it actually works with our string parser stringToLong
     public static String longToString(long millis) {
+        if (millis == NO_LIMIT)
+            return "None";
         String output = "";
         long minutes = millis / 60000;
 
@@ -185,10 +195,9 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
         return output + minutes + "m";
     }
 
-
     @Override
     public int compareTo(BlacklistEntry o) {
-        return -Long.compare(getTimeOfFlag(this.span_flag), o.getTimeOfFlag(this.span_flag));
+        return Long.compare(getTimeOfFlag(this.span_flag), o.getTimeOfFlag(this.span_flag));
     }
 
     @Override
