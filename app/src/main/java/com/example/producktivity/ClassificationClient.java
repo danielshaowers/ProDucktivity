@@ -42,6 +42,9 @@ public class ClassificationClient{
         final String[] category = {""};
         final String[] appType = {""};
         System.out.println(url);
+        if(appId.equalsIgnoreCase("com.example.producktivity")){
+            return "PRODUCKTIVITY";
+        }
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, future, future){
@@ -71,6 +74,6 @@ public class ClassificationClient{
             e.printStackTrace();
         }
         System.out.println("added to queue");
-        return "ERROR RETRIEVING CATEGORY FROM API";
+        return "SYSTEM";
     }
 }

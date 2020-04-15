@@ -145,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
         String cat = cClient.requestAppCategory(appId);
         app.setCategory(Category.valueOf(cat));
         Boolean productive = blacklistClient.classifyApp(appId);
+        if(cat.equalsIgnoreCase("SYSTEM") || cat.equalsIgnoreCase("PRODUCKTIVE")){
+            productive = true;
+        }
         //TODO: add productive classification to app entry
         app.setInferredProductive(productive);
     }
