@@ -1,6 +1,7 @@
 package com.example.producktivity.ui.scrolling_to_do;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,12 +33,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.zip.Inflater;
 
 //implements InputAdapter.ItemClickListener if i want it to register button clicks
-public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemClick{
+public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemClick, AdapterView.OnItemSelectedListener{
     private InputAdapter mAdapter;
 
     private List<Task> taskList;
@@ -44,37 +49,21 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
     private ToDoViewModel vm;
     private int pos;
 
-    @Override
+    private String[] selectViewArray = {"Incomplete Tasks", "Completed Tasks", "All Tasks"};
+    ArrayList<String> spinnerList = new ArrayList<>(Arrays.asList(selectViewArray));
+    Spinner spinner;
+    private int currentSelection;
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //vm = new ViewModelProvider(this).get(ToDoViewModel.class);
-        /*View root = LayoutInflater.from(this.getContext())
-                .inflate(R.layout.to_do, null, false);
-        emptyView = root.findViewById(R.id.empty_list);
-
-        recyclerView = root.findViewById(R.id.todo_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new InputAdapter(TaskFragment.this, new ArrayList<Task>());
-        recyclerView.setAdapter(mAdapter);*/
-    }
+    private String[] forIncompleteTasks = new String[]{"Complete", "Edit", "Delete"};
+    private String[] forCompletedTasks = new String[]{"Recover Task", "Edit", "Delete"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.to_do, container, false);
+        View root = initViews(inflater, container, savedInstanceState);
 
-        emptyView = root.findViewById(R.id.empty_list);
+        spinner.setOnItemSelectedListener(this);
+        spinner.setSelection(0);
 
-        recyclerView = root.findViewById(R.id.todo_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        mAdapter = new InputAdapter(TaskFragment.this, new ArrayList<>());
-        new RetrieveToDosTask(this);
-
-        recyclerView.setAdapter(mAdapter);
-        displayList();
         return root;
     }
 
@@ -84,8 +73,29 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
         vm = ((MainActivity)context).toDoVM;
     }
 
-    private void displayList() {
-        vm.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+    private View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.to_do, container, false);
+
+        emptyView = root.findViewById(R.id.empty_list);
+
+        spinner = root.findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, spinnerList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        recyclerView = root.findViewById(R.id.todo_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter = new InputAdapter(TaskFragment.this, new ArrayList<>());
+        new RetrieveToDosTask(this);
+
+        recyclerView.setAdapter(mAdapter);
+        return root;
+    }
+
+    private void observeTasks(LiveData<List<Task>> tasks) {
+        tasks.observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
                 Log.i("task frag", "We observed a change!!");
@@ -113,10 +123,8 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
         if (requestCode == 100 && resultCode > 0) {
             Task task = (Task) data.getSerializableExtra("task");
             if (resultCode == 1) {
-
                 vm.insert(task);
             } else if (resultCode == 2) {
-
                 vm.update(task);
             }
         }
@@ -124,26 +132,34 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
 
     @Override
     public void onTaskClick(final int pos) {
-        new AlertDialog.Builder(Objects.requireNonNull(TaskFragment.this.getContext()))
-                .setTitle("Select Options")
-                .setItems( new String[]{"Complete", "Edit", "Delete"}, (dialogInterface, i) ->{
-                    switch(i) {
-                        case 0:
-                            setTaskCompleted(mAdapter.getItemAt(pos));
-                            break;
-                        case 1:
-                            updateTask(mAdapter.getItemAt(pos));
-                            break;
-                        case 2:
-                            deleteTask(mAdapter.getItemAt(pos));
-                            break;
-                    }
-                }).show();
+        Task currentTask = mAdapter.getItemAt(pos);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Objects.requireNonNull(TaskFragment.this.getContext()))
+                .setTitle("Select Options");
+        DialogInterface.OnClickListener d = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch(which) {
+                    case 0:
+                        setTaskCompleted(currentTask, !currentTask.isComplete()); break;
+                    case 1:
+                        updateTask(mAdapter.getItemAt(pos));
+                        break;
+                    case 2:
+                        deleteTask(mAdapter.getItemAt(pos));
+                        break;
+                }
+        }};
+        if(currentTask.isComplete()) {
+            alertDialogBuilder.setItems(forCompletedTasks, d).show();
+        } else {
+            alertDialogBuilder.setItems(forIncompleteTasks, d).show();
+        }
     }
 
-    private void setTaskCompleted(Task t) {
-        t.setComplete(true);
+    private void setTaskCompleted(Task t, boolean b) {
+        t.setComplete(b);
         vm.update(t);
+        mAdapter.notifyDataSetChanged();
     }
 
     private void updateTask(Task t) {
@@ -156,6 +172,23 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
 
     private void deleteTask(Task t) {
         vm.delete(t);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                observeTasks(vm.getIncompleteTasks()); break;
+            case 1:
+                observeTasks(vm.getCompleteTasks()); break;
+            case 2:
+                observeTasks(vm.getAllTasks()); break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private static class RetrieveToDosTask extends AsyncTask<Void, Void, LiveData<List<Task>>> {
