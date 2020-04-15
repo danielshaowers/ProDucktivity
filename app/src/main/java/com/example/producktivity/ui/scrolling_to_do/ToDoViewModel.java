@@ -26,8 +26,8 @@ public class ToDoViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Task>> getAllTasks() {
-        Log.i("dbs", "got task list: " + repo.getAllTasks().getValue());
-        return repo.getAllTasks();}
+        Log.i("dbs", "got task list: " + mAllTasks.getValue());
+        return mAllTasks;}
 
     public void insert(Task task) {repo.insert(task);}
 

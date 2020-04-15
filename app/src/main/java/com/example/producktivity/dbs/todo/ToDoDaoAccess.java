@@ -9,6 +9,8 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import static androidx.room.OnConflictStrategy.REPLACE;
+
 @Dao
 public interface ToDoDaoAccess {
 
@@ -21,12 +23,12 @@ public interface ToDoDaoAccess {
     @Query("SELECT * FROM tasks WHERE complete = :complete")
     LiveData<List<Task>> getTasksWithComplete(boolean complete);
 
-    @Insert
+    @Insert(onConflict = REPLACE)
     void insert(Task task);
 
     @Delete
     void delete(Task task);
 
-    @Update
+    @Update(onConflict = REPLACE)
     void update(Task task);
 }

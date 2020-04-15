@@ -28,7 +28,7 @@ public class ToDoRepo {
     }
 
     public LiveData<List<Task>> getAllTasks() {
-        return mToDoDao.getTasksByDueDate();
+        return mToDoDao.getTasks();
     }
 
     public LiveData<List<Task>> getTaskWithComplete(boolean complete) {
@@ -53,6 +53,7 @@ public class ToDoRepo {
             @Override
             protected Void doInBackground(Void... voids) {
                 db.daoAccess().update(task);
+                Log.i("repo", "this is actually updating" + task.getTitle());
                 return null;
             }
         }.execute();
