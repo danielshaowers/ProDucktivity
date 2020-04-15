@@ -57,6 +57,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.security.Permissions;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -113,19 +114,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<BlacklistEntry> s) {
                 if (!updated[0]) {
-                    System.out.println("onChanged called for the blockselect viewmodel");
-                    List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
-                    bsViewModel.updateList(usagetimes, s);
-                    System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
-                    System.out.println("at cc");
-                    ClassificationClient cClient = new ClassificationClient(getApplicationContext());
-                    BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
-                    for(BlacklistEntry app: s){
-                        //strip this out into a new method to call when response arrives
-                        addInfoToEntry(app, cClient, blacklistClient);
-                    }
+                    //I put this code in a new thread so the main thread doesn't get blocked
+                    new Thread(new Runnable() {
+                        public void run() {
+                            System.out.println("onChanged called for the blockselect viewmodel");
+                            List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
+                            bsViewModel.updateList(usagetimes, s);
+                            System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
+                            System.out.println("at cc");
+                            ClassificationClient cClient = new ClassificationClient(getApplicationContext());
+                            BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
+                            for(BlacklistEntry app: s){
+                                //strip this out into a new method to call when response arrives
+                                addInfoToEntry(app, cClient, blacklistClient);
+                            }
+                        }
+                    }).start();
                     bsViewModel.replaceDB(s);
                     updated[0] = true;
+
                 }
                 bsViewModel.getSelectList().removeObserver(this);
             }

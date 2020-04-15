@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -44,51 +45,35 @@ public class ClassificationClient {
         final String[] category = {""};
         final String[] appType = {""};
         System.out.println(url);
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
+                (Request.Method.GET, url, null, future, future){
                     @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            System.out.println("got a response");
-                            category[0] = response.getString("genre_id");
-                            appType[0] = response.getString("app_type");
-                            System.out.print(category[0]);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    public Map<String, String> getHeaders(){
+                        Map<String,String> headers = new HashMap<>();
+                        // add headers <key,value>
+                        String credentials = UserName+":"+PassWord;
+                        String auth = "Basic "
+                                + Base64.encodeToString(credentials.getBytes(StandardCharsets.UTF_8),
+                                Base64.DEFAULT);
+                        headers.put("Authorization", auth);
+                        return headers;
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        error.printStackTrace();
-
-                    }
-                }) {
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                // add headers <key,value>
-                String credentials = UserName + ":" + PassWord;
-                String auth = "Basic "
-                        + Base64.encodeToString(credentials.getBytes(),
-                        Base64.NO_WRAP);
-                headers.put("Authorization", auth);
-                return headers;
-                        /*Map<String, String> headers = new HashMap<String, String>();
-                        headers.put("Username", UserName);
-                        headers.put("Password", PassWord);
-                        return headers;*/
-            }
-        };
+                };
         queue.add(jsonObjectRequest);
-        if (appType[0].equalsIgnoreCase("GAME"))
-            return "GAME";
-        else
-            return category[0];
+        try {
+            JSONObject response = future.get();
+            category[0] = response.getString("genre_id");
+            appType[0] = response.getString("app_type");
+            if(appType[0].equalsIgnoreCase("GAME"))
+                return "GAME";
+            else
+                return category[0];
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            // handle the error
+            e.printStackTrace();
+        }
+        System.out.println("added to queue");
+        return "ERROR RETRIEVING CATEGORY FROM API";
     }
 }
