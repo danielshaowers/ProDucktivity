@@ -14,12 +14,12 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClassificationClient{
+public class ClassificationClient {
     private String URL = "https://api.appmonsta.com/v1/stores/android/details/";
     private String UserName = "23bd817660d5852948f01392ffd4457dd549afa4";
     private String PassWord = "X";
-    public ClassificationClient(){
-    }
+
+    public ClassificationClient() {}
 
     public String requestAppCategory(String appId) {
         String url = URL + appId + ".json?country=US";
@@ -47,15 +47,15 @@ public class ClassificationClient{
 
                     }
                 }) {
-                    @Override
-                    public Map<String, String> getHeaders() {
-                        Map<String, String> headers = new HashMap<String, String>();
-                        headers.put("Username", UserName);
-                        headers.put("Password", PassWord);
-                        return headers;
-                    }
-                };
-        if(appType[0].equalsIgnoreCase("GAME"))
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Username", UserName);
+                headers.put("Password", PassWord);
+                return headers;
+            }
+        };
+        if (appType[0].equalsIgnoreCase("GAME"))
             return "GAME";
         else
             return category[0];

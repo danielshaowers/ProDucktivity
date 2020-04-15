@@ -39,6 +39,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.producktivity.dbs.blacklist.Category;
 import com.example.producktivity.dbs.todo.Task;
 
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
@@ -116,18 +117,19 @@ public class MainActivity extends AppCompatActivity {
                     List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
                     bsViewModel.updateList(usagetimes, s);
                     System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
-                   /* ClassificationClient cClient = new ClassificationClient();
+                    ClassificationClient cClient = new ClassificationClient();
                     BlacklistClient blacklistClient = new BlacklistClient(s);
-                    /*for(BlacklistEntry app: s){
+                    for(BlacklistEntry app: s){
 
                         String appId = app.getPackageName();
                         String cat = cClient.requestAppCategory(appId);
+                        System.out.println("GUESS WHAT CAT IS " + cat + " WHICH IS LENGTH " + cat.length());
                         app.setCategory(Category.valueOf(cat));
                         Boolean productive = blacklistClient.classifyApp(appId);
                         //TODO: add productive classification to app entry
 
                         app.setInferredProductive(productive);
-                    }*/
+                    }
                     //bsViewModel.replaceDB(s);
                     updated[0] = true;
                 }
