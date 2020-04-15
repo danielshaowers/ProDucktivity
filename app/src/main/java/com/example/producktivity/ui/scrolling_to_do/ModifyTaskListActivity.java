@@ -26,6 +26,7 @@ import com.example.producktivity.dbs.todo.ToDoRepo;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.lang.ref.WeakReference;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -64,8 +65,11 @@ public class ModifyTaskListActivity extends AppCompatActivity {
             update = true;
             editTextTitle.setText(oldTask.getTitle());
             editTextDesc.setText(oldTask.getDesc());
-            editTextDueDate.setText(oldTask.getDueDate().toString());
-            editTextReminder.setText(oldTask.getReminderTime().toString());
+
+
+            editTextDueDate.setText(new Timestamp(oldTask.getDueDate().getTime()).toString());
+            editTextReminder.setText(new Timestamp(oldTask.getReminderTime().getTime()).toString());
+
             switch(oldTask.getPriority()) {
                 case LOW: low.setChecked(true);
                 case MED: medium.setChecked(true);
@@ -76,12 +80,15 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         button.setOnClickListener(view -> {
             if (update) {
                 updateTaskFromFields(oldTask);
+                MainActivity.scheduleNotification(this, oldTask);
                 setResult(oldTask, 2);
             } else {
                 Task newTask = new Task();
                 updateTaskFromFields(newTask);
+                MainActivity.scheduleNotification(this, newTask);
                 setResult(newTask, 1);
             }
+
         });
     }
 
@@ -134,6 +141,10 @@ public class ModifyTaskListActivity extends AppCompatActivity {
                         date.setText(dayOfMonth + "/" + (monthOfYear + 1));
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        myCalendar.set(Calendar.HOUR_OF_DAY, 12);
+                        myCalendar.set(Calendar.MINUTE, 0);
+                        myCalendar.set(Calendar.SECOND, 0);
+                        myCalendar.set(Calendar.MILLISECOND, 0);
                     }
                 }, year, month, day);
                 picker[0].show();

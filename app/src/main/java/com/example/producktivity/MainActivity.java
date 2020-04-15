@@ -1,19 +1,21 @@
 package com.example.producktivity;
 
 
+import android.app.AlarmManager;
 import android.app.AppOpsManager;
-import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,14 +34,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import com.example.producktivity.dbs.todo.Priority;
+
 import com.example.producktivity.dbs.todo.Task;
 
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
-import com.example.producktivity.dbs.blacklist.Category;
 
+import com.example.producktivity.notifs.ReminderNotificationPublisher;
 import com.example.producktivity.ui.scrolling_to_do.ModifyTaskListActivity;
-import com.example.producktivity.ui.scrolling_to_do.TaskFragment;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 import com.example.producktivity.ui.send.BlockSelectViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
@@ -46,17 +49,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration; //the lefthand bar to navigate
 
+    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
+    private final static String default_notification_channel_id = "default" ;
 
     private boolean isFabOpen = false;
     public ToDoViewModel toDoVM;
@@ -78,68 +79,11 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Create a task", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 //once the FAB is clicked
-
                 startActivityForResult(new Intent(
                                 MainActivity.this,
                                 ModifyTaskListActivity.class),
                         100
                 );
-
-                /*
-                if (!isFabOpen){
-                    isFabOpen = true;
-                    CardView taskCard = findViewById(R.id.task_card);
-                    taskCard.setVisibility(View.VISIBLE);
-                    EditText dueDate = findViewById(R.id.task_date);
-                    Calendar myCalendar = MainActivity.makeCalendar(dueDate, MainActivity.this);
-                    EditText reminder = findViewById(R.id.reminder);
-                    Calendar reminderCalendar = MainActivity.makeCalendar(reminder, MainActivity.this);
-
-                    //done setting date
-                    Button done = findViewById(R.id.done_button);
-                    done.setOnClickListener(view12 -> {
-                        Task task = new Task();
-                        EditText title = findViewById(R.id.task_title);
-                        if (title.getText() != null){
-                            task.setTitle(title.getText().toString());
-                            RadioGroup priorities = findViewById(R.id.priority_group);
-                            RadioButton priority = findViewById(priorities.getCheckedRadioButtonId());
-                            if (priority != null) {
-                                if (priority.getId() == R.id.high_priority)
-                                    task.setPriority(Priority.HIGH);
-                                if (priority.getId() == R.id.medium_priority)
-                                    task.setPriority(Priority.MED);
-                                if (priority.getId() == R.id.low_priority)
-                                    task.setPriority(Priority.LOW);
-                            } else
-                                task.setPriority(Priority.LOW);
-                            EditText description = findViewById(R.id.description);
-                            if (!description.getText().toString().equals(""))
-                                task.setDesc(description.getText().toString());
-                            if (!myCalendar.getTime().toString().equals("")) {
-                                task.setDueDate(myCalendar.getTime());
-                            }
-                            task.setReminderTime(reminderCalendar.getTime());
-                            //also need to set reminder time. would prefer if it was an enum instead of a date
-                            task.setComplete(task.getTitle() != null && task.getDesc() != null && task.getPriority() != null &&
-                            task.getDueDate() != null); //task.getReminderTime() != null
-                            toDoVM = new ViewModelProvider(MainActivity.this).get(ToDoViewModel.class);
-                            toDoVM.insert(task);
-
-                            taskCard.setVisibility(View.GONE);
-                            isFabOpen = false;
-                            //clear all views
-                            clearInputs();
-                            Snackbar.make(view, "Task Saved", Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
-                        }});
-                }
-                else{
-                    isFabOpen = false;
-                    CardView card= findViewById(R.id.task_card);
-                    card.setVisibility(View.GONE); //if they entered something into the database
-                    clearInputs();
-                }*/
             }
         });
         //this is where the navigation bar is linking to all our pages
@@ -223,6 +167,30 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public  static void scheduleNotification(Context context, Task task) {//delay is after how much time(in millis) from current time you want to schedule the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, default_notification_channel_id)
+                .setContentTitle(task.getTitle())
+                .setContentText(task.getDesc())
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.duck)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent activity = PendingIntent.getActivity(context, task.getId(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        builder.setContentIntent(activity);
+
+        Notification notification = builder.build();
+
+        Intent notificationIntent = new Intent(context, ReminderNotificationPublisher.class);
+        notificationIntent.putExtra(ReminderNotificationPublisher.NOTIFICATION_ID, task.getId());
+        notificationIntent.putExtra(ReminderNotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, task.getId(), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        long futureInMillis = task.getReminderTime().getTime() - SystemClock.elapsedRealtime();
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
     /*@RequiresApi(api = Build.VERSION_CODES.M)
