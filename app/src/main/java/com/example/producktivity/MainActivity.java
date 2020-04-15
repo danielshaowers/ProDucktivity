@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
                         app.setInferredProductive(productive);
                     }*/
-                    bsViewModel.replaceDB(s);
+                    //bsViewModel.replaceDB(s);
                     updated[0] = true;
                 }
                 bsViewModel.getSelectList().removeObserver(this);

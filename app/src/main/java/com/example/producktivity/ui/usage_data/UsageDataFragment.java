@@ -153,6 +153,9 @@ public class UsageDataFragment extends Fragment {
         List<DataPoint> dataPoints = list.stream().limit(size)
                 .map(d -> new DataPoint(n.getAndIncrement(), d.getTimeOfFlag(d.getSpan_flag())/60000))
                 .collect(Collectors.toList());
+        int i = 0;
+        for (DataPoint d : dataPoints)
+            output[i++] = d;
         return output;
     }
 
@@ -164,11 +167,15 @@ public class UsageDataFragment extends Fragment {
 
 
         barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
-        barSeries.setDataWidth(1);
+        barSeries.setDataWidth(3);
         graph.addSeries(barSeries);
 
         graph.getGridLabelRenderer().setHumanRounding(false, true);
         graph.getGridLabelRenderer().setNumHorizontalLabels(dps.length);
+        graph.getViewport().setScrollable(true); // enables horizontal scrolling
+        graph.getViewport().setScrollableY(true); // enables vertical scrolling
+        graph.getViewport().setScalable(true); // enables horizontal zooming and scrolling
+        graph.getViewport().setScalableY(true); // enables vertical zooming and scrolling
         //Change graph format to show the name of the app
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
