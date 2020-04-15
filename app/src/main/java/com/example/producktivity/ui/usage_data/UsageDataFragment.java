@@ -84,7 +84,7 @@ public class UsageDataFragment extends Fragment {
                 if (position == 0){
                    adapter.setData(BlockSelectFragment.changeSpan(UsageTime.DAY, adapter.getData()));
                    span = UsageTime.DAY;
-                   barSeries.resetData();
+                   barSeries.resetData(generatePoints(adapter.getData(), 6));
                 }
                 if (position == 1){
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.WEEK, adapter.getData()));
@@ -146,29 +146,28 @@ public class UsageDataFragment extends Fragment {
         bsViewModel.updateList(handler.getStats(timeFrame), adapter.getData()); */
     }
 
-    public List<DataPoint> generatePoints (List<BlacklistEntry> list){
+    public DataPoint[] generatePoints (List<BlacklistEntry> list, int size){
+        DataPoint[] output = new DataPoint[size];
         AtomicInteger n = new AtomicInteger(0); //For incrementing in a stream
-        List<DataPoint> dataPoints = list.stream().limit(6)
+        List<DataPoint> dataPoints = list.stream().limit(size)
                 .map(d -> new DataPoint(n.getAndIncrement(), d.getTimeOfFlag(d.getSpan_flag())/60000))
                 .collect(Collectors.toList());
-        return dataPoints;
+        return output;
     }
+
     public void createGraph(GraphView graph, List<BlacklistEntry> list){
 
         //Fill the series with the data and add it to the graph
-        List<DataPoint> dataPoints = generatePoints(list);
-        Log.i("graph", "list size is " + dataPoints.size());
-        DataPoint[] dps = new DataPoint[dataPoints.size()];
-        for(int i = 0; i < dataPoints.size(); i++) {
-            dps[i] = dataPoints.get(i);
-        }
+        DataPoint[] dps = generatePoints(list, 6);
+        Log.i("graph", "list size is " + dps.length);
+
 
         barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
         barSeries.setDataWidth(1);
         graph.addSeries(barSeries);
 
         graph.getGridLabelRenderer().setHumanRounding(false, true);
-        graph.getGridLabelRenderer().setNumHorizontalLabels(dataPoints.size());
+        graph.getGridLabelRenderer().setNumHorizontalLabels(dps.length);
         //Change graph format to show the name of the app
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
