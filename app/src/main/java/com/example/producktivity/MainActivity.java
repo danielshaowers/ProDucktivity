@@ -1,12 +1,15 @@
 package com.example.producktivity;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +27,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,6 +53,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.security.Permissions;
 import java.util.Calendar;
 import java.util.List;
 
@@ -110,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("onChanged called for the blockselect viewmodel");
                     List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
                     bsViewModel.updateList(usagetimes, s);
-
+                    System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
                    /* ClassificationClient cClient = new ClassificationClient();
                     BlacklistClient blacklistClient = new BlacklistClient(s);
                     /*for(BlacklistEntry app: s){
@@ -158,7 +163,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkPermissions(String permission, String setting) {
+
         System.out.println(permission + "\t" + setting);
+
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
         if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED)
             System.out.println("we do have permission");
@@ -195,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
-    /*@RequiresApi(api = Build.VERSION_CODES.M)
+   /* @RequiresApi(api = Build.VERSION_CODES.M)
     public void checkPermissions() {
         if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.PACKAGE_USAGE_STATS) != PackageManager.PERMISSION_GRANTED) {
             //if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS))
@@ -233,7 +240,11 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
         }
     }
-
+    @Override
+public void onPause(){
+        super.onPause();
+        JacocoReportGenerator.generateCoverageReport();
+}
     /*@Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {

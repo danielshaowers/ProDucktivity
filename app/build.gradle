@@ -101,7 +101,7 @@ configurations {
 apply plugin: 'com.android.application'
 //apply plugin: 'kotlin-android'
 //apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'jacoco'
+apply plugin: 'jacoco'
 
 android {
     viewBinding.enabled = true
@@ -142,9 +142,15 @@ android {
         testOptions {
 
             execution 'ANDROIDX_TEST_ORCHESTRATOR'
-            unitTests {
+            unitTests{
                 includeAndroidResources = true
             }
+         /*   unitTests.all {
+                jacoco {
+                    includeNoLocationClasses = true
+
+                }
+            }*/
         }
     }
     buildTypes {
@@ -166,6 +172,37 @@ android {
     }
 }
 
+
+jacoco{
+    toolVersion =  "0.8.5" // try a newer version if you can
+}
+task jacocoTestReport(type: JacocoReport) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+    classDirectories.from = fileTree(
+            dir: './build/intermediates/classes/debug',
+            excludes: ['**/R*.class',
+                       '**/*$InjectAdapter.class',
+                       '**/*$ModuleAdapter.class',
+                       '**/*$ViewInjector*.class'
+            ])
+    def coverageSourceDirs = [
+            '../app/src/main/java'
+    ]
+    sourceDirectories.from = files(coverageSourceDirs)
+    executionData.from = files("$buildDir/outputs/code-coverage/connected/coverage.exec")
+    doFirst {
+        new File("$buildDir/intermediates/classes/").eachFileRecurse { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
+    }
+}
 dependencies {
     def room_version = "2.2.4"
     def fragment_version = "1.2.4"

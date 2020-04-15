@@ -2,6 +2,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
@@ -20,6 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -48,7 +50,7 @@ public class MainActivityTestFAB {
                         isDisplayed()));
         floatingActionButton.perform(click());
 
-        ViewInteraction editText = onView(
+        DataInteraction editText = onData(
                 allOf(withId(R.id.todo_title), withText("Enter title"),
                         childAtPosition(
                                 childAtPosition(
@@ -58,7 +60,7 @@ public class MainActivityTestFAB {
                         isDisplayed()));
         editText.check(matches(withText("Enter title")));
 
-        ViewInteraction editText2 = onView(
+        DataInteraction editText2 = onData(
                 allOf(withId(R.id.todo_date), withText("Deadline"),
                         childAtPosition(
                                 childAtPosition(
@@ -67,7 +69,12 @@ public class MainActivityTestFAB {
                                 0),
                         isDisplayed()));
         editText2.check(matches(withText("Deadline")));
+<<<<<<< Updated upstream
         ViewInteraction editText3 = onView(
+=======
+
+        DataInteraction editText3 = onData(
+>>>>>>> Stashed changes
                 allOf(withId(R.id.todo_reminder), withText("Reminder"),
                         childAtPosition(
                                 childAtPosition(
@@ -77,7 +84,7 @@ public class MainActivityTestFAB {
                         isDisplayed()));
         editText3.check(matches(withText("Reminder")));
 
-        ViewInteraction radioGroup = onView(
+        DataInteraction radioGroup = onData(
                 allOf(withId(R.id.todo_priority),
                         childAtPosition(
                                 childAtPosition(
@@ -87,7 +94,7 @@ public class MainActivityTestFAB {
                         isDisplayed()));
         radioGroup.check(matches(isDisplayed()));
 
-        ViewInteraction button = onView(
+        DataInteraction button = onData(
                 allOf(withId(R.id.done_button_edit),
                         childAtPosition(
                                 childAtPosition(

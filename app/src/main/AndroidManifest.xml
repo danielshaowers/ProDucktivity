@@ -13,6 +13,7 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name = "android.permission.VIBRATE" />
     <uses-permission android:name = "android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
         <!--tools:remove="android:maxSdkVersion"-->
     <application
         android:allowBackup="true"

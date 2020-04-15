@@ -171,7 +171,7 @@ public class UsageDataFragment extends Fragment {
 
 
         barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
-       // barSeries.setDataWidth(10);
+       barSeries.setDataWidth(10);
         barSeries.setDrawValuesOnTop(true);
         barSeries.setValueDependentColor(new ValueDependentColor<DataPoint>() {
             @Override
@@ -179,7 +179,7 @@ public class UsageDataFragment extends Fragment {
                 return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
             }
         });
-        barSeries.setSpacing(150);
+        barSeries.setSpacing(100);
         barSeries.setValuesOnTopColor(Color.RED);
         graph.addSeries(barSeries);
         GridLabelRenderer format = graph.getGridLabelRenderer();
@@ -191,7 +191,7 @@ public class UsageDataFragment extends Fragment {
         graph.getGridLabelRenderer().setHumanRounding(false, true);
         graph.getGridLabelRenderer().setNumHorizontalLabels(dps.length);
         format.setHorizontalLabelsAngle(40);
-        format.setLabelHorizontalHeight(-10);
+        format.setLabelHorizontalHeight(10);
 
         //format.draw();
         graph.getViewport().setScrollable(true); // enables horizontal scrolling

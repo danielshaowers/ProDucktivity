@@ -33,7 +33,7 @@ public class BlockSelectTest {
 
     @Test
     public void appListTest(){
-    /*    final MainActivity[] main = {new MainActivity()};
+       /* final MainActivity[] main = {new MainActivity()};
 
         ActivityScenario<MainActivity> activity_sc = ActivityScenario.launch(MainActivity.class);
         activity_sc.onActivity(activity -> {
@@ -53,9 +53,8 @@ public class BlockSelectTest {
         FragmentScenario<BlockSelectFragment> fuckme = FragmentScenario.launch(BlockSelectFragment.class);
         FragmentScenario.launchInContainer(BlockSelectFragment.class);
         fuckme.moveToState(Lifecycle.State.CREATED);
-
-        BlockSelectFragment bsf = new BlockSelectFragment();*/
-        assertEquals(1,1);
+        BlockSelectFragment bsf = new BlockSelectFragment(); */
+       assertEquals(1,1);
 
     }
 
