@@ -123,6 +123,7 @@ public class UsageDataFragment extends Fragment {
                   }
                   adapter.setData(s);
                   GraphView graphView = root.findViewById(R.id.graph);
+                  if (adapter.getData() != null && adapter.getData().size() > 0)
                   createGraph(graphView, adapter.getData());
           }});
         /*GraphView graphView = root.findViewById(R.id.graph);
