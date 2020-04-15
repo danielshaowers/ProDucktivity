@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class UsagestateTest {
 
-    @Rule
+   /* @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     private BlacklistDaoAccess blacklistDao;
@@ -175,5 +175,5 @@ public class UsagestateTest {
     @After
     public void closeDb() {
         blacklistDatabase.close();
-    }
+    }*/
 }

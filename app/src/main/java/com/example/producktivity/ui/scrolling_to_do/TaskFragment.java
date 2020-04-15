@@ -60,17 +60,11 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = initViews(inflater, container, savedInstanceState);
-
+        vm = new ViewModelProvider(this).get(ToDoViewModel.class);
         spinner.setOnItemSelectedListener(this);
         spinner.setSelection(0);
 
         return root;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        vm = ((MainActivity)context).toDoVM;
     }
 
     private View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -133,7 +127,7 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
     @Override
     public void onTaskClick(final int pos) {
         Task currentTask = mAdapter.getItemAt(pos);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Objects.requireNonNull(TaskFragment.this.getContext()))
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TaskFragment.this.requireContext())
                 .setTitle("Select Options");
         DialogInterface.OnClickListener d = new DialogInterface.OnClickListener() {
             @Override
