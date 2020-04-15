@@ -1,5 +1,6 @@
 package com.example.producktivity.ui.usage_data;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.ValueDependentColor;
 import com.jjoe64.graphview.series.DataPoint;
 
 
@@ -167,11 +170,29 @@ public class UsageDataFragment extends Fragment {
 
 
         barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
-        barSeries.setDataWidth(3);
+        barSeries.setDataWidth(100);
+        barSeries.setDrawValuesOnTop(true);
+        barSeries.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+            @Override
+            public int get(DataPoint data) {
+                return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
+            }
+        });
+        barSeries.setSpacing(50);
+        barSeries.setDrawValuesOnTop(true);
+        barSeries.setValuesOnTopColor(Color.RED);
         graph.addSeries(barSeries);
+        GridLabelRenderer format = graph.getGridLabelRenderer();
+        format.setVerticalAxisTitle("Minutes");
+        /*format.setLabelsSpace(100);
+        format.setPadding(10);*/
 
         graph.getGridLabelRenderer().setHumanRounding(false, true);
         graph.getGridLabelRenderer().setNumHorizontalLabels(dps.length);
+        format.setHorizontalLabelsAngle(30);
+        format.setLabelHorizontalHeight(-10);
+
+        //format.draw();
         graph.getViewport().setScrollable(true); // enables horizontal scrolling
         graph.getViewport().setScrollableY(true); // enables vertical scrolling
         graph.getViewport().setScalable(true); // enables horizontal zooming and scrolling

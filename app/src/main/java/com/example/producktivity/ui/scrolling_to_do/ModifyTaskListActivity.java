@@ -48,10 +48,11 @@ public class ModifyTaskListActivity extends AppCompatActivity {
 
         EditText editTextDueDate = findViewById(R.id.todo_date);
         EditText editTextReminder = findViewById(R.id.todo_reminder);
+        editTextDueDate.setFocusable(false);
+        editTextReminder.setFocusable(false);
 
         reminderCalendar = makeCalendar(editTextReminder, ModifyTaskListActivity.this);
         myCalendar = makeCalendar(editTextDueDate, ModifyTaskListActivity.this);
-
         RadioButton high = findViewById(R.id.high_todo);
         RadioButton medium = findViewById(R.id.medium_todo);
         RadioButton low = findViewById(R.id.low_todo);
