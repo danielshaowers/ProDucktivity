@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
@@ -33,13 +34,13 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
 
 
     //obtains the layoutinflater from the given context. layoutinflater converts the xml file into its corresponding view
-    InputAdapter(Context context, List<Task> tasks) {
+    InputAdapter(Fragment frag, List<Task> tasks) {
         Objects.requireNonNull(tasks);
 
-        mInflater = LayoutInflater.from(context);
+        mInflater = LayoutInflater.from(frag.getContext());
         this.tasks = tasks;
 
-        onTaskItemClick = (OnTaskItemClick)context;
+        onTaskItemClick = (OnTaskItemClick)frag;
     }
 
     @Override @NonNull
@@ -81,8 +82,9 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
         return tasks.size();
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+    public void addTasks(List<Task> tasks) {
+        this.tasks.clear();
+        this.tasks.addAll(tasks);
     }
 
     public interface OnTaskItemClick {
@@ -110,7 +112,6 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
         //Clicking pulls up the other menu
         @Override
         public void onClick(View v) {
-            Log.i("yike", "im trying here");
             onTaskItemClick.onTaskClick(getAdapterPosition());
         }
 

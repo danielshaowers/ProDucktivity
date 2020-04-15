@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -16,6 +17,7 @@ import com.example.producktivity.MainActivity;
 import com.example.producktivity.dbs.todo.Priority;
 import com.example.producktivity.dbs.todo.Task;
 import com.example.producktivity.R;
+import com.example.producktivity.dbs.todo.ToDoRepo;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.lang.ref.WeakReference;
@@ -24,9 +26,9 @@ import java.util.Objects;
 
 public class ModifyTaskListActivity extends AppCompatActivity {
 
-    private TextInputEditText editTextTitle, editTextDesc, editTextReminder, editTextDueDate;
-    private ToDoViewModel vm;
-    private Task task;
+    private TextInputEditText editTextTitle, editTextDesc;
+    private Calendar myCalendar, reminderCalendar;
+
     private boolean update;
 
     @Override
@@ -34,53 +36,54 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_task_page);
 
-        vm = new ViewModelProvider(this).get(ToDoViewModel.class);
-
         editTextTitle = findViewById(R.id.todo_title);
         editTextDesc = findViewById(R.id.todo_description);
 
-        editTextDueDate = findViewById(R.id.todo_date);
-        editTextReminder = findViewById(R.id.todo_reminder);
+        EditText editTextDueDate = findViewById(R.id.todo_date);
+        EditText editTextReminder = findViewById(R.id.todo_reminder);
+
+        reminderCalendar = MainActivity.makeCalendar(editTextReminder, ModifyTaskListActivity.this);
+        myCalendar = MainActivity.makeCalendar(editTextDueDate, ModifyTaskListActivity.this);
 
         RadioButton high = findViewById(R.id.high_todo);
         RadioButton medium = findViewById(R.id.medium_todo);
         RadioButton low = findViewById(R.id.low_todo);
 
-        Button button = findViewById(R.id.done_button_edit);
 
-        if ((task = (Task) getIntent().getSerializableExtra("task")) != null) {
+        Task oldTask;
+        if ((oldTask = (Task) getIntent().getSerializableExtra("task")) != null) {
             update = true;
-            editTextTitle.setText(task.getTitle());
-            editTextDesc.setText(task.getDesc());
-            editTextDueDate.setText(task.getDueDate().toString());
-            editTextReminder.setText(task.getReminderTime().toString());
-            switch(task.getPriority()) {
+            editTextTitle.setText(oldTask.getTitle());
+            editTextDesc.setText(oldTask.getDesc());
+            editTextDueDate.setText(oldTask.getDueDate().toString());
+            editTextReminder.setText(oldTask.getReminderTime().toString());
+            switch(oldTask.getPriority()) {
                 case LOW: low.setChecked(true);
                 case MED: medium.setChecked(true);
                 case HIGH: high.setChecked(true);
             }
 
         }
+        Button button = findViewById(R.id.done_button_edit);
         button.setOnClickListener(view -> {
             if (update) {
-                updateTaskFromFields();
-                vm.update(task);
-                setResult(task, 2);
+                updateTaskFromFields(oldTask);
+                setResult(oldTask, 2);
             } else {
-                task = new Task();
-                updateTaskFromFields();
-                new InsertTask(ModifyTaskListActivity.this, task).execute();
+                Task newTask = new Task();
+                updateTaskFromFields(newTask);
+                setResult(newTask, 1);
             }
         });
     }
 
-    private void updateTaskFromFields() {
-        task.setDesc(Objects.requireNonNull(editTextDesc.getText()).toString());
-        task.setTitle(Objects.requireNonNull(editTextTitle.getText()).toString());
-        Calendar myCalendar = MainActivity.makeCalendar(editTextDueDate, this);
-        task.setDueDate(myCalendar.getTime());
-        Calendar reminderCalendar = MainActivity.makeCalendar(editTextReminder, this);
-        task.setReminderTime(reminderCalendar.getTime());
+    private void updateTaskFromFields(Task t) {
+        t.setDesc(Objects.requireNonNull(editTextDesc.getText()).toString());
+        t.setTitle(Objects.requireNonNull(editTextTitle.getText()).toString());
+
+        t.setDueDate(myCalendar.getTime());
+
+        t.setReminderTime(reminderCalendar.getTime());
 
         RadioGroup priorities = findViewById(R.id.todo_priority);
         RadioButton priority = findViewById(priorities.getCheckedRadioButtonId());
@@ -89,14 +92,14 @@ public class ModifyTaskListActivity extends AppCompatActivity {
 
         if (priority != null) {
             if (priority.getId() == R.id.high_todo)
-                task.setPriority(Priority.HIGH);
+                t.setPriority(Priority.HIGH);
             if (priority.getId() == R.id.medium_todo)
-                task.setPriority(Priority.MED);
+                t.setPriority(Priority.MED);
             if (priority.getId() == R.id.low_todo)
-                task.setPriority(Priority.LOW);
+                t.setPriority(Priority.LOW);
         }
         else {
-            task.setPriority(Priority.LOW);
+            t.setPriority(Priority.LOW);
         }
     }
 
@@ -104,7 +107,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         setResult(flag, new Intent().putExtra("task", task));
         finish();
     }
-
+/*
     private static class InsertTask extends AsyncTask<Void, Void, Boolean> {
 
         private WeakReference<ModifyTaskListActivity> activityReference;
@@ -120,7 +123,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... objs) {
             // retrieve auto incremented note id
-            activityReference.get().vm.insert(task);
+            activityReference.get().repo.insert(task);
             Log.e("ID ", "doInBackground: " + task.getId());
             return true;
         }
@@ -133,7 +136,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
                 activityReference.get().finish();
             }
         }
-    }
+    }*/
 
 
 }

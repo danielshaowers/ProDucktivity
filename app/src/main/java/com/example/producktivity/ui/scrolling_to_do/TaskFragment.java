@@ -3,9 +3,11 @@ package com.example.producktivity.ui.scrolling_to_do;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.todo.Task;
+import com.example.producktivity.dbs.todo.ToDoRepo;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.ref.WeakReference;
@@ -27,80 +30,95 @@ import java.util.List;
 import java.util.Objects;
 
 //implements InputAdapter.ItemClickListener if i want it to register button clicks
-public class TaskFragment extends AppCompatActivity implements InputAdapter.OnTaskItemClick{
+public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemClick{
     private InputAdapter mAdapter;
 
     private List<Task> taskList;
-    //public static final int GET_FROM_GALLERY = 1;
-
-    private ArrayList<Task> data = new ArrayList<>();
-
-    private ToDoViewModel viewModel;
+    private TextView emptyView;
+    private RecyclerView recyclerView;
+    private ToDoViewModel vm;
     private int pos;
 
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(ToDoViewModel.class);
 
-        taskList = new ArrayList<>();
-        mAdapter = new InputAdapter(this, taskList);
-
-        viewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                taskList = tasks;
-                mAdapter.setTasks(tasks);
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-
-        setContentView(R.layout.to_do);
-
-        FloatingActionButton fab = findViewById(R.id.fab2);
-        fab.setOnClickListener(listener);
-
-        RecyclerView recyclerView = findViewById(R.id.todo_recyclerview);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)); //used to be root's context
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        displayList();
+        vm = new ViewModelProvider(this).get(ToDoViewModel.class);
 
     }
 
-    private View.OnClickListener listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            startActivityForResult(new Intent(TaskFragment.this, ModifyTaskListActivity.class), 100);
-        }
-    };
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.to_do, container, false);
+
+        emptyView = root.findViewById(R.id.empty_list);
+
+        recyclerView = root.findViewById(R.id.todo_recyclerview);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        displayList();
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(View v, Bundle savedInstanceState) {
+        super.onViewCreated(v, savedInstanceState);
+
+    }
 
     private void displayList() {
-        new RetrieveToDosTask(this).execute();
+        vm.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                Log.i("task frag", "We observed a change!!");
+                if(tasks.size() > 0) {
+                    emptyView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    if(mAdapter == null) {
+                        mAdapter = new InputAdapter(TaskFragment.this, tasks);
+                        taskList = tasks;
+                        recyclerView.setAdapter(mAdapter);
+                    } else {
+                        taskList = tasks;
+                        mAdapter.addTasks(tasks);
+                    }
+                } else updateEmptyView();
+            }
+        });
+    }
+
+    private void updateEmptyView() {
+        emptyView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode > 0) {
+            Task task = (Task) data.getSerializableExtra("task");
             if (resultCode == 1) {
-                taskList.add((Task) data.getSerializableExtra("task"));
+                taskList.add(task);
+                vm.insert(task);
+                mAdapter.notifyDataSetChanged();
             } else if (resultCode == 2) {
-                taskList.add((Task) data.getSerializableExtra("task"));
+                taskList.set(pos, (Task) data.getSerializableExtra("task"));
+                vm.update(task);
+                mAdapter.notifyDataSetChanged();
             }
-            mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void onTaskClick(final int pos) {
-        new AlertDialog.Builder(Objects.requireNonNull(TaskFragment.this))
+        new AlertDialog.Builder(Objects.requireNonNull(TaskFragment.this.getContext()))
                 .setTitle("Select Options")
                 .setItems( new String[]{"Complete", "Edit", "Delete"}, (dialogInterface, i) ->{
                     switch(i) {
                         case 0:
+                            TaskFragment.this.pos = pos;
                             setTaskCompleted(taskList.get(pos));
                         case 1:
                             TaskFragment.this.pos = pos;
@@ -113,25 +131,23 @@ public class TaskFragment extends AppCompatActivity implements InputAdapter.OnTa
 
     private void setTaskCompleted(Task t) {
         t.setComplete(true);
-        viewModel.update(t);
-        mAdapter.notifyDataSetChanged();
+        vm.update(t);
     }
 
     private void updateTask(Task t) {
         startActivityForResult(
-                new Intent(TaskFragment.this,
+                new Intent(TaskFragment.this.getContext(),
                         ModifyTaskListActivity.class).putExtra("task", t),
                 100
         );
-        mAdapter.notifyDataSetChanged();
     }
 
     private void deleteTask(Task t) {
-        viewModel.delete(t);
+        vm.delete(t);
         taskList.remove(t);
         mAdapter.notifyDataSetChanged();
     }
-
+/*
     private static class RetrieveToDosTask extends AsyncTask<Void, Void, LiveData<List<Task>>> {
 
         private WeakReference<TaskFragment> fragReference;
@@ -141,7 +157,7 @@ public class TaskFragment extends AppCompatActivity implements InputAdapter.OnTa
         @Override
         protected LiveData<List<Task>> doInBackground(Void... voids) {
             if(fragReference.get() != null)
-                return fragReference.get().viewModel.getAllTasks();
+                return fragReference.get().repo.getAllTasks();
 
             else
                 return null;
@@ -158,5 +174,5 @@ public class TaskFragment extends AppCompatActivity implements InputAdapter.OnTa
             }
         }
 
-    }
+    }*/
 }

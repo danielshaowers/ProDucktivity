@@ -22,7 +22,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+<<<<<<< HEAD
 import com.jjoe64.graphview.series.DataPoint;
+=======
+
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
+
+>>>>>>> 3e60784e25a7132355d048120ff6197e6ded5bd6
 import com.example.producktivity.R;
 
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
@@ -31,15 +40,19 @@ import com.example.producktivity.ui.send.BlockSelectFragment;
 import com.example.producktivity.ui.send.BlockSelectViewModel;
 
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+<<<<<<< HEAD
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 
+=======
+>>>>>>> 3e60784e25a7132355d048120ff6197e6ded5bd6
 
 public class UsageDataFragment extends Fragment {
 
@@ -47,6 +60,7 @@ public class UsageDataFragment extends Fragment {
     private AppAdapter adapter;
     private UsageDataHandler handler;
     private Spinner dropdown;
+    private int span;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -73,12 +87,15 @@ public class UsageDataFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0){
                    adapter.setData(BlockSelectFragment.changeSpan(UsageTime.DAY, adapter.getData()));
+                   span = UsageTime.DAY;
                 }
                 if (position == 1){
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.WEEK, adapter.getData()));
+                    span = UsageTime.WEEK;
                 }
                 if (position == 2){ //does this notify the observer? what does the observer even observe??
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.MONTH, adapter.getData()));
+                    span = UsageTime.MONTH;
                 }
             }
 
@@ -88,6 +105,7 @@ public class UsageDataFragment extends Fragment {
             }
         });
         //this line watches the data view model for any changes, adjusting accordingly
+
        // dataViewModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<UsageTime>>() {
           bsViewModel.getSelectList().observe(getViewLifecycleOwner(), new Observer<List<BlacklistEntry>>() {
               @Override
@@ -130,6 +148,7 @@ public class UsageDataFragment extends Fragment {
         int timeFrame = selected == null ? UsageTime.MONTH: selected.equals("Day") ? UsageTime.DAY : (selected.equals("Month") ? UsageTime.MONTH:UsageTime.WEEK);
         bsViewModel.updateList(handler.getStats(timeFrame), adapter.getData()); */
     }
+
     public void createGraph(GraphView graph, List<BlacklistEntry> list){
 
         //Fill the series with the data and add it to the graph
@@ -145,6 +164,7 @@ public class UsageDataFragment extends Fragment {
         }
 
         BarGraphSeries<com.jjoe64.graphview.series.DataPoint> barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
+
         barSeries.setDataWidth(1);
         graph.addSeries(barSeries);
 
@@ -163,3 +183,4 @@ public class UsageDataFragment extends Fragment {
         });
     }
 }
+
