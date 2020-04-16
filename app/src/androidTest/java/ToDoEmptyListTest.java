@@ -72,10 +72,12 @@ public class ToDoEmptyListTest {
                         isDisplayed()));
         textView.check(matches(isDisplayed()));
 
-        DataInteraction spinner = onData(
+        ViewInteraction spinner = onView(withId(R.id.spinner));
+        DataInteraction spinnerData = onData(
                 allOf(is(instanceOf(String.class)),
                         is("Incomplete Tasks")));
         spinner.check(matches(isDisplayed()));
+        spinnerData.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(

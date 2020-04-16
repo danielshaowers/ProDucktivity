@@ -50,8 +50,8 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
     private int pos;
 
     private String[] selectViewArray = {"Incomplete Tasks", "Completed Tasks", "All Tasks"};
-    ArrayList<String> spinnerList = new ArrayList<>(Arrays.asList(selectViewArray));
-    Spinner spinner;
+    private ArrayList<String> spinnerList = new ArrayList<>(Arrays.asList(selectViewArray));
+    private Spinner spinner;
     private int currentSelection;
 
     private String[] forIncompleteTasks = new String[]{"Complete", "Edit", "Delete"};
