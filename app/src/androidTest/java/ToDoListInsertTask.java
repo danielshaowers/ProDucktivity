@@ -20,6 +20,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import TestUtils.RecyclerViewMatcher;
+
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -156,6 +158,7 @@ public class ToDoListInsertTask {
                         isDisplayed()));
         navigationMenuItemView.perform(click());
 
+        /*
         DataInteraction textView = onData(
                 allOf(is(instanceOf(String.class)),
                         is("Title")));
@@ -175,6 +178,32 @@ public class ToDoListInsertTask {
                 allOf(is(instanceOf(String.class)),
                         is("High Priority")));
         textView5.check(matches(isDisplayed()));
+         */
+
+        //Do RecyclerViewAdapter test
+        ViewInteraction recyclerViewOfTask = onView(
+                allOf(
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ),
+                                        0),
+                                0
+                                )
+                        )
+                );
+        recyclerViewOfTask.check(matches(isDisplayed()));
+        recyclerViewOfTask.check(matches(withText("Title")));
+        recyclerViewOfTask.check(matches(withText("Desc")));
+        recyclerViewOfTask.check(matches(withText("00-15")));
+        recyclerViewOfTask.check(matches(withText("High Priority")));
+
+    }
+
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
     }
 
     private static Matcher<View> childAtPosition(

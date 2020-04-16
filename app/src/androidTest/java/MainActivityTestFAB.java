@@ -69,12 +69,8 @@ public class MainActivityTestFAB {
                                 0),
                         isDisplayed()));
         editText2.check(matches(withText("Deadline")));
-<<<<<<< Updated upstream
-        ViewInteraction editText3 = onView(
-=======
 
-        DataInteraction editText3 = onData(
->>>>>>> Stashed changes
+        ViewInteraction editText3 = onView(
                 allOf(withId(R.id.todo_reminder), withText("Reminder"),
                         childAtPosition(
                                 childAtPosition(

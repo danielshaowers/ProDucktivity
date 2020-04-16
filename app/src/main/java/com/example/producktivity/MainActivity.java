@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
 public void onPause(){
         super.onPause();
-        JacocoReportGenerator.generateCoverageReport();
+        //JacocoReportGenerator.generateCoverageReport();
 }
     /*@Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

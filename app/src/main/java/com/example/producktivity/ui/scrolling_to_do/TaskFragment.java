@@ -58,6 +58,13 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
     private String[] forCompletedTasks = new String[]{"Recover Task", "Edit", "Delete"};
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.e("Frag", "Task fragment got attached!");
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = initViews(inflater, container, savedInstanceState);
         vm = new ViewModelProvider(this).get(ToDoViewModel.class);
