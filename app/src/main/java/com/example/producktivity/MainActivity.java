@@ -1,15 +1,12 @@
 package com.example.producktivity;
 
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,9 +24,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -47,17 +42,14 @@ import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 import com.example.producktivity.notifs.ReminderNotificationPublisher;
 import com.example.producktivity.ui.scrolling_to_do.ModifyTaskListActivity;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
-import com.example.producktivity.ui.send.BlockSelectViewModel;
+import com.example.producktivity.ui.blockSelect.BlockSelectViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
 import com.example.producktivity.ui.usage_data.UsageTime;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.security.Permissions;
-import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 public class MainActivity extends AppCompatActivity {
 

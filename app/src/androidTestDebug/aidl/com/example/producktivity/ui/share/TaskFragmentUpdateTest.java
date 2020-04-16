@@ -38,7 +38,7 @@ import static org.hamcrest.Matchers.is;
 public class TaskFragmentUpdateTest<ActivityTestRule> {
 
     @Rule
-    public ActivityTestRule mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule mActivityTestRule = new ActivityTestRule(MainActivity.class);
 
     @Test
     public void taskFragmentUpdateTest() {

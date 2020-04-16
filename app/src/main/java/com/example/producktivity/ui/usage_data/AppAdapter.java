@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
-import com.example.producktivity.ui.send.BlockSelectViewModel;
+import com.example.producktivity.ui.blockSelect.BlockSelectViewModel;
 
 import java.util.List;
 

@@ -26,9 +26,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 import com.example.producktivity.ui.blocking.BlockActivity;
-import com.example.producktivity.ui.send.BlockSelectViewModel;
+import com.example.producktivity.ui.blockSelect.BlockSelectViewModel;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class HomeFragment extends Fragment {

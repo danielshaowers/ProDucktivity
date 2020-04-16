@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.example.producktivity.ui.send.BlockSelectFragment"
+        android:name="com.example.producktivity.ui.blockSelect.BlockSelectFragment"
         android:label="@string/menu_block"
         tools:layout="@layout/profile" />
 </navigation>

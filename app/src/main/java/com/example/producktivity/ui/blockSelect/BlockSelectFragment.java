@@ -1,4 +1,4 @@
-package com.example.producktivity.ui.send;
+package com.example.producktivity.ui.blockSelect;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,8 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,15 +24,10 @@ import com.example.producktivity.R;
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
 import com.example.producktivity.dbs.blacklist.Category;
-import com.example.producktivity.dbs.blacklist.CategoryConverter;
-import com.example.producktivity.ui.usage_data.AppAdapter;
-import com.example.producktivity.ui.usage_data.DataViewModel;
-import com.example.producktivity.ui.usage_data.UsageDataFragment;
 
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BlockSelectFragment extends Fragment {

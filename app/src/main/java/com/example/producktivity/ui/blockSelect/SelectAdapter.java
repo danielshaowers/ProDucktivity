@@ -1,4 +1,4 @@
-package com.example.producktivity.ui.send;
+package com.example.producktivity.ui.blockSelect;
 
 import android.content.Context;
 import android.view.LayoutInflater;

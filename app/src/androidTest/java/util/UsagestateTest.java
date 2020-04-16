@@ -21,18 +21,15 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Objects;
 
+import TestUtils.LiveDataTestUtil;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class UsagestateTest {
 
-    @Test
-    public void test() {
-        assertEquals(1, 1);
-    }
-
-   /* @Rule
+    @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     private BlacklistDaoAccess blacklistDao;
@@ -90,7 +87,7 @@ public class UsagestateTest {
 
     @Test
     public void writeAndRead() throws InterruptedException {
-     /*   List<BlacklistEntry> entryList = LiveDataTestUtil.getValue(blacklistDao.getList());
+        List<BlacklistEntry> entryList = LiveDataTestUtil.getValue(blacklistDao.getList());
         assertTrue(entryList.isEmpty());
         blacklistDao.insert(data2);
 
@@ -100,11 +97,10 @@ public class UsagestateTest {
 
         blacklistDao.delete(data2);
 
-        assertTrue(LiveDataTestUtil.getValue(blacklistDao.getList()).isEmpty());*/
-     //assertTrue(1 == (1+0));
-    //}
+        assertTrue(LiveDataTestUtil.getValue(blacklistDao.getList()).isEmpty());
 
-  /*  @Test
+    }
+  @Test
     public void testUpdate6() throws InterruptedException {
 
         List<BlacklistEntry> dataList = LiveDataTestUtil.getValue(blacklistDao.getList());
@@ -181,5 +177,5 @@ public class UsagestateTest {
     @After
     public void closeDb() {
         blacklistDatabase.close();
-    }*/
+    }
 }
