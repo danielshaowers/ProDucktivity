@@ -5,7 +5,9 @@ import androidx.lifecycle.Lifecycle;
 import androidx.room.Room;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 import com.example.producktivity.MainActivity;
 import com.example.producktivity.dbs.blacklist.BlacklistDaoAccess;
@@ -17,9 +19,12 @@ import com.example.producktivity.ui.blockSelect.BlockSelectViewModel;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
+import TestUtils.SingleFragmentActivity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -28,6 +33,8 @@ import static org.junit.Assert.assertTrue;
 public class BlockSelectTest {
     private BlacklistDatabase mDatabase;
     private BlacklistDaoAccess dao;
+    @Rule //provides functional testing of this activity. launched before each test and before any before method. provides the activity for our initDb method
+    ActivityScenarioRule<SingleFragmentActivity> testActivityRule = new ActivityScenarioRule<>(SingleFragmentActivity.class);
     @Before
     public void initDb() throws Exception {
         mDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(),
@@ -45,8 +52,10 @@ public class BlockSelectTest {
 
 
     @Test
-    public void appListTest(){
-        final MainActivity[] main = {new MainActivity()};
+    public void singleEntry(){
+        //create a single fragment
+        <SingleFragmentActivity> testActivityRule = ActivityTestRule<>(SingleFragmentActivity::class.java, true, true)
+        /*final MainActivity[] main = {new MainActivity()};
         ActivityScenario<MainActivity> activity_sc = ActivityScenario.launch(MainActivity.class);
         activity_sc.onActivity(activity -> {
                 main[0] = activity;
@@ -66,7 +75,9 @@ public class BlockSelectTest {
         FragmentScenario.launchInContainer(BlockSelectFragment.class);
         fuckme.moveToState(Lifecycle.State.CREATED);
         BlockSelectFragment bsf = new BlockSelectFragment();
-       assertEquals(1,1);
+       assertEquals(1,1); */
+
+
 
     }
 

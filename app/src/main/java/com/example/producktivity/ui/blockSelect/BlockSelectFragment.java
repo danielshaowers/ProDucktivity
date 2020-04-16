@@ -32,12 +32,16 @@ import java.util.List;
 
 public class BlockSelectFragment extends Fragment {
 
-    private BlockSelectViewModel blockSelectViewModel;
+    private BlockSelectViewModel blockSelectViewModel = null;
     private SelectAdapter adapter;
+
+    public BlockSelectViewModel getVM(){return blockSelectViewModel;}
+    public void setVM(BlockSelectViewModel blockSelectViewModel){this.blockSelectViewModel = blockSelectViewModel;}
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        blockSelectViewModel =
-                ViewModelProviders.of(this.getActivity()).get(BlockSelectViewModel.class);
+        if (blockSelectViewModel == null)
+            blockSelectViewModel = ViewModelProviders.of(this.getActivity()).get(BlockSelectViewModel.class);
         UsageDataHandler handler = new UsageDataHandler(this.getContext());
         View root = inflater.inflate(R.layout.block_select_rcycler, container, false);
         Spinner spintowin = root.findViewById(R.id.choose_cat);
