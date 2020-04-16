@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.example.producktivity.R;
-
+//to be used for unit testing of fragments https://medium.com/@aitorvs/isolate-your-fragments-just-for-testing-ea7d4fddcba2
+//when other aspects aren't necessary only!
 @RestrictTo(RestrictTo.Scope.TESTS)
 public class SingleFragmentActivity extends AppCompatActivity {
     /**
