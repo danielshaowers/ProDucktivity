@@ -168,16 +168,6 @@ public class MainActivity extends AppCompatActivity {
        // checkPermissions(AppOpsManager.OPSTR_WRITE_EXTERNAL_STORAGE, Settings.ACTION_MANAGE_WRITE_SETTINGS);
     }
 
-    private void clearInputs(){
-        CardView card= findViewById(R.id.task_card);
-        card.setVisibility(View.GONE); //if they entered something into the database
-        ((EditText)findViewById(R.id.task_title)).getText().clear();
-        ((RadioGroup)findViewById(R.id.priority_group)).clearCheck();
-        ((EditText)findViewById(R.id.task_date)).getText().clear();
-        ((EditText)findViewById(R.id.reminder)).getText().clear();
-        ((EditText)findViewById(R.id.description)).getText().clear();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

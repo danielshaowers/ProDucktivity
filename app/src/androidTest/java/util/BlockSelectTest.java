@@ -112,7 +112,7 @@ public class BlockSelectTest {
     @Test
     public void singleEntry() {
         //create a single fragment
-<<<<<<< Updated upstream
+
         // AtomicReference<BlockSelectViewModel> blockSelectViewModel = new AtomicReference<>();
 
         BlockSelectFragment frag = new BlockSelectFragment();
