@@ -7,7 +7,6 @@ import android.view.ViewParent;
 
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
@@ -17,34 +16,29 @@ import com.example.producktivity.R;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import TestUtils.RecyclerViewMatcher;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class CalendarTest {
+public class UsageStatsTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
-    }
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
@@ -66,9 +60,20 @@ public class CalendarTest {
     }
 
     @Test
-    public void calendarTest() {
+    public void usageStatsTest() {
+        ViewInteraction linearLayout = onView(
+                allOf(withId(R.id.appBarLayout),
+                        childAtPosition(
+                                allOf(withId(R.id.coordinatorLayout),
+                                        childAtPosition(
+                                                withId(R.id.drawer_layout),
+                                                0)),
+                                0),
+                        isDisplayed()));
+        linearLayout.check(matches(isDisplayed()));
+
         ViewInteraction appCompatImageButton = onView(
-                Matchers.allOf(ViewMatchers.withContentDescription("Open navigation drawer"),
+                allOf(withContentDescription("Open navigation drawer"),
                         childAtPosition(
                                 allOf(withId(R.id.toolbar),
                                         childAtPosition(
@@ -84,21 +89,42 @@ public class CalendarTest {
                                 childAtPosition(
                                         withId(R.id.nav_view),
                                         0)),
-                        5),
+                        2),
                         isDisplayed()));
-
         navigationMenuItemView.perform(click());
 
-        DataInteraction relativeLayout = onData(anything())
-                .inAdapterView(allOf(withId(R.id.calendar_grid),
+        ViewInteraction appCompatSpinner = onView(
+                allOf(withId(R.id.change_span),
                         childAtPosition(
-                                withId(R.id.calendar_switcher),
-                                0)))
-                .atPosition(31);
-        relativeLayout.perform(click());
+                                childAtPosition(
+                                        withId(R.id.nav_host_fragment),
+                                        0),
+                                5),
+                        isDisplayed()));
+        appCompatSpinner.perform(click());
 
-        ViewInteraction frameLayout = onView(
-                allOf(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class), isDisplayed()));
-        frameLayout.check(matches(isDisplayed()));
+        DataInteraction appCompatCheckedTextView = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(1);
+        appCompatCheckedTextView.perform(click());
+
+        ViewInteraction appCompatSpinner2 = onView(
+                allOf(withId(R.id.change_span),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.nav_host_fragment),
+                                        0),
+                                5),
+                        isDisplayed()));
+        appCompatSpinner2.perform(click());
+
+        DataInteraction appCompatCheckedTextView2 = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(2);
+        appCompatCheckedTextView2.perform(click());
     }
 }

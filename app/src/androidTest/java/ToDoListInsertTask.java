@@ -54,6 +54,29 @@ public class ToDoListInsertTask {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
+    }
+
+    private static Matcher<View> childAtPosition(
+            final Matcher<View> parentMatcher, final int position) {
+
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+    }
+
     @Test
     public void toDoListAInsertTask() {
         ViewInteraction floatingActionButton = onView(
@@ -248,7 +271,6 @@ public class ToDoListInsertTask {
         );
 
 
-
     }
 
     @Test
@@ -388,31 +410,5 @@ public class ToDoListInsertTask {
                 allOf(withId(R.id.todo_card_view),
                         isDisplayed())).perform(click());
 
-    }
-
-
-
-
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
-    }
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
     }
 }
