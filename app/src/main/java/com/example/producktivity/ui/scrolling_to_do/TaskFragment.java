@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -58,16 +59,16 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
     private String[] forCompletedTasks = new String[]{"Recover Task", "Edit", "Delete"};
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Log.e("Frag", "Task fragment got attached!");
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = initViews(inflater, container, savedInstanceState);
         vm = new ViewModelProvider(this).get(ToDoViewModel.class);
+
         spinner.setOnItemSelectedListener(this);
         spinner.setSelection(0);
 
@@ -80,7 +81,7 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
         emptyView = root.findViewById(R.id.empty_list);
 
         spinner = root.findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, spinnerList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.requireContext(), android.R.layout.simple_spinner_item, spinnerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -96,7 +97,7 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
     }
 
     private void observeTasks(LiveData<List<Task>> tasks) {
-        tasks.observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+        tasks.observe(this.requireActivity(), new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
                 Log.i("task frag", "We observed a change!!");
@@ -116,6 +117,9 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
         emptyView.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
     }
+
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -177,14 +181,18 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.i("Task frag", "Spinner changed to position: " + position);
         switch (position) {
             case 0:
-                observeTasks(vm.getIncompleteTasks()); break;
+                observeTasks(vm.getIncompleteTasks());
+                Log.e("task frag", "were here now");
+                break;
             case 1:
                 observeTasks(vm.getCompleteTasks()); break;
             case 2:
                 observeTasks(vm.getAllTasks()); break;
         }
+        currentSelection = position;
     }
 
     @Override
@@ -218,5 +226,9 @@ public class TaskFragment extends Fragment implements InputAdapter.OnTaskItemCli
             }
         }
 
+    }
+
+    public static TaskFragment newInstance() {
+        return new TaskFragment();
     }
 }

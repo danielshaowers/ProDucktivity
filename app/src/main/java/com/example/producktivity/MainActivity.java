@@ -41,6 +41,7 @@ import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
 import com.example.producktivity.notifs.ReminderNotificationPublisher;
 import com.example.producktivity.ui.scrolling_to_do.ModifyTaskListActivity;
+import com.example.producktivity.ui.scrolling_to_do.TaskFragment;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 import com.example.producktivity.ui.blockSelect.BlockSelectViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
@@ -50,6 +51,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isFabOpen = false;
     public ToDoViewModel toDoVM;
+    private BlockSelectViewModel bsViewModel = null;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -98,48 +101,55 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        if (bsViewModel == null) {
+            bsViewModel = ViewModelProviders.of(this).get(BlockSelectViewModel.class);
+            UsageDataHandler handler = new UsageDataHandler(this);
+            //I am hoping this updates the values every time main activity is created, so we don't have to during the usage stats
+            bsViewModel.getSelectList().observe(this, new Observer<List<BlacklistEntry>>() {
+                @Override
+                public void onChanged(@Nullable List<BlacklistEntry> s) {
+                    if (!updated[0]) {
+                        //I put this code in a new thread so the main thread doesn't get blocked
+                     //   new Thread(new Runnable() {
+                       //     public void run() {
+                                System.out.println("onChanged called in MainActivity");
+                                List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
+                                s = bsViewModel.updateList(usagetimes, s);
+                                System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
+                                ClassificationClient cClient = new ClassificationClient(getApplicationContext());
+                                BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
+                                //if (s != null)
+                              /*  for (BlacklistEntry app : s) {
+                                    //  if (app != null && app.getAppName() != null)
+                                    //strip this out into a new method to call when response arrives
+                                    addInfoToEntry(app, cClient, blacklistClient);
+                                }
+                       //     } */
+                      //  }).start();
+                        //bsViewModel.replaceDB(s);
+                        updated[0] = true;
 
-        BlockSelectViewModel bsViewModel =  ViewModelProviders.of(this).get(BlockSelectViewModel.class);
-        UsageDataHandler handler = new UsageDataHandler(this);
-        //I am hoping this updates the values every time main activity is created, so we don't have to during the usage stats
-        bsViewModel.getSelectList().observe(this, new Observer<List<BlacklistEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<BlacklistEntry> s) {
-                if (!updated[0]) {
-                    //I put this code in a new thread so the main thread doesn't get blocked
-                    new Thread(new Runnable() {
-                        public void run() {
-                            System.out.println("onChanged called for the blockselect viewmodel");
-                            List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
-                            bsViewModel.updateList(usagetimes, s);
-                            System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
-                            System.out.println("at cc");
-                            ClassificationClient cClient = new ClassificationClient(getApplicationContext());
-                            BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
-                            if (s != null)
-                            for(BlacklistEntry app: s){
-                                if (app != null && app.getAppName() != null)
-                                //strip this out into a new method to call when response arrives
-                                addInfoToEntry(app, cClient, blacklistClient);
-                            }
-                        }
-                    }).start();
-                    bsViewModel.replaceDB(s);
-                    updated[0] = true;
-
+                    }
+                    bsViewModel.getSelectList().removeObserver(this);
                 }
-                bsViewModel.getSelectList().removeObserver(this);
-            }
-        });
+            });
+        }
     }
 
+    public void setVM(BlockSelectViewModel bs){
+        bsViewModel = bs;
+    }
     public void addInfoToEntry(BlacklistEntry app, ClassificationClient cClient, BlacklistClient blacklistClient){
         System.out.println(app.getAppName());
         String appId = app.getPackageName();
         String cat = cClient.requestAppCategory(appId);
-        if (cat == null)
+        try {
+            app.setCategory(Category.valueOf(cat));
+        }
+        catch (IllegalArgumentException i){
+            System.out.println("no valid cateogry found");
             return;
-        app.setCategory(Category.valueOf(cat));
+        }
         Boolean productive = blacklistClient.classifyApp(appId);
         if(cat.equalsIgnoreCase("SYSTEM") || cat.equalsIgnoreCase("PRODUCKTIVE")){
             productive = true;
@@ -147,14 +157,15 @@ public class MainActivity extends AppCompatActivity {
         //TODO: add productive classification to app entry
         app.setInferredProductive(productive);
     }
+    public BlockSelectViewModel getVM(){return bsViewModel;}
 
 
     @Override
     protected void onResume() {
-        super.onResume();
-        checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
-        checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-        checkPermissions(AppOpsManager.OPSTR_WRITE_EXTERNAL_STORAGE, Settings.ACTION_MANAGE_WRITE_SETTINGS);
+        super.onResume(); //todo: uncomment out the previous lines
+     //   checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
+      //  checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+       // checkPermissions(AppOpsManager.OPSTR_WRITE_EXTERNAL_STORAGE, Settings.ACTION_MANAGE_WRITE_SETTINGS);
     }
 
     private void clearInputs(){
@@ -232,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i("MainAct", "Result code: " + resultCode);
 
+
         if (requestCode == 100 && resultCode > 0) {
             Task task = (Task) data.getSerializableExtra("task");
             if (resultCode == 1) {
@@ -255,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
 public void onPause(){
         super.onPause();
-        //JacocoReportGenerator.generateCoverageReport();
+      //  JacocoReportGenerator.generateCoverageReport();
 }
     /*@Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

@@ -120,8 +120,8 @@ public class BlockSelectFragment extends Fragment {
         });
         return root;
     }
-
-
+    public List<BlacklistEntry> getAdapterList(){return adapter.getLimits();}
+    public SelectAdapter getAdapter(){return adapter;}
     //called when the fragment is no longer in view
     @Override
     public void onPause(){

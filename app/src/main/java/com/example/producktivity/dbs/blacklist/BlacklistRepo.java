@@ -19,6 +19,7 @@ public class BlacklistRepo {
 
     private BlacklistDaoAccess dao;
     private LiveData<List<BlacklistEntry>> allEntries;
+    private BlacklistDatabase db;
     private static BlacklistRepo instance;
    /* public static BlacklistRepo getInstance(){
         if (instance == null){
@@ -30,10 +31,21 @@ public class BlacklistRepo {
     }*/
 
     public BlacklistRepo(Application app) {
-        BlacklistDatabase db = BlacklistDatabase.getDatabase(app); //this should create the database
+        db = BlacklistDatabase.getDatabase(app); //this should create the database
         dao = db.daoAccess();
         allEntries = dao.getList();
+        allEntries = dao.getListByCategory(Category.BEAUTY);
     }
+
+    public void setDatabase(BlacklistDatabase db){
+        this.db = db;
+    }
+    public BlacklistRepo(BlacklistDatabase db, BlacklistDaoAccess dao){
+        this.db = db;
+        this.dao = dao;
+        allEntries = dao.getListByCategory(Category.BEAUTY);
+    }
+    public void setDao(BlacklistDaoAccess dao){ this.dao = dao;}
 
     public LiveData<List<BlacklistEntry>> getAllEntries() {
         return allEntries;
@@ -59,12 +71,14 @@ public class BlacklistRepo {
                 map.put(b.getAppName(), b);
             }
         }
+        System.out.println("size of hashmap for updated is " + map.size());
         for (UsageTime time : ut){
             BlacklistEntry entry = map.get(time.appName);
             if (entry == null){
                 entry = new BlacklistEntry(time.appName);
                 entry = updateEntry(entry, time);
                 insert(entry);
+                System.out.println("app inserted name " + time.appName);
             }
             else{
                 entry = updateEntry(entry, time);
@@ -106,7 +120,7 @@ public class BlacklistRepo {
     public void deleteAll(){ BlacklistDatabase.databaseWriteExecutor.execute(() ->
             dao.deleteAll());}
 
-     public int getItemId(BlacklistEntry entry){
-        return 1000000000;
+     public String getItemId(BlacklistEntry entry){
+        return entry.getAppName();
      }
 }

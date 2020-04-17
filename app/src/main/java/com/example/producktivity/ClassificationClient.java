@@ -76,9 +76,10 @@ public class ClassificationClient {
                 return category[0];
         } catch (InterruptedException | ExecutionException | JSONException e) {
             // handle the error
-            e.printStackTrace();
+            return category[0];
+           // e.printStackTrace();
         }
-        System.out.println("added to queue");
-        return "SYSTEM";
+       // System.out.println("added to queue");
+       // return "SYSTEM";
     }
 }

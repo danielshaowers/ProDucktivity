@@ -26,7 +26,6 @@ public class LiveDataTestUtil {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        return (T) data[0];
+            return (T) data[0];
     }
 }

@@ -93,6 +93,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
     }
 
     private void updateTaskFromFields(Task t) {
+
         t.setDesc(Objects.requireNonNull(editTextDesc.getText()).toString());
         t.setTitle(Objects.requireNonNull(editTextTitle.getText()).toString());
 
@@ -102,8 +103,6 @@ public class ModifyTaskListActivity extends AppCompatActivity {
 
         RadioGroup priorities = findViewById(R.id.todo_priority);
         RadioButton priority = findViewById(priorities.getCheckedRadioButtonId());
-
-
 
         if (priority != null) {
             if (priority.getId() == R.id.high_todo)
