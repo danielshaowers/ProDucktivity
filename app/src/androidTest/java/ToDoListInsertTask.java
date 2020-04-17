@@ -382,13 +382,13 @@ public class ToDoListInsertTask {
 
     }
 
-    @Test
+  /*  @Test
     public void toDoListCEditTask() {
         onView(
                 allOf(withId(R.id.todo_card_view),
                         isDisplayed())).perform(click());
 
-    }
+    }*/
 
 
 

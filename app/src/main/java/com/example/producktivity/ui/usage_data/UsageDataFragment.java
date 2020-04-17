@@ -76,7 +76,6 @@ public class UsageDataFragment extends Fragment {
                 if (position == 0){
                    adapter.setData(BlockSelectFragment.changeSpan(UsageTime.DAY, adapter.getData()));
                    span = UsageTime.DAY;
-                   barSeries.resetData(generatePoints(adapter.getData(), 6));
                 }
                 if (position == 1){
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.WEEK, adapter.getData()));
@@ -86,7 +85,8 @@ public class UsageDataFragment extends Fragment {
                     adapter.setData(BlockSelectFragment.changeSpan(UsageTime.MONTH, adapter.getData()));
                     span = UsageTime.MONTH;
                 }
-                barSeries.resetData(generatePoints(adapter.getData(), 6));
+                if (barSeries != null && adapter.getData() != null)
+                    barSeries.resetData(generatePoints(adapter.getData(), 6));
             }
 
             @Override
@@ -141,6 +141,7 @@ public class UsageDataFragment extends Fragment {
     }
 
     public DataPoint[] generatePoints (List<BlacklistEntry> list, int size){
+        size = Math.min(size, list.size());
         DataPoint[] output = new DataPoint[size];
         AtomicInteger n = new AtomicInteger(0); //For incrementing in a stream
         List<DataPoint> dataPoints = list.stream().limit(size)

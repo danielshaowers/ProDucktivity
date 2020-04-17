@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 
+import com.example.producktivity.dbs.blacklist.BlacklistDaoAccess;
+import com.example.producktivity.dbs.blacklist.BlacklistDatabase;
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
 import com.example.producktivity.dbs.blacklist.BlacklistRepo;
@@ -31,8 +33,12 @@ public class BlockSelectViewModel extends AndroidViewModel {
         list = new MutableLiveData<>();
         repo = new BlacklistRepo(app);
         list = repo.getAllEntries();
-
        //do I need to initialize the list here? I don't think so
+    }
+    public BlockSelectViewModel(Application app, BlacklistDaoAccess dao, BlacklistDatabase db){
+        super(app);
+        this.repo = new BlacklistRepo(db, dao);
+        list = repo.getAllEntries();
     }
 
    /* public void setSelectList(List<BlacklistEntry> entry){
