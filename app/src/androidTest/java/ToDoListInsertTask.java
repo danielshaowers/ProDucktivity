@@ -2,7 +2,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
@@ -16,9 +15,18 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
+
+import TestUtils.RecyclerViewMatcher;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -31,20 +39,46 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class ToDoListInsertTask {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
+    }
+
+    private static Matcher<View> childAtPosition(
+            final Matcher<View> parentMatcher, final int position) {
+
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+    }
+
     @Test
-    public void toDoListInsertTask() {
+    public void toDoListAInsertTask() {
         ViewInteraction floatingActionButton = onView(
                 Matchers.allOf(ViewMatchers.withId(R.id.fab),
                         childAtPosition(
@@ -156,43 +190,225 @@ public class ToDoListInsertTask {
                         isDisplayed()));
         navigationMenuItemView.perform(click());
 
-        DataInteraction textView = onData(
-                allOf(is(instanceOf(String.class)),
-                        is("Title")));
-        textView.check(matches(isDisplayed()));
+        //Do RecyclerViewAdapter test
+        onView(
+                allOf(withId(R.id.todo_title_view),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 0
+                        ),
+                        isDisplayed(),
+                        withText("Title")
+                )
+        );
 
-        DataInteraction textView2 = onData(
-                allOf(is(instanceOf(String.class)),
-                        is("desc")));
-        textView2.check(matches(isDisplayed()));
+        onView(
+                allOf(withId(R.id.todo_description_view),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 1
+                        ),
+                        isDisplayed(),
+                        withText("desc")
+                )
+        );
 
-        DataInteraction textView4 = onData(
-                allOf(is(instanceOf(String.class)),
-                        is("00-15")));
-        textView4.check(matches(isDisplayed()));
+        Date today = Date.from(Instant.now());
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd");
 
-        DataInteraction textView5 = onData(
-                allOf(is(instanceOf(String.class)),
-                        is("High Priority")));
-        textView5.check(matches(isDisplayed()));
+
+        onView(
+                allOf(withId(R.id.todo_date_view),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 2
+                        ),
+                        isDisplayed(),
+                        withText(dateFormat.format(today))
+                )
+        );
+
+        onView(
+                allOf(withId(R.id.todo_reminder_view),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 3
+                        ),
+                        isDisplayed(),
+                        withText(dateFormat.format(today))
+                )
+        );
+
+        onView(
+                allOf(withId(R.id.todo_priority),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 4
+                        ),
+                        isDisplayed(),
+                        withText("High Priority")
+                )
+        );
+
+
     }
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
+    @Test
+    public void toDoListBChangeTaskView() {
+        ViewInteraction appCompatImageButton = onView(
+                allOf(withContentDescription("Open navigation drawer"),
+                        childAtPosition(
+                                allOf(withId(R.id.toolbar),
+                                        childAtPosition(
+                                                withId(R.id.appBarLayout),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton.perform(click());
 
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
+        ViewInteraction navigationMenuItemView = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.design_navigation_view),
+                                childAtPosition(
+                                        withId(R.id.nav_view),
+                                        0)),
+                        4),
+                        isDisplayed()));
+        navigationMenuItemView.perform(click());
 
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+        ViewInteraction spinner = onView(withId(R.id.spinner));
+        spinner.check(matches(isDisplayed()));
+        spinner.perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Completed Tasks"))).perform(click());
+        spinner.check(matches(withSpinnerText(containsString("Completed Tasks"))));
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.empty_list), withText("No tasks to show!"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.nav_host_fragment),
+                                        0),
+                                1),
+                        isDisplayed()));
+        textView.check(matches(isDisplayed()));
+
+        spinner.check(matches(isDisplayed()));
+        spinner.perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("All Tasks"))).perform(click());
+        spinner.check(matches(withSpinnerText(containsString("All Tasks"))));
+
+        //to do card is displayed
+        onView(
+                allOf(withId(R.id.todo_card_view),
+                        isDisplayed()));
+
+        //Do RecyclerViewAdapter test
+        onView(
+                allOf(withId(R.id.todo_title_view),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 0
+                        ),
+                        isDisplayed(),
+                        withText("Title")
+                )
+        );
+
+        onView(
+                allOf(withId(R.id.todo_description_view),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 1
+                        ),
+                        isDisplayed(),
+                        withText("desc")
+                )
+        );
+
+        Date today = Date.from(Instant.now());
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd");
+
+
+        onView(
+                allOf(withId(R.id.todo_date_view),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 2
+                        ),
+                        isDisplayed(),
+                        withText(dateFormat.format(today))
+                )
+        );
+
+        onView(
+                allOf(withId(R.id.todo_reminder_view),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 3
+                        ),
+                        isDisplayed(),
+                        withText(dateFormat.format(today))
+                )
+        );
+
+        onView(
+                allOf(withId(R.id.todo_priority),
+                        childAtPosition(
+                                childAtPosition(
+                                        childAtPosition(
+                                                withRecyclerView(R.id.todo_recyclerview).atPosition(0),
+                                                0
+                                        ), 0
+                                ), 4
+                        ),
+                        isDisplayed(),
+                        withText("High Priority")
+                )
+        );
+
+    }
+
+    @Test
+    public void toDoListCEditTask() {
+        onView(
+                allOf(withId(R.id.todo_card_view),
+                        isDisplayed())).perform(click());
+
     }
 }

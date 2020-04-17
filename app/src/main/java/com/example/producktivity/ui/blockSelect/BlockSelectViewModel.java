@@ -1,22 +1,17 @@
-package com.example.producktivity.ui.send;
+package com.example.producktivity.ui.blockSelect;
 
 
-import android.app.Activity;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
-import com.example.producktivity.R;
-
 import com.example.producktivity.dbs.blacklist.BlacklistRepo;
-import com.example.producktivity.ui.usage_data.UsageDataHandler;
 
 import com.example.producktivity.ui.usage_data.UsageTime;
 
@@ -48,9 +43,6 @@ public class BlockSelectViewModel extends AndroidViewModel {
         return list;
     }
 
-    public LiveData<List<BlacklistEntry>> getDBList(){
-        return repo.getAllEntries();
-    }
     public void insert(BlacklistEntry entry){ repo.insert(entry);}
 
     public List<BlacklistEntry> updateList(List<UsageTime> ut, List<BlacklistEntry> blacklistEntries){

@@ -10,16 +10,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-
 
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,25 +28,18 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
-import com.jjoe64.graphview.series.DataPoint;
 
 import com.example.producktivity.R;
 
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
-import com.example.producktivity.ui.send.BlockSelectFragment;
-import com.example.producktivity.ui.send.BlockSelectViewModel;
+import com.example.producktivity.ui.blockSelect.BlockSelectFragment;
+import com.example.producktivity.ui.blockSelect.BlockSelectViewModel;
 
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import com.jjoe64.graphview.DefaultLabelFormatter;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.BarGraphSeries;
 
 public class UsageDataFragment extends Fragment {
 

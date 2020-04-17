@@ -1,3 +1,6 @@
+package util;
+
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -16,68 +19,31 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import TestUtils.RecyclerViewMatcher;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.anything;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class ToDoEmptyListTest {
+public class CalendarTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void toDoEmptyListTest() {
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withId(R.id.appBarLayout),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
-
-        ViewInteraction navigationMenuItemView = onView(
-                allOf(childAtPosition(
-                        allOf(withId(R.id.design_navigation_view),
-                                childAtPosition(
-                                        withId(R.id.nav_view),
-                                        0)),
-                        4),
-                        isDisplayed()));
-        navigationMenuItemView.perform(click());
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.empty_list), withText("No tasks to show!"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.nav_host_fragment),
-                                        0),
-                                1),
-                        isDisplayed()));
-        textView.check(matches(isDisplayed()));
-
-        ViewInteraction spinner = onView(withId(R.id.spinner));
-        DataInteraction spinnerData = onData(
-                allOf(is(instanceOf(String.class)),
-                        is("Incomplete Tasks")));
-        spinner.check(matches(isDisplayed()));
-        spinnerData.check(matches(isDisplayed()));
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
     }
 
     private static Matcher<View> childAtPosition(
@@ -97,5 +63,42 @@ public class ToDoEmptyListTest {
                         && view.equals(((ViewGroup) parent).getChildAt(position));
             }
         };
+    }
+
+    @Test
+    public void calendarTest() {
+        ViewInteraction appCompatImageButton = onView(
+                Matchers.allOf(ViewMatchers.withContentDescription("Open navigation drawer"),
+                        childAtPosition(
+                                allOf(withId(R.id.toolbar),
+                                        childAtPosition(
+                                                withId(R.id.appBarLayout),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton.perform(click());
+
+        ViewInteraction navigationMenuItemView = onView(
+                allOf(childAtPosition(
+                        allOf(withId(R.id.design_navigation_view),
+                                childAtPosition(
+                                        withId(R.id.nav_view),
+                                        0)),
+                        5),
+                        isDisplayed()));
+
+        navigationMenuItemView.perform(click());
+
+        DataInteraction relativeLayout = onData(anything())
+                .inAdapterView(allOf(withId(R.id.calendar_grid),
+                        childAtPosition(
+                                withId(R.id.calendar_switcher),
+                                0)))
+                .atPosition(31);
+        relativeLayout.perform(click());
+
+        ViewInteraction frameLayout = onView(
+                allOf(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class), isDisplayed()));
+        frameLayout.check(matches(isDisplayed()));
     }
 }
