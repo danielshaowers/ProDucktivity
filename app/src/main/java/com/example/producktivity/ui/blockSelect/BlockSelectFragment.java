@@ -47,8 +47,8 @@ public class BlockSelectFragment extends Fragment {
         Spinner spintowin = root.findViewById(R.id.choose_cat);
         String[] items = new String[]{ "ART_AND_DESIGN", "AUGMENTED_REALITY", "AUTO_AND_VEHICLES", "BEAUTY", "BOOKS_AND_REFERENCE", "BUSINESS",
                 "COMICS", "COMMUNICATION", "DATING", "EDUCATION", "ENTERTAINMENT", "EVENTS", "FAMILY", "FINANCE", "FOOD_AND_DRINK",
-                "GAMES", "GOOGLE_CAST", "HEALTH_AND_FITNESS", "HOUSE_AND_HOME", "LIBRARIES_AND_DEMO", "LIFESTYLE",
-                "MAPS_AND_NAVIGATION", "MEDICAL"};
+                "GAME", "GOOGLE_CAST", "HEALTH_AND_FITNESS", "HOUSE_AND_HOME", "LIBRARIES_AND_DEMO", "LIFESTYLE",
+                "MAPS_AND_NAVIGATION", "MEDICAL", "VIDEO_PLAYERS"};
 
         ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         spintowin.setAdapter(sortAdapter);
