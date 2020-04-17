@@ -88,6 +88,7 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
 
     public void addTasks(List<Task> newTasks) {
         tasks = newTasks;
+        notifyDataSetChanged();
     }
 
     public interface OnTaskItemClick {
@@ -110,9 +111,8 @@ public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHold
             reminder = itemView.findViewById(R.id.todo_reminder_view);
             priority = itemView.findViewById(R.id.priority_view);
 
-        } //could set onclick listeners for the calendars here if i was motivated
+        }
 
-        //Clicking pulls up the other menu
         @Override
         public void onClick(View v) {
             onTaskItemClick.onTaskClick(getAdapterPosition());

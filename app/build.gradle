@@ -234,7 +234,7 @@ dependencies {
         exclude module: 'recyclerview-v7'
     }
 
-    implementation 'androidx.recyclerview:recyclerview:1.1.0';
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.fragment:fragment:1.2.4'
 
     def work_version = "2.3.4"

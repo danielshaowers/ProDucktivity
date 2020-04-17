@@ -22,13 +22,13 @@ public class ToDoRepo {
         db = Room.databaseBuilder(app.getApplicationContext(),
                 ToDoDatabase.class, "todo_db").build();
         mToDoDao = db.daoAccess();
-        mAllTasks = mToDoDao.getTasksByDueDate();
+        mAllTasks = mToDoDao.getTasks();
         mCompleteTasks = mToDoDao.getTasksWithComplete(true);
         mIncompleteTasks = mToDoDao.getTasksWithComplete(false);
     }
 
     public LiveData<List<Task>> getAllTasks() {
-        return mToDoDao.getTasks();
+        return mAllTasks;
     }
 
     public LiveData<List<Task>> getTaskWithComplete(boolean complete) {
