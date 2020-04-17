@@ -168,7 +168,7 @@ android {
     }
     sourceSets {
         main { java.srcDirs = ['src/main/java'] }
-        test { java.srcDirs = ['src/test/java'] }
+        test { java.srcDirs = ['src/test/java'] } //todo: note that this maybe should be androidtest
     }
 }
 
@@ -225,6 +225,7 @@ dependencies {
     testImplementation 'android.arch.core:core-testing:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation('com.android.support.test.espresso:espresso-contrib:3.0.2') {
         // Necessary to avoid version conflicts
@@ -257,7 +258,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'android.arch.core:core-testing:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'

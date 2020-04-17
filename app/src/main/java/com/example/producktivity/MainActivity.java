@@ -116,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println("at cc");
                             ClassificationClient cClient = new ClassificationClient(getApplicationContext());
                             BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
+                            if (s != null)
                             for(BlacklistEntry app: s){
+                                if (app != null && app.getAppName() != null)
                                 //strip this out into a new method to call when response arrives
                                 addInfoToEntry(app, cClient, blacklistClient);
                             }
@@ -135,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(app.getAppName());
         String appId = app.getPackageName();
         String cat = cClient.requestAppCategory(appId);
+        if (cat == null)
+            return;
         app.setCategory(Category.valueOf(cat));
         Boolean productive = blacklistClient.classifyApp(appId);
         if(cat.equalsIgnoreCase("SYSTEM") || cat.equalsIgnoreCase("PRODUCKTIVE")){

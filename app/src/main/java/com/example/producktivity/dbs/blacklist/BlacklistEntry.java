@@ -1,6 +1,7 @@
 package com.example.producktivity.dbs.blacklist;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -44,6 +45,7 @@ public class BlacklistEntry implements Serializable, Comparable<BlacklistEntry> 
     public static final long NO_LIMIT = 1000000000;
 
     @ColumnInfo(name = "category")
+   // @Nullable
     @TypeConverters({CategoryConverter.class})
     private Category category;
 

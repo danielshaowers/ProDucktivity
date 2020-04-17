@@ -40,6 +40,10 @@ public class BlacklistClient {
         this.listOfApps = apps;
     }
 
+    public List<BlacklistEntry> getListOfApps() {
+        return listOfApps;
+    }
+
     private Boolean isInDatabase(String appId) {
         for(BlacklistEntry element : this.listOfApps) {
             if(element.getAppName().equalsIgnoreCase(appId)) {
@@ -89,12 +93,6 @@ public class BlacklistClient {
     //returns false if unproductive, true if productive
     public Boolean classifyApp(String appId) {
         BlacklistEntry app = getEntryFromList(appId);
-        //determine if the app is productive or unproductive based on category and database information
-        //if(appCategory.equalsIgnoreCase("PRODUCTIVITY") || appCategory.equalsIgnoreCase("BUSINESS") || appCategory.equalsIgnoreCase("EDUCATION") || appCategory.equalsIgnoreCase("BOOKS_AND_REFERENCE"))
-          //  return true;
-        //else
-          //  return false;
-
         //if user marks as productive it's productive
         if(app.isUnrestricted()) {
             return true;
