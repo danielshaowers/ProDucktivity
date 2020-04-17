@@ -17,6 +17,7 @@ import com.example.producktivity.R;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -60,18 +62,50 @@ public class UsageStatsTest {
     }
 
     @Test
-    public void usageStatsTest() {
-        ViewInteraction linearLayout = onView(
-                allOf(withId(R.id.appBarLayout),
+    public void usageStatisticsTest() {
+        navigateToUsageList();
+
+        ViewInteraction checkedTextView = onView(
+                allOf(withId(android.R.id.text1),
                         childAtPosition(
-                                allOf(withId(R.id.coordinatorLayout),
+                                allOf(withId(R.id.change_span),
                                         childAtPosition(
-                                                withId(R.id.drawer_layout),
+                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
+                                                2)),
+                                0),
+                        isDisplayed()));
+        checkedTextView.check(matches(isDisplayed()));
+
+        ViewInteraction appCompatSpinner = onView(
+                allOf(withId(R.id.change_span),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.nav_host_fragment),
+                                        0),
+                                5),
+                        isDisplayed()));
+        appCompatSpinner.perform(click());
+
+        DataInteraction appCompatCheckedTextView = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(2);
+        appCompatCheckedTextView.perform(click());
+
+        ViewInteraction view = onView(
+                allOf(withId(R.id.graph),
+                        childAtPosition(
+                                allOf(withId(R.id.cardUsageStatsBarGraph),
+                                        childAtPosition(
+                                                withId(R.id.constraintLayout),
                                                 0)),
                                 0),
                         isDisplayed()));
-        linearLayout.check(matches(isDisplayed()));
+        view.check(matches(isDisplayed()));
+    }
 
+    private void navigateToUsageList() {
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open navigation drawer"),
                         childAtPosition(
@@ -93,38 +127,22 @@ public class UsageStatsTest {
                         isDisplayed()));
         navigationMenuItemView.perform(click());
 
-        ViewInteraction appCompatSpinner = onView(
-                allOf(withId(R.id.change_span),
+        onView(
+                allOf(withId(R.id.graph), isDisplayed()));
+
+        assertTrue(isappPresent());
+    }
+
+    private boolean isappPresent() {
+        ViewInteraction recyclerView = onView(
+                allOf(withId(R.id.app_recyclerView),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.nav_host_fragment),
                                         0),
-                                5),
+                                4),
                         isDisplayed()));
-        appCompatSpinner.perform(click());
-
-        DataInteraction appCompatCheckedTextView = onData(anything())
-                .inAdapterView(childAtPosition(
-                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
-                        0))
-                .atPosition(1);
-        appCompatCheckedTextView.perform(click());
-
-        ViewInteraction appCompatSpinner2 = onView(
-                allOf(withId(R.id.change_span),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.nav_host_fragment),
-                                        0),
-                                5),
-                        isDisplayed()));
-        appCompatSpinner2.perform(click());
-
-        DataInteraction appCompatCheckedTextView2 = onData(anything())
-                .inAdapterView(childAtPosition(
-                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
-                        0))
-                .atPosition(2);
-        appCompatCheckedTextView2.perform(click());
+        recyclerView.check(matches(isDisplayed()));
+        return true;
     }
 }
