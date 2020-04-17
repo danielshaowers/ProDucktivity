@@ -455,6 +455,7 @@ public class ToDoListInsertTask {
         appCompatTextView.perform(click());
 
         assertTrue(isEmptyListPresent());
+
     }
 
     @Test
@@ -654,4 +655,5 @@ public class ToDoListInsertTask {
             }
         };
     }
+
 }

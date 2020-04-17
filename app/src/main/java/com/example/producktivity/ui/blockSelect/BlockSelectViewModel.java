@@ -43,9 +43,6 @@ public class BlockSelectViewModel extends AndroidViewModel {
         return list;
     }
 
-    public LiveData<List<BlacklistEntry>> getDBList(){
-        return repo.getAllEntries();
-    }
     public void insert(BlacklistEntry entry){ repo.insert(entry);}
 
     public List<BlacklistEntry> updateList(List<UsageTime> ut, List<BlacklistEntry> blacklistEntries){

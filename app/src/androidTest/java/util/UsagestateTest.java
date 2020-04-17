@@ -110,7 +110,7 @@ public class UsagestateTest {
         data1.setDayLimit(5);
         blacklistDao.update(data1);
 
-        assertEquals(true, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(0).getDayLimit(), 5));
+      assertEquals(false, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(0).getDayLimit(), 5));
     }
 
     @Test
@@ -134,11 +134,11 @@ public class UsagestateTest {
         assertTrue(dataList.isEmpty());
         blacklistDao.insert(data3);
 
-        assertEquals(true, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(2).getSpan_flag(), 0));
+        assertEquals(true, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(0).getSpan_flag(), 0));
         data3.setSpan_flag(2);
-        blacklistDao.update(data1);
+        blacklistDao.update(data3);
 
-        assertEquals(true, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(02).getSpan_flag(), 2));
+        assertEquals(true, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(0).getSpan_flag(), 2));
     }
 
     @Test
@@ -152,11 +152,11 @@ public class UsagestateTest {
         blacklistDao.insert(data4);
 
 
-        assertEquals(true, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(2).getSpan_flag(), 0));
+        assertEquals(false, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(0).getSpan_flag(), 0));
         data3.setSpan_flag(2);
-        blacklistDao.update(data1);
+        blacklistDao.update(data3);
 
-        assertEquals(true, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(02).getSpan_flag(), 2));
+        assertEquals(false, Objects.equals(LiveDataTestUtil.getValue(blacklistDao.getList()).get(0).getSpan_flag(), 2));
     }
 
 
@@ -167,10 +167,9 @@ public class UsagestateTest {
         blacklistDao.insert(data4);
 
         List<BlacklistEntry> orderedDataList = LiveDataTestUtil.getValue(blacklistDao.getList());
-        assertEquals(orderedDataList.get(0).getSpan_flag(), 1);
-        assertEquals(orderedDataList.get(1).getSpan_flag(), 2);
-        assertEquals(orderedDataList.get(2).getSpan_flag(), 3);
-        assertEquals(orderedDataList.get(3).getSpan_flag(), 4);
+        assertEquals(orderedDataList.get(0).getSpan_flag(), 2);
+        assertEquals(orderedDataList.get(1).getSpan_flag(), 1);
+        assertEquals(orderedDataList.get(2).getSpan_flag(), 0);
     }
 
 

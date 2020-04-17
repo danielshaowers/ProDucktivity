@@ -41,6 +41,8 @@ public class ClassificationClient{
         String url = URL + appId + ".json?country=US";
         final String[] category = {""};
         final String[] appType = {""};
+        if (appId == null)
+            return null;
         System.out.println(url);
         if(appId.equalsIgnoreCase("com.example.producktivity")){
             return "PRODUCKTIVITY";
