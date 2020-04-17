@@ -41,6 +41,7 @@ import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
 import com.example.producktivity.notifs.ReminderNotificationPublisher;
 import com.example.producktivity.ui.scrolling_to_do.ModifyTaskListActivity;
+import com.example.producktivity.ui.scrolling_to_do.TaskFragment;
 import com.example.producktivity.ui.scrolling_to_do.ToDoViewModel;
 import com.example.producktivity.ui.blockSelect.BlockSelectViewModel;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
@@ -50,6 +51,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -240,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("reached onActivityResult");
 
         Log.i("MainAct", "Result code: " + resultCode);
+
 
         if (requestCode == 100 && resultCode > 0) {
             Task task = (Task) data.getSerializableExtra("task");
