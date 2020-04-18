@@ -629,7 +629,6 @@ public class ToDoListInsertTask {
                                         0),
                                 1),
                         isDisplayed()));
-        textView.check(matches(isDisplayed()));
         return true;
     }
 
