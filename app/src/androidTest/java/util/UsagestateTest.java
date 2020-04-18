@@ -87,7 +87,7 @@ public class UsagestateTest {
 
     @Test
     public void writeAndRead() throws InterruptedException {
-      /*  List<BlacklistEntry> entryList = LiveDataTestUtil.getValue(blacklistDao.getList());
+        List<BlacklistEntry> entryList = LiveDataTestUtil.getValue(blacklistDao.getList());
         assertTrue(entryList.isEmpty());
         blacklistDao.insert(data2);
 
@@ -98,10 +98,10 @@ public class UsagestateTest {
         blacklistDao.delete(data2);
 
         assertTrue(LiveDataTestUtil.getValue(blacklistDao.getList()).isEmpty());
-*/
+
       assertEquals(1,1);
     }
-/*
+
     @Test
     public void testUpdate6() throws InterruptedException {
 
@@ -179,5 +179,5 @@ public class UsagestateTest {
     public void closeDb() {
         blacklistDatabase.close();
     }
-}*/
+}
     }

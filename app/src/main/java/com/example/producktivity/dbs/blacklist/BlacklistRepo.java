@@ -34,16 +34,17 @@ public class BlacklistRepo {
         db = BlacklistDatabase.getDatabase(app); //this should create the database
         dao = db.daoAccess();
         allEntries = dao.getList();
-        allEntries = dao.getListByCategory(Category.BEAUTY);
+       // allEntries = dao.getListByCategory(Category.ART_AND_DESIGN);
     }
 
     public void setDatabase(BlacklistDatabase db){
         this.db = db;
     }
+
     public BlacklistRepo(BlacklistDatabase db, BlacklistDaoAccess dao){
         this.db = db;
         this.dao = dao;
-        allEntries = dao.getListByCategory(Category.BEAUTY);
+     //   allEntries = dao.getListByCategory(Category.BEAUTY);
     }
     public void setDao(BlacklistDaoAccess dao){ this.dao = dao;}
 

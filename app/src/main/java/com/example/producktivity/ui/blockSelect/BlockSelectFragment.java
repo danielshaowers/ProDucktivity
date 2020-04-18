@@ -28,6 +28,7 @@ import com.example.producktivity.dbs.blacklist.Category;
 import com.example.producktivity.ui.usage_data.UsageDataHandler;
 import com.example.producktivity.ui.usage_data.UsageTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlockSelectFragment extends Fragment {
@@ -45,7 +46,7 @@ public class BlockSelectFragment extends Fragment {
         UsageDataHandler handler = new UsageDataHandler(this.getContext());
         View root = inflater.inflate(R.layout.block_select_rcycler, container, false);
         Spinner spintowin = root.findViewById(R.id.choose_cat);
-        String[] items = new String[]{ "ART_AND_DESIGN", "AUGMENTED_REALITY", "AUTO_AND_VEHICLES", "BEAUTY", "BOOKS_AND_REFERENCE", "BUSINESS",
+        String[] items = new String[]{ "ALL", "ART_AND_DESIGN", "AUGMENTED_REALITY", "AUTO_AND_VEHICLES", "BEAUTY", "BOOKS_AND_REFERENCE", "BUSINESS",
                 "COMICS", "COMMUNICATION", "DATING", "EDUCATION", "ENTERTAINMENT", "EVENTS", "FAMILY", "FINANCE", "FOOD_AND_DRINK",
                 "GAME", "GOOGLE_CAST", "HEALTH_AND_FITNESS", "HOUSE_AND_HOME", "LIBRARIES_AND_DEMO", "LIFESTYLE",
                 "MAPS_AND_NAVIGATION", "MEDICAL", "VIDEO_PLAYERS"};
@@ -61,9 +62,9 @@ public class BlockSelectFragment extends Fragment {
             public void onClick(View v) {
                 String day = dayLim.getText().toString();
                 String week = weekLim.getText().toString();
-                List<BlacklistEntry> list = adapter.getLimits();
-                for(BlacklistEntry e : list) { //technically, viewmodel should notice and notify adapter for us
-                      if (e.getCategory() == selected[0]) {
+                //List<BlacklistEntry> list = adapter.getLimits();
+                for(BlacklistEntry e : adapter.getLimits()) { //technically, viewmodel should notice and notify adapter for us
+                      if (e.getCategory() == selected[0] || selected[0] == Category.ALL) {
                          long dayL = BlacklistEntry.stringToLong(day);
                          long weekL = BlacklistEntry.stringToLong(week);
                          if (dayL > 0)
@@ -72,7 +73,7 @@ public class BlockSelectFragment extends Fragment {
                              e.setWeekLimit(weekL);
                        }
                    }
-                adapter.setLimitList(list); //this re-sorts everything
+                adapter.setLimitList(adapter.getLimits()); //this re-sorts everything
             }
         });
         //make sure you only update the day/week limits when something is actually entered
@@ -82,13 +83,7 @@ public class BlockSelectFragment extends Fragment {
         spintowin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(items[position] + " selected");
                 selected[0] = Category.valueOf(items[position]);
-                /*List<BlacklistEntry> list = adapter.getLimits();
-                   for(BlacklistEntry e : list) { //technically, viewmodel should notice and notify adapter for us
-                       if (e.getCategory().toString().equals(items[position]))
-                           e.set
-                   }*/
             }
             //todo: make sure the viewmodel observer genuinely updates with any changes made
             @Override
@@ -97,6 +92,19 @@ public class BlockSelectFragment extends Fragment {
             }
         });
 
+        Button reset = root.findViewById(R.id.reset);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (BlacklistEntry e : adapter.getLimits()){
+                    if (e.getCategory() == selected[0] || selected[0] == Category.ALL){
+                        e.setWeekLimit(BlacklistEntry.NO_LIMIT);
+                        e.setDayLimit(BlacklistEntry.NO_LIMIT);
+                    }
+                }
+                adapter.setLimitList(adapter.getLimits());
+            }
+        });
         //observes if there are any modifications to the select list and automatically performs onChanged
         RecyclerView rView = root.findViewById(R.id.select_recycler);
         adapter = new SelectAdapter(this.getContext());
@@ -125,10 +133,10 @@ public class BlockSelectFragment extends Fragment {
     //called when the fragment is no longer in view
     @Override
     public void onPause(){
-        super.onPause();
+        super.onPause();/*
         System.out.println("saving the following");
         for (BlacklistEntry e: adapter.getLimits())
-            System.out.println(e.getAppName() + "is unrestricted? " + e.isUnrestricted());
+            System.out.println(e.getAppName() + "is unrestricted? " + e.isUnrestricted());*/
         blockSelectViewModel.replaceDB(adapter.getLimits());
     }
 

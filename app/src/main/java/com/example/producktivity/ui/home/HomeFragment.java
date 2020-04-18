@@ -127,8 +127,8 @@ public class HomeFragment extends Fragment {
                             } else { //we need to check if we passed the time limit
                             //how do we check the time used right here?
                                 if (entry.getDayLimit() < entry.getDayUse() || entry.getWeekLimit() < entry.getWeekUse()) { //if exceeded max allowable time
-                                    System.out.println("we are trying to block " + name);
-                                    showBlockScreen();
+                                    System.out.println("exceeded time limit " + name);
+                                    showBlockScreen(); //todo: add message about why we're blocking?
                                     return;
                                 } else { //updates the usages if it's not already larger based on the database.
                                 //todo: I'm pretty sure this is super slow...might now want to do it
