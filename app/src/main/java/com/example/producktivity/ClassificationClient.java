@@ -33,11 +33,13 @@ public class ClassificationClient {
     //private String UserName = "23bd817660d5852948f01392ffd4457dd549afa4";
     private String UserName = "6c37dfff1e13611723680d7faa54c4fd5d4d1fd2";
     private String PassWord = "X";
+
     RequestQueue queue;
 
     public ClassificationClient(Context t) {
         queue = Volley.newRequestQueue(t);
     }
+
 
     public String requestAppCategory(String appId) {
         String url = URL + appId + ".json?country=US";
