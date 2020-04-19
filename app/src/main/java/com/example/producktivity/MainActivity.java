@@ -4,6 +4,8 @@ package com.example.producktivity;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -62,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
     private final static String default_notification_channel_id = "default" ;
+
+    public static String NOTIFICATION_ID = "notification_id";
+    public static String NOTIFICATION = "notification";
+    private NotificationManagerCompat notificationManager;
 
     private boolean isFabOpen = false;
     public ToDoViewModel toDoVM;
@@ -141,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        makeNotificationStuff();
     }
 
     public void setVM(BlockSelectViewModel bs){
@@ -198,8 +207,8 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public  static void scheduleNotification(Context context, Task task) {//delay is after how much time(in millis) from current time you want to schedule the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, default_notification_channel_id)
+    public void scheduleNotification(Context context, Task task) {//delay is after how much time(in millis) from current time you want to schedule the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "ProDucktive_Channel")
                 .setContentTitle(task.getTitle())
                 .setContentText(task.getDesc())
                 .setAutoCancel(true)
@@ -212,14 +221,28 @@ public class MainActivity extends AppCompatActivity {
 
         Notification notification = builder.build();
 
+
         Intent notificationIntent = new Intent(context, ReminderNotificationPublisher.class);
         notificationIntent.putExtra(ReminderNotificationPublisher.NOTIFICATION_ID, task.getId());
         notificationIntent.putExtra(ReminderNotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, task.getId(), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        long futureInMillis = task.getReminderTime().getTime() - SystemClock.elapsedRealtime();
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        AlarmManager am = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+        am.setExact(AlarmManager.RTC_WAKEUP, task.getReminderTime().getTime(), pendingIntent);
+
+
+        //NotificationManagerCompat notificationManager2 = NotificationManagerCompat.from(this);
+        //notificationManager2.notify(task.getId(), notification);
+
+    }
+
+    private void makeNotificationStuff() {
+        notificationManager = NotificationManagerCompat.from(this);
+        NotificationChannel channel = new NotificationChannel("ProDucktive_Channel", "Producktive notif channel", NotificationManager.IMPORTANCE_HIGH);
+        channel.setAllowBubbles(true);
+        channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+        channel.setShowBadge(true);
+        notificationManager.createNotificationChannel(channel);
     }
 
    /* @RequiresApi(api = Build.VERSION_CODES.M)
@@ -241,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
             Task task = (Task) data.getSerializableExtra("task");
             if (resultCode == 1) {
                 toDoVM.insert(task);
+                scheduleNotification(this, task);
             } else if (resultCode == 2) {
                 toDoVM.update(task);
             }
