@@ -5,6 +5,29 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/show_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:text="Category: Unknown"
+        android:textColor="#DA1111"
+        android:textSize="8sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/limit_card"
+        app:layout_constraintTop_toTopOf="@+id/prod_guess" />
+
+    <TextView
+        android:id="@+id/prod_guess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Our Guess: "
+        android:textSize="8sp"
+        app:layout_constraintStart_toEndOf="@+id/show_cat"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/limit_card"
         android:layout_width="0dp"
@@ -12,22 +35,11 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@+id/app_select_button"
         app:layout_constraintStart_toStartOf="@+id/app_select_button"
-        app:layout_constraintTop_toTopOf="@+id/app_select_button">
+        app:layout_constraintTop_toBottomOf="@+id/prod_guess">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/show_cat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category: Unknown"
-                android:textColor="#DA1111"
-                android:textSize="8sp"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@+id/weekly_limit_text"
-                app:layout_constraintTop_toTopOf="@+id/weekly_limit" />
 
             <EditText
                 android:id="@+id/weekly_limit"
@@ -78,12 +90,10 @@
                 android:id="@+id/save_select_button"
                 android:layout_width="70dp"
                 android:layout_height="41dp"
-                android:layout_marginStart="48dp"
-                android:layout_marginEnd="30dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginBottom="10dp"
                 android:text="Save"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/daily_limit" />
 
             <Switch
@@ -115,11 +125,10 @@
         android:layout_width="414dp"
         android:layout_height="134dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/prod_guess"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
