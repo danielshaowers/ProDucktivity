@@ -50,8 +50,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.google.common.collect.ComparisonChain.start;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,27 +111,27 @@ public class MainActivity extends AppCompatActivity {
             bsViewModel.getSelectList().observe(this, new Observer<List<BlacklistEntry>>() {
                 @Override
                 public void onChanged(@Nullable List<BlacklistEntry> s) {
+                    //only get the list with updated usage times and categories
                     if (!updated[0]) {
+                        final List<BlacklistEntry>[] update = new List[]{s};
                         //I put this code in a new thread so the main thread doesn't get blocked
-                     //   new Thread(new Runnable() {
-                       //     public void run() {
+                        new Thread(new Runnable() {
+                            public void run() {
                                 System.out.println("onChanged called in MainActivity");
                                 List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
-                                s = bsViewModel.updateList(usagetimes, s);
+                                update[0] = bsViewModel.updateList(usagetimes, update[0]);
                                 System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
                                 ClassificationClient cClient = new ClassificationClient(getApplicationContext());
                                 BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
-                                //if (s != null)
-                              /*  for (BlacklistEntry app : s) {
-                                    //  if (app != null && app.getAppName() != null)
+                                for (BlacklistEntry app : update[0]) {
                                     //strip this out into a new method to call when response arrives
-                                    addInfoToEntry(app, cClient, blacklistClient);
+                                    if (app.getCategory() == Category.BEAUTY)
+                                        addInfoToEntry(app, cClient, blacklistClient);
                                 }
-                       //     } */
-                      //  }).start();
-                        //bsViewModel.replaceDB(s);
+                            }
+                        }).start();
+                        bsViewModel.replaceDB(s);
                         updated[0] = true;
-
                     }
                     bsViewModel.getSelectList().removeObserver(this);
                 }
@@ -147,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             app.setCategory(Category.valueOf(cat));
         }
         catch (IllegalArgumentException i){
-            System.out.println("no valid cateogry found");
+            System.out.println("no valid category found");
             return;
         }
         Boolean productive = blacklistClient.classifyApp(appId);
@@ -163,19 +166,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume(); //todo: uncomment out the previous lines
-     //   checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
-      //  checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+        checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
        // checkPermissions(AppOpsManager.OPSTR_WRITE_EXTERNAL_STORAGE, Settings.ACTION_MANAGE_WRITE_SETTINGS);
-    }
-
-    private void clearInputs(){
-        CardView card= findViewById(R.id.task_card);
-        card.setVisibility(View.GONE); //if they entered something into the database
-        ((EditText)findViewById(R.id.task_title)).getText().clear();
-        ((RadioGroup)findViewById(R.id.priority_group)).clearCheck();
-        ((EditText)findViewById(R.id.task_date)).getText().clear();
-        ((EditText)findViewById(R.id.reminder)).getText().clear();
-        ((EditText)findViewById(R.id.description)).getText().clear();
     }
 
     @Override
@@ -186,9 +179,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkPermissions(String permission, String setting) {
-
         System.out.println(permission + "\t" + setting);
-
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
         if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED)
             System.out.println("we do have permission");
@@ -238,12 +229,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
-
         System.out.println("reached onActivityResult");
-
         Log.i("MainAct", "Result code: " + resultCode);
-
-
         if (requestCode == 100 && resultCode > 0) {
             Task task = (Task) data.getSerializableExtra("task");
             if (resultCode == 1) {
@@ -252,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
                 toDoVM.update(task);
             }
         }
-
         System.out.println("are we ok?");
         try {
             super.onActivityResult(requestCode, resultCode, data);

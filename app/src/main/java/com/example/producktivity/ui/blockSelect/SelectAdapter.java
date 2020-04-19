@@ -32,9 +32,11 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             private final Button appSelect;
             private final CardView card;
             private final Button save;
-
+            private final TextView cat;
+            private final Button reset_single;
             public selectViewHolder(View itemView) {
                 super(itemView);
+                reset_single = itemView.findViewById(R.id.reset_single);
                 setProductive = itemView.findViewById(R.id.set_as_productive);
                 save = itemView.findViewById(R.id.save_select_button);
                 appSelect = itemView.findViewById(R.id.app_select_button);
@@ -43,6 +45,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 weekLimit = itemView.findViewById(R.id.weekly_limit);
                 dayLimit = itemView.findViewById(R.id.daily_limit);
                 card = itemView.findViewById(R.id.limit_card);
+                cat = itemView.findViewById(R.id.show_cat);
             }
         }
 
@@ -86,10 +89,19 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         current.setUnrestricted(isChecked);
                     }
                 });
+                holder.reset_single.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        holder.dayLimit.setText(BlacklistEntry.longToString(BlacklistEntry.NO_LIMIT));
+                        holder.weekLimit.setText(BlacklistEntry.longToString(BlacklistEntry.NO_LIMIT));
+                    }
+                });
+
                 holder.setProductive.setChecked(current.isUnrestricted());
                 holder.appSelect.setText(current.getAppName());
                 holder.weekLimit.setText(BlacklistEntry.longToString(current.getWeekLimit()));
                 holder.dayLimit.setText(BlacklistEntry.longToString(current.getDayLimit()));
+                holder.cat.setText(current.getCategory().toString());
                 holder.save.setOnClickListener(v -> { //when done is clicked, hide and save the values
                     holder.card.setVisibility(View.INVISIBLE);
                     holder.appSelect.setVisibility(View.VISIBLE);
