@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,7 +42,7 @@ public class BlockSelectFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         if (blockSelectViewModel == null)
-            blockSelectViewModel = ViewModelProviders.of(this.getActivity()).get(BlockSelectViewModel.class);
+            blockSelectViewModel = new ViewModelProvider(this).get(BlockSelectViewModel.class);
         UsageDataHandler handler = new UsageDataHandler(this.getContext());
         View root = inflater.inflate(R.layout.block_select_rcycler, container, false);
         Spinner spintowin = root.findViewById(R.id.choose_cat);
