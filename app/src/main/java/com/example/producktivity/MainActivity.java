@@ -50,8 +50,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.google.common.collect.ComparisonChain.start;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,27 +111,31 @@ public class MainActivity extends AppCompatActivity {
             bsViewModel.getSelectList().observe(this, new Observer<List<BlacklistEntry>>() {
                 @Override
                 public void onChanged(@Nullable List<BlacklistEntry> s) {
+                    //only get the list with updated usage times and categories
                     if (!updated[0]) {
+                        final List<BlacklistEntry>[] update = new List[]{s};
                         //I put this code in a new thread so the main thread doesn't get blocked
-                     //   new Thread(new Runnable() {
-                       //     public void run() {
+                        new Thread(new Runnable() {
+                            public void run() {
                                 System.out.println("onChanged called in MainActivity");
                                 List<UsageTime> usagetimes = handler.getStats(BlacklistEntry.DAY);
-                                s = bsViewModel.updateList(usagetimes, s);
+                                update[0] = bsViewModel.updateList(usagetimes, update[0]);
                                 System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
                                 ClassificationClient cClient = new ClassificationClient(getApplicationContext());
-                                BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
-                                //if (s != null)
-                              /*  for (BlacklistEntry app : s) {
-                                    //  if (app != null && app.getAppName() != null)
-                                    //strip this out into a new method to call when response arrives
-                                    addInfoToEntry(app, cClient, blacklistClient);
+                                //BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
+                                int count = 0;
+                                for (BlacklistEntry app : update[0]) {
+                                    if (count++ < 3) {
+                                        //strip this out into a new method to call when response arrives
+                                        if (app.getCategory() == Category.BEAUTY)
+                                            addInfoToEntry(app, cClient, update[0]);
+                                    }
                                 }
-                       //     } */
-                      //  }).start();
-                        //bsViewModel.replaceDB(s);
-                        updated[0] = true;
+                                bsViewModel.replaceDB(update[0]);
+                            }
+                        }).start();
 
+                        updated[0] = true;
                     }
                     bsViewModel.getSelectList().removeObserver(this);
                 }
@@ -139,18 +146,20 @@ public class MainActivity extends AppCompatActivity {
     public void setVM(BlockSelectViewModel bs){
         bsViewModel = bs;
     }
-    public void addInfoToEntry(BlacklistEntry app, ClassificationClient cClient, BlacklistClient blacklistClient){
+
+    public void addInfoToEntry(BlacklistEntry app, ClassificationClient cClient, List<BlacklistEntry> list){//BlacklistClient blacklistClient){
         System.out.println(app.getAppName());
         String appId = app.getPackageName();
         String cat = cClient.requestAppCategory(appId);
         try {
+            System.out.println("found category of " + app.getAppName() + ": " + cat );
             app.setCategory(Category.valueOf(cat));
         }
         catch (IllegalArgumentException i){
-            System.out.println("no valid cateogry found");
+            System.out.println("no valid category found");
             return;
         }
-        Boolean productive = blacklistClient.classifyApp(appId);
+        Boolean productive = BlacklistClient.categoryVote(app, list );
         if(cat.equalsIgnoreCase("SYSTEM") || cat.equalsIgnoreCase("PRODUCKTIVE")){
             productive = true;
         }
@@ -163,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume(); //todo: uncomment out the previous lines
-     //   checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
-      //  checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+        checkPermissions(AppOpsManager.OPSTR_GET_USAGE_STATS, Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        checkPermissions(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
        // checkPermissions(AppOpsManager.OPSTR_WRITE_EXTERNAL_STORAGE, Settings.ACTION_MANAGE_WRITE_SETTINGS);
     }
 
@@ -176,9 +185,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkPermissions(String permission, String setting) {
-
         System.out.println(permission + "\t" + setting);
-
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
         if (appOps.checkOpNoThrow(permission, android.os.Process.myUid(), getPackageName()) == AppOpsManager.MODE_ALLOWED)
             System.out.println("we do have permission");
@@ -228,12 +235,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
-
         System.out.println("reached onActivityResult");
-
         Log.i("MainAct", "Result code: " + resultCode);
-
-
         if (requestCode == 100 && resultCode > 0) {
             Task task = (Task) data.getSerializableExtra("task");
             if (resultCode == 1) {
@@ -242,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
                 toDoVM.update(task);
             }
         }
-
         System.out.println("are we ok?");
         try {
             super.onActivityResult(requestCode, resultCode, data);

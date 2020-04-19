@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public interface BlacklistDaoAccess {
 
-    @Query("SELECT * FROM blacklist GROUP BY category")
+    @Query("SELECT * FROM blacklist")
     LiveData<List<BlacklistEntry>> getList();
 
     @Query("SELECT * FROM blacklist WHERE category = :category")

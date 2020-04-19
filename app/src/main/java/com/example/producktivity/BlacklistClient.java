@@ -76,10 +76,14 @@ public class BlacklistClient {
         }
         return null;
     }
-
-    private Boolean categoryVote(BlacklistEntry app){
+    //can't set it based on inferred productive, becase this IS how you set inferred productive
+    public static Boolean categoryVote(BlacklistEntry app, List<BlacklistEntry> listOfApps){
         int countProductive = 0;
-        for(BlacklistEntry iter: this.listOfApps){
+        if (app.isUnrestricted())
+            return true;
+        if (app.getDayLimit() != BlacklistEntry.NO_LIMIT || app.getWeekLimit() != BlacklistEntry.NO_LIMIT)
+            return false;
+        for(BlacklistEntry iter: listOfApps){
             if(iter.getCategory().equals(app.getCategory())){
                 if (iter.isInferredProductive() || iter.isUnrestricted())
                     countProductive++;
@@ -94,18 +98,7 @@ public class BlacklistClient {
     public Boolean classifyApp(String appId) {
         BlacklistEntry app = getEntryFromList(appId);
         //if user marks as productive it's productive
-        if(app.isUnrestricted()) {
-            return true;
-        }
-        //if user sets time limit it's unproductive
-        else if(app.getDayLimit() != BlacklistEntry.NO_LIMIT || app.getWeekLimit() != BlacklistEntry.NO_LIMIT){
-            return false;
-        }
-
-        //if neither, majority vote of category
-        else {
-            return categoryVote(app);
-        }
+        return categoryVote(app, listOfApps);
     }
 
 }

@@ -28,12 +28,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class ClassificationClient{
+public class ClassificationClient {
     private String URL = "https://api.appmonsta.com/v1/stores/android/details/";
-    private String UserName = "23bd817660d5852948f01392ffd4457dd549afa4";
+    //private String UserName = "23bd817660d5852948f01392ffd4457dd549afa4";
+    private String UserName = "6c37dfff1e13611723680d7faa54c4fd5d4d1fd2";
     private String PassWord = "X";
     RequestQueue queue;
-    public ClassificationClient(Context t){
+
+    public ClassificationClient(Context t) {
         queue = Volley.newRequestQueue(t);
     }
 
@@ -44,39 +46,40 @@ public class ClassificationClient{
         if (appId == null)
             return null;
         System.out.println(url);
-        if(appId.equalsIgnoreCase("com.example.producktivity")){
+        if (appId.equalsIgnoreCase("com.example.producktivity")) {
             return "PRODUCKTIVITY";
         }
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, future, future){
-                    @Override
-                    public Map<String, String> getHeaders(){
-                        Map<String,String> headers = new HashMap<>();
-                        // add headers <key,value>
-                        String credentials = UserName+":"+PassWord;
-                        String auth = "Basic "
-                                + Base64.encodeToString(credentials.getBytes(StandardCharsets.UTF_8),
-                                Base64.DEFAULT);
-                        headers.put("Authorization", auth);
-                        return headers;
-                    }
-                };
+                (Request.Method.GET, url, null, future, future) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add headers <key,value>
+                String credentials = UserName + ":" + PassWord;
+                String auth = "Basic "
+                        + Base64.encodeToString(credentials.getBytes(StandardCharsets.UTF_8),
+                        Base64.DEFAULT);
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
         queue.add(jsonObjectRequest);
         try {
             JSONObject response = future.get();
             category[0] = response.getString("genre_id");
             appType[0] = response.getString("app_type");
-            if(appType[0].equalsIgnoreCase("GAME"))
+            if (appType[0].equalsIgnoreCase("GAME"))
                 return "GAME";
             else
                 return category[0];
         } catch (InterruptedException | ExecutionException | JSONException e) {
             // handle the error
+        /*    e.printStackTrace();
             return category[0];
-           // e.printStackTrace();
+        }*/
+            System.out.println("added to queue");
+            return "SYSTEM";
         }
-       // System.out.println("added to queue");
-       // return "SYSTEM";
     }
 }

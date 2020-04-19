@@ -126,6 +126,8 @@ public class BlockSelectTest {
             UsageTime ut = new UsageTime("oh", 10, 20, 30, "fakename", UsageTime.DAY);
             List<UsageTime> times = new ArrayList<UsageTime>();
             List<BlacklistEntry> output = bsvm.updateList(times, null);
+
+
             assertTrue(output.size() == 0);
             times.add(ut);
             List<BlacklistEntry> list = fragment.getAdapterList();
@@ -140,7 +142,7 @@ public class BlockSelectTest {
             //assertTrue(fragment.getAdapterList().contains(new BlacklistEntry(ut.appName)));
         });
     }
-    /*@Test
+  /*  @Test
     public void testVM(){
           ActivityScenario<MainActivity> activity_sc = ActivityScenario.launch(MainActivity.class);
         activity_sc.moveToState(Lifecycle.State.CREATED);
@@ -150,9 +152,10 @@ public class BlockSelectTest {
         BlockSelectViewModel bs = new BlockSelectViewModel(activity.getApplication(), dao, mDatabase);
         //okay so now we have a viewmodel with the database we've defined.
             bs.insert(beList.get(0));
+            bs.updateList()
            // assertEquals(LiveDataTestUtil.getValue(bs.getSelectList()).get(0), beList.get(0));
         });
-    }*/
+    } */
         //INTERACTING WITH ACTIVITY!!
       /*  ActivityScenario<MainActivity> activity_sc = ActivityScenario.launch(MainActivity.class);
         activity_sc.moveToState(Lifecycle.State.CREATED); */
