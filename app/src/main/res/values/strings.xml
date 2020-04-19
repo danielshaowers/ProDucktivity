@@ -9,7 +9,6 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_data">Usage Data</string>
-    <string name="menu_settings">Blocking Settings</string>
     <string name="menu_todo">To Do</string>
     <string name="menu_calendar">Calendar</string>
     <string name="menu_block">Block Apps</string>
