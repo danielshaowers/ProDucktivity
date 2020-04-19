@@ -26,7 +26,7 @@
                 android:textColor="#DA1111"
                 android:textSize="8sp"
                 android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@+id/set_as_productive"
+                app:layout_constraintStart_toStartOf="@+id/weekly_limit_text"
                 app:layout_constraintTop_toTopOf="@+id/weekly_limit" />
 
             <EditText
@@ -88,16 +88,24 @@
 
             <Switch
                 android:id="@+id/set_as_productive"
-                android:layout_width="74dp"
-                android:layout_height="38dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
                 android:text="Always Allowed"
                 android:textSize="8sp"
                 app:layout_constraintBottom_toTopOf="@+id/save_select_button"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/save_select_button"
                 app:layout_constraintStart_toEndOf="@+id/weekly_limit" />
+
+            <Button
+                android:id="@+id/reset_single"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset Limits"
+                android:textSize="8sp"
+                app:layout_constraintBottom_toTopOf="@+id/set_as_productive"
+                app:layout_constraintStart_toStartOf="@+id/set_as_productive" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

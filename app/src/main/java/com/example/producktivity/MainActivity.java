@@ -125,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
                                 BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
                                 for (BlacklistEntry app : update[0]) {
                                     //strip this out into a new method to call when response arrives
-                                    addInfoToEntry(app, cClient, blacklistClient);
+                                    if (app.getCategory() == Category.BEAUTY)
+                                        addInfoToEntry(app, cClient, blacklistClient);
                                 }
                             }
                         }).start();
@@ -149,8 +150,7 @@ public class MainActivity extends AppCompatActivity {
             app.setCategory(Category.valueOf(cat));
         }
         catch (IllegalArgumentException i){
-            System.out.println("no valid cateogry found");
-
+            System.out.println("no valid category found");
             return;
         }
         Boolean productive = blacklistClient.classifyApp(appId);

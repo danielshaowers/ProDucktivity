@@ -76,7 +76,7 @@ public class BlacklistClient {
         }
         return null;
     }
-
+    //can't set it based on inferred productive, becase this IS how you set inferred productive
     private Boolean categoryVote(BlacklistEntry app){
         int countProductive = 0;
         for(BlacklistEntry iter: this.listOfApps){

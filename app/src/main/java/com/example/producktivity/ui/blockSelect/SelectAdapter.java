@@ -33,9 +33,10 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             private final CardView card;
             private final Button save;
             private final TextView cat;
-
+            private final Button reset_single;
             public selectViewHolder(View itemView) {
                 super(itemView);
+                reset_single = itemView.findViewById(R.id.reset_single);
                 setProductive = itemView.findViewById(R.id.set_as_productive);
                 save = itemView.findViewById(R.id.save_select_button);
                 appSelect = itemView.findViewById(R.id.app_select_button);
@@ -88,6 +89,14 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         current.setUnrestricted(isChecked);
                     }
                 });
+                holder.reset_single.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        holder.dayLimit.setText(BlacklistEntry.longToString(BlacklistEntry.NO_LIMIT));
+                        holder.weekLimit.setText(BlacklistEntry.longToString(BlacklistEntry.NO_LIMIT));
+                    }
+                });
+
                 holder.setProductive.setChecked(current.isUnrestricted());
                 holder.appSelect.setText(current.getAppName());
                 holder.weekLimit.setText(BlacklistEntry.longToString(current.getWeekLimit()));
