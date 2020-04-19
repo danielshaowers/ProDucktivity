@@ -1,4 +1,4 @@
-package com.example.producktivity.ui.Calendar;
+package com.example.producktivity.ui.calendar;
 /*
 
 import android.content.Context;

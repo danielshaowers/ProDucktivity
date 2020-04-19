@@ -12,7 +12,7 @@ import com.example.producktivity.R;
 import java.util.Calendar;
 
 // fills in all of the calendar related monthly dates and swipe activity
-public class CalendarAdaptor extends BaseAdapter {
+public class CalendarAdapter extends BaseAdapter {
     // calendar set up for monday as first day
     private static final int FIRST_DAY_OF_WEEK = Calendar.MONDAY;
     private final Calendar calendar;
@@ -22,7 +22,7 @@ public class CalendarAdaptor extends BaseAdapter {
     private CalendarItem[] days;
 
     //constructor gets each month separately
-    public CalendarAdaptor(Context context, Calendar monthCalendar) {
+    public CalendarAdapter(Context context, Calendar monthCalendar) {
         calendar = monthCalendar;
         today = new CalendarItem(monthCalendar);
         selected = new CalendarItem(monthCalendar);
