@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         }
         catch (IllegalArgumentException i){
             System.out.println("no valid cateogry found");
+
             return;
         }
         Boolean productive = blacklistClient.classifyApp(appId);
