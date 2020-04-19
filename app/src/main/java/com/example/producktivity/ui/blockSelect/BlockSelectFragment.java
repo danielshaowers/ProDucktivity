@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.producktivity.BlacklistClient;
 import com.example.producktivity.R;
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
 
@@ -71,6 +72,8 @@ public class BlockSelectFragment extends Fragment {
                              e.setDayLimit(dayL);
                          if (weekL > 0)
                              e.setWeekLimit(weekL);
+                         //update inferred list for the category selected
+                          e.setInferredProductive(BlacklistClient.categoryVote(e, adapter.getLimits()));
                        }
                    }
                 adapter.setLimitList(adapter.getLimits()); //this re-sorts everything

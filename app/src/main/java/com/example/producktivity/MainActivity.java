@@ -122,15 +122,19 @@ public class MainActivity extends AppCompatActivity {
                                 update[0] = bsViewModel.updateList(usagetimes, update[0]);
                                 System.out.println(usagetimes.size() + "time size issdlkfjasdl;fk");
                                 ClassificationClient cClient = new ClassificationClient(getApplicationContext());
-                                BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
+                                //BlacklistClient blacklistClient = new BlacklistClient(s, getApplicationContext());
+                                int count = 0;
                                 for (BlacklistEntry app : update[0]) {
-                                    //strip this out into a new method to call when response arrives
-                                    if (app.getCategory() == Category.BEAUTY)
-                                        addInfoToEntry(app, cClient, blacklistClient);
+                                    if (count++ < 3) {
+                                        //strip this out into a new method to call when response arrives
+                                        if (app.getCategory() == Category.BEAUTY)
+                                            addInfoToEntry(app, cClient, update[0]);
+                                    }
                                 }
+                                bsViewModel.replaceDB(update[0]);
                             }
                         }).start();
-                        bsViewModel.replaceDB(s);
+
                         updated[0] = true;
                     }
                     bsViewModel.getSelectList().removeObserver(this);
@@ -142,18 +146,20 @@ public class MainActivity extends AppCompatActivity {
     public void setVM(BlockSelectViewModel bs){
         bsViewModel = bs;
     }
-    public void addInfoToEntry(BlacklistEntry app, ClassificationClient cClient, BlacklistClient blacklistClient){
+
+    public void addInfoToEntry(BlacklistEntry app, ClassificationClient cClient, List<BlacklistEntry> list){//BlacklistClient blacklistClient){
         System.out.println(app.getAppName());
         String appId = app.getPackageName();
         String cat = cClient.requestAppCategory(appId);
         try {
+            System.out.println("found category of " + app.getAppName() + ": " + cat );
             app.setCategory(Category.valueOf(cat));
         }
         catch (IllegalArgumentException i){
             System.out.println("no valid category found");
             return;
         }
-        Boolean productive = blacklistClient.classifyApp(appId);
+        Boolean productive = BlacklistClient.categoryVote(app, list );
         if(cat.equalsIgnoreCase("SYSTEM") || cat.equalsIgnoreCase("PRODUCKTIVE")){
             productive = true;
         }

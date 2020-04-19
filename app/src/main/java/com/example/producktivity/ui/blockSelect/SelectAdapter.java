@@ -34,6 +34,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             private final Button save;
             private final TextView cat;
             private final Button reset_single;
+            private final TextView guess;
             public selectViewHolder(View itemView) {
                 super(itemView);
                 reset_single = itemView.findViewById(R.id.reset_single);
@@ -46,6 +47,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 dayLimit = itemView.findViewById(R.id.daily_limit);
                 card = itemView.findViewById(R.id.limit_card);
                 cat = itemView.findViewById(R.id.show_cat);
+                guess = itemView.findViewById(R.id.prod_guess);
             }
         }
 
@@ -96,7 +98,8 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         holder.weekLimit.setText(BlacklistEntry.longToString(BlacklistEntry.NO_LIMIT));
                     }
                 });
-
+                String prod = current.isInferredProductive() ? "Our guess: PRODUCTIVE" : "Our guess: UNPRODUCTIVE";
+                holder.guess.setText(prod);
                 holder.setProductive.setChecked(current.isUnrestricted());
                 holder.appSelect.setText(current.getAppName());
                 holder.weekLimit.setText(BlacklistEntry.longToString(current.getWeekLimit()));

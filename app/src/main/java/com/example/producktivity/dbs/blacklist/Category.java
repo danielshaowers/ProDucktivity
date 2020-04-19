@@ -10,7 +10,7 @@ public enum Category {
     @Override
     public String toString(){
         String name = name();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("Category: ");
         for (int i = 0; i < name.length(); i++){
             if (name.charAt(i) == '_')
                 sb.append(' ');
