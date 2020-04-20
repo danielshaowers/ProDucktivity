@@ -87,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:text="Due Date: "
+                android:textColor="@color/colorBlack"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/todo_description_view" />
@@ -96,6 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reminder: "
+                android:textColor="@color/colorBlack"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/todo_date_view"
                 app:layout_constraintTop_toTopOf="@+id/todo_date_view" />
