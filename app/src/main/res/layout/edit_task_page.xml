@@ -1,223 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/todo_card"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#DA1C1C"
-        android:fadingEdge="none"
-        android:visibility="visible"
-        app:cardBackgroundColor="#FBF9F9"
-        app:cardCornerRadius="10dp">
+        android:layout_centerInParent="false"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
 
-        <TableLayout
+        <TextView
+            android:id="@+id/textView6"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:text="New Event"
+            android:textSize="40sp" />
 
-            <TableRow
+        <androidx.cardview.widget.CardView
+            android:id="@+id/todo_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DA1C1C"
+            android:fadingEdge="none"
+            android:visibility="visible"
+            app:cardBackgroundColor="#FBF9F9"
+            app:cardCornerRadius="10dp">
+
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.google.android.material.textfield.TextInputLayout
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                    android:layout_width="213dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:ems="10"
-                    android:hint="Enter title"
+                    <com.google.android.material.textfield.TextInputLayout
 
-                    app:layout_constraintEnd_toEndOf="@+id/todo_description"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                        android:layout_width="369dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ems="10"
+                        android:hint="Enter title"
+                        android:imeOptions="actionDone"
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/todo_title"
+                        app:layout_constraintEnd_toEndOf="@+id/todo_description"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/todo_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:inputType="textPersonName" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <EditText
+                        android:id="@+id/todo_date"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="textPersonName" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </TableRow>
+                        android:ems="10"
+                        android:focusable="true"
+                        android:hint="Deadline"
+                        android:imeOptions="actionDone"
+                        android:inputType="date"
+                        android:textSize="18sp"
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                        app:layout_constraintBottom_toBottomOf="@+id/todo_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/todo_title"
+                        app:layout_constraintTop_toTopOf="@+id/todo_title" />
+                </TableRow>
 
-                <EditText
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:hint="Deadline"
-                    android:inputType="datetime"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/todo_title"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/todo_title"
-                    app:layout_constraintTop_toTopOf="@+id/todo_title"
-                    android:id="@+id/todo_date" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:layout_marginTop="4dp"
-                    android:id="@+id/button_dd_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Set Date"/>
-
-                <Button
-                    android:layout_marginTop="4dp"
-                    android:id="@+id/button_dd_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Set Time"/>
-            </TableRow>
+                    <EditText
+                        android:id="@+id/todo_reminder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:focusable="true"
+                        android:hint="Reminder"
+                        android:imeOptions="actionDone"
+                        android:inputType="time"
+                        android:textSize="18sp"
 
 
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/todo_description"
+                        app:layout_constraintTop_toBottomOf="@+id/todo_date" />
+                </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <EditText
-                    android:ems="10"
-                    android:focusable="false"
-                    android:hint="Reminder"
-                    android:inputType="datetime"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/todo_description"
-                    app:layout_constraintTop_toBottomOf="@+id/todo_date"
-                    android:id="@+id/todo_reminder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </TableRow>
+                    <com.google.android.material.textfield.TextInputLayout
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Description"
+                        android:imeOptions="actionDone|actionNext"
+                        android:inputType="textLongMessage"
+                        android:textSize="18sp"
 
-                <Button
-                    android:layout_marginTop="4dp"
-                    android:id="@+id/button_rd_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Set Date"/>
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/todo_reminder"
+                        app:layout_constraintVertical_bias="0.0">
 
-                <Button
-                    android:layout_marginTop="4dp"
-                    android:id="@+id/button_rd_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Set Time"/>
-            </TableRow>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/todo_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputLayout
-
+                <RadioGroup
+                    android:id="@+id/todo_priority"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Description"
-                    android:inputType="textLongMessage"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/todo_reminder">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/todo_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </TableRow>
-
-            <RadioGroup
-                android:id="@+id/todo_priority"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/todo_description"
-                app:layout_constraintTop_toBottomOf="@+id/todo_reminder">
-
-                <RadioButton
-                   android:id="@+id/high_todo"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:text="High Priority"
-                   android:textSize="8sp" />
-
-                <RadioButton
-                   android:id="@+id/medium_todo"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:text="Medium Priority"
-                   android:textSize="8sp" />
-
-                <RadioButton
-                   android:id="@+id/low_todo"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:text="Low Priority"
-                   android:textSize="8sp" />
-
-            </RadioGroup>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/done_button_edit"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Done"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/todo_priority"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/todo_description"
-                    app:layout_constraintTop_toBottomOf="@+id/todo_priority" />
-            </TableRow>
-        </TableLayout>
+                    app:layout_constraintTop_toBottomOf="@+id/todo_reminder">
+
+                    <RadioButton
+                        android:id="@+id/high_todo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="High Priority"
+                        android:textSize="16sp" />
 
 
+                    <RadioButton
+                        android:id="@+id/medium_todo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Medium Priority"
+                        android:textSize="16sp" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toBottomOf="@+id/todo_date"
-            app:layout_constraintEnd_toEndOf="@+id/todo_date"
-            app:layout_constraintStart_toStartOf="@+id/todo_description"
-            app:layout_constraintTop_toBottomOf="@+id/todo_title" />
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/todo_description"
-            app:layout_constraintStart_toEndOf="@+id/todo_description"
-            app:layout_constraintTop_toTopOf="@+id/todo_title" />
+                    <RadioButton
+                        android:id="@+id/low_todo"
 
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Low Priority"
+                        android:textSize="16sp" />
+
+                </RadioGroup>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/done_button_edit"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Done"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/todo_priority"
+                        app:layout_constraintStart_toEndOf="@+id/todo_description"
+                        app:layout_constraintTop_toBottomOf="@+id/todo_priority" />
+                </TableRow>
+            </TableLayout>
+
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+
+                android:layout_height="0dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="@+id/todo_date"
+                app:layout_constraintEnd_toEndOf="@+id/todo_date"
+                app:layout_constraintStart_toStartOf="@+id/todo_description"
+                app:layout_constraintTop_toBottomOf="@+id/todo_title" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/todo_description"
+
+                app:layout_constraintStart_toEndOf="@+id/todo_description"
+                app:layout_constraintTop_toTopOf="@+id/todo_title" />
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</RelativeLayout>

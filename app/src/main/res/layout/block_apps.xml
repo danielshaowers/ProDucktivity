@@ -7,35 +7,60 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/block_page"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/block_button"
-        android:textSize="40sp"
+        android:text="@string/block_page"
+        android:textSize="56sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintVertical_bias="0.15" />
 
-    <Switch
-        android:id="@+id/activate_blocker"
+    <TextView
+        android:id="@+id/smart_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:scaleX="3"
-        android:scaleY="3"
-        android:text="Your settings"
-        app:layout_constraintEnd_toEndOf="@+id/textView6"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        android:layout_marginTop="100dp"
+        android:text="@string/smart_block"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@+id/block_page"
+        app:layout_constraintStart_toStartOf="@+id/block_page"
+        app:layout_constraintTop_toBottomOf="@+id/block_page" />
 
     <Switch
         android:id="@+id/smart_blocker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="Leap of faith"
-        app:layout_constraintEnd_toEndOf="@+id/activate_blocker"
-        app:layout_constraintTop_toBottomOf="@+id/activate_blocker" />
+        android:layout_marginTop="18dp"
+        android:scaleX="3"
+        android:scaleY="3"
+        app:layout_constraintEnd_toEndOf="@+id/smart_text"
+        app:layout_constraintStart_toStartOf="@+id/smart_text"
+        app:layout_constraintTop_toBottomOf="@+id/smart_text" />
+
+    <TextView
+        android:id="@+id/block_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/block_button"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@+id/smart_blocker"
+        app:layout_constraintStart_toStartOf="@+id/smart_blocker"
+        app:layout_constraintTop_toBottomOf="@+id/smart_blocker" />
+
+
+    <Switch
+        android:id="@+id/activate_blocker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:scaleX="3"
+        android:scaleY="3"
+        app:layout_constraintEnd_toEndOf="@+id/block_text"
+        app:layout_constraintStart_toStartOf="@+id/block_text"
+        app:layout_constraintTop_toBottomOf="@+id/block_text" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

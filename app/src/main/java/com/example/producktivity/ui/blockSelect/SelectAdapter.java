@@ -1,6 +1,7 @@
 package com.example.producktivity.ui.blockSelect;
 
 import android.content.Context;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ import java.util.List;
 public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
 
-        public class selectViewHolder extends RecyclerView.ViewHolder {
+        public class SelectViewHolder extends RecyclerView.ViewHolder {
             private final TextView dayText;
             private final TextView weekText;
             private final Switch setProductive;
@@ -35,7 +36,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             private final TextView cat;
             private final Button reset_single;
             private final TextView guess;
-            public selectViewHolder(View itemView) {
+            public SelectViewHolder(View itemView) {
                 super(itemView);
                 reset_single = itemView.findViewById(R.id.reset_single);
                 setProductive = itemView.findViewById(R.id.set_as_productive);
@@ -51,7 +52,7 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         }
 
-
+        private int mExpandedPosition = -1;
         private final LayoutInflater mInflater;
         private List<BlacklistEntry> limits;
 
@@ -67,16 +68,25 @@ public class SelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = mInflater.inflate(R.layout.single_select_rcyclr, parent, false);
-            return new selectViewHolder(itemView);
+            return new SelectViewHolder(itemView);
         }
 
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            onBindViewHolder((selectViewHolder) holder, position);
-        }
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        onBindViewHolder((SelectViewHolder) holder, position);
+
+        /*final boolean isExpanded = position == mExpandedPosition;
+        ((SelectViewHolder) holder).card.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.itemView.setActivated(isExpanded);
+        holder.itemView.setOnClickListener(v -> {
+            mExpandedPosition = isExpanded ? -1 : position;
+            TransitionManager.beginDelayedTransition(R.layout.block_select_rcycler);
+            notifyDataSetChanged();
+        });*/
+    }
 
 
-        public void onBindViewHolder(selectViewHolder holder, int position) {
+    public void onBindViewHolder(SelectViewHolder holder, int position) {
             if (limits != null) {
                 BlacklistEntry current = limits.get(position);
                 holder.appSelect.setOnClickListener(new View.OnClickListener() {
