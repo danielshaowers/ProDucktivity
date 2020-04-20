@@ -100,13 +100,11 @@
                 android:id="@+id/set_as_productive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
                 android:layout_marginBottom="4dp"
                 android:text="Always Allowed"
                 android:textSize="8sp"
                 app:layout_constraintBottom_toTopOf="@+id/save_select_button"
-                app:layout_constraintEnd_toEndOf="@+id/save_select_button"
-                app:layout_constraintStart_toEndOf="@+id/weekly_limit" />
+                app:layout_constraintEnd_toEndOf="@+id/save_select_button" />
 
             <Button
                 android:id="@+id/reset_single"

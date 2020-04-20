@@ -45,6 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="hh:mm"
         android:inputType="time"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="@+id/category_limit"
