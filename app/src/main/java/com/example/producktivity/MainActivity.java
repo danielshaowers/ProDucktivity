@@ -235,10 +235,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     private void makeNotificationStuff() {
         notificationManager = NotificationManagerCompat.from(this);
         NotificationChannel channel = new NotificationChannel("ProDucktive_Channel", "Producktive notif channel", NotificationManager.IMPORTANCE_HIGH);
-        channel.setAllowBubbles(true);
+       // channel.setAllowBubbles(true);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
         channel.setShowBadge(true);
         notificationManager.createNotificationChannel(channel);

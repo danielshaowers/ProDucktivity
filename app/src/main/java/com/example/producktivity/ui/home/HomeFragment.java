@@ -103,7 +103,7 @@ public class HomeFragment extends Fragment {
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         public void appOnScreen() {
-            UsageEvents events = usManager.queryEvents(System.currentTimeMillis() - 2000, System.currentTimeMillis());
+            UsageEvents events = usManager.queryEvents(System.currentTimeMillis() - 3000, System.currentTimeMillis());
             while (events.hasNextEvent()) {
                 UsageEvents.Event event = new UsageEvents.Event();
                 events.getNextEvent(event);
