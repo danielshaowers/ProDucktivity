@@ -34,6 +34,7 @@ public class BlacklistRepo {
         db = BlacklistDatabase.getDatabase(app); //this should create the database
         dao = db.daoAccess();
         allEntries = dao.getList();
+
        // allEntries = dao.getListByCategory(Category.ART_AND_DESIGN);
     }
 
@@ -46,7 +47,6 @@ public class BlacklistRepo {
         this.dao = dao;
      //   allEntries = dao.getListByCategory(Category.BEAUTY);
     }
-    public void setDao(BlacklistDaoAccess dao){ this.dao = dao;}
 
     public LiveData<List<BlacklistEntry>> getAllEntries() {
         return allEntries;

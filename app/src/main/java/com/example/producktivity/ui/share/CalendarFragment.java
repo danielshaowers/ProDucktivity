@@ -17,7 +17,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -37,7 +36,7 @@ public class CalendarFragment extends Fragment {
     private final Locale locale;
     private ViewSwitcher calendarSwitcher;
     private TextView currentMonth;
-    private CalendarAdaptor calendarAdapter;
+    private CalendarAdapter calendarAdapter;
     private ToDoViewModel tasks;
 
     //Calendar Adaptor is where we show the switching between days and months etc, while the fragment here shows  the look
@@ -58,7 +57,7 @@ public class CalendarFragment extends Fragment {
       //  final ScrollView tasklist = (ScrollView) calendarLayout.findViewById(R.id.taskview);
         calendarSwitcher = (ViewSwitcher) calendarLayout.findViewById(R.id.calendar_switcher);
         currentMonth = (TextView) calendarLayout.findViewById(R.id.current_month);
-        calendarAdapter = new CalendarAdaptor(getActivity(), calendar);
+        calendarAdapter = new CalendarAdapter(getActivity(), calendar);
         updateCurrentMonth();
 
         // switches between previous and next month from current based on user clicking

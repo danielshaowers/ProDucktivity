@@ -20,6 +20,7 @@ import com.example.producktivity.dbs.todo.Task;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 //import static com.example.flashcards.TaskFragment.GET_FROM_GALLERY; //not sure if it should be input activity
@@ -28,7 +29,7 @@ import java.util.Objects;
 //dang it i can't figure out how to make the inputviewHolder work as a static class instead of nonstatic class
 public class InputAdapter extends RecyclerView.Adapter<InputAdapter.TaskViewHolder> {
 
-    private final DateFormat dateFormat = new SimpleDateFormat("MM-dd");
+    private final DateFormat dateFormat = new SimpleDateFormat("MM/dd hh:mm a", Locale.US);
 
     private List<Task> tasks; //cached copy of words
     private OnTaskItemClick onTaskItemClick;
