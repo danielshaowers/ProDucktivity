@@ -7,7 +7,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -90,6 +92,37 @@ public class ModifyTaskListActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        boolean handleReturn = super.dispatchTouchEvent(ev);
+
+        View view = getCurrentFocus();
+
+        int x = (int) ev.getX();
+        int y = (int) ev.getY();
+
+        if(view instanceof EditText){
+            View innerView = getCurrentFocus();
+
+            if (ev.getAction() == MotionEvent.ACTION_UP && !viewContains(innerView, x, y)) {
+
+                InputMethodManager input = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                input.hideSoftInputFromWindow(getWindow().getCurrentFocus()
+                        .getWindowToken(), 0);
+            }
+        }
+
+        return handleReturn;
+    }
+
+    private boolean viewContains(View v, int x, int y) {
+        int[] coords = new int[2];
+        v.getLocationOnScreen(coords);
+        return x >= coords[0] && x <= coords[0] + v.getRight() && y >= coords[1] && y <= coords[1] + v.getBottom();
     }
 
     private void updateTaskFromFields(Task t) {

@@ -13,7 +13,9 @@
     <string name="menu_calendar">Calendar</string>
     <string name="menu_block">Block Apps</string>
 
-    <string name="block_button">Begin blocking</string>
+    <string name="block_page">Begin blocking</string>
+    <string name="block_button">Custom settings</string>
+    <string name="smart_block">Smart blocking</string>
 
     <string name="current_date">March, 2020</string>
     <string name="add_event">ADD CALENDAR EVENT</string>
