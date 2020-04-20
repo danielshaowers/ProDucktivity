@@ -12,6 +12,13 @@
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Task"
+        android:textSize="40sp" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/todo_card"
         android:layout_width="match_parent"
@@ -54,18 +61,18 @@
                 android:layout_height="match_parent">
 
                 <EditText
+                    android:id="@+id/todo_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:focusable="true"
                     android:hint="Deadline"
                     android:inputType="date"
-                    android:textSize="12sp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/todo_title"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/todo_title"
-                    app:layout_constraintTop_toTopOf="@+id/todo_title"
-                    android:id="@+id/todo_date" />
+                    app:layout_constraintTop_toTopOf="@+id/todo_title" />
             </TableRow>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,7 +80,7 @@
 
                 <Button
                     android:id="@+id/button_dd_date"
-                    android:layout_width="163dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="Set Date" />
@@ -97,7 +104,7 @@
                     android:focusable="true"
                     android:hint="Reminder"
                     android:inputType="time"
-                    android:textSize="12sp"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/todo_description"
@@ -159,21 +166,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="High Priority"
-                    android:textSize="8sp" />
+                    android:textSize="16sp" />
 
                 <RadioButton
                     android:id="@+id/medium_todo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Medium Priority"
-                    android:textSize="8sp" />
+                    android:textSize="16sp" />
 
                 <RadioButton
                     android:id="@+id/low_todo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Low Priority"
-                    android:textSize="8sp" />
+                    android:textSize="16sp" />
 
             </RadioGroup>
 

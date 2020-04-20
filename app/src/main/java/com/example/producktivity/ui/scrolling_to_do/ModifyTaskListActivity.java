@@ -111,7 +111,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         int x = (int) ev.getX();
         int y = (int) ev.getY();
 
-        if(view instanceof EditText){
+        if (view instanceof EditText){
             View innerView = getCurrentFocus();
 
             if (ev.getAction() == MotionEvent.ACTION_UP && !viewContains(innerView, x, y)) {
