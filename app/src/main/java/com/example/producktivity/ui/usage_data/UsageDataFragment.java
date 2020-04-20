@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -20,22 +19,16 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jjoe64.graphview.GridLabelRenderer;
-import com.jjoe64.graphview.ValueDependentColor;
-import com.jjoe64.graphview.series.DataPoint;
-
-
-import com.jjoe64.graphview.DefaultLabelFormatter;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.BarGraphSeries;
-
 import com.example.producktivity.R;
-
 import com.example.producktivity.dbs.blacklist.BlacklistEntry;
-
 import com.example.producktivity.ui.blockSelect.BlockSelectFragment;
 import com.example.producktivity.ui.blockSelect.BlockSelectViewModel;
-
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.ValueDependentColor;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -74,6 +67,7 @@ public class UsageDataFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0){
+                    // barSeries.resetData(vv);
                    adapter.setData(BlockSelectFragment.changeSpan(UsageTime.DAY, adapter.getData()));
                    span = UsageTime.DAY;
                 }
@@ -86,7 +80,7 @@ public class UsageDataFragment extends Fragment {
                     span = UsageTime.MONTH;
                 }
                 if (barSeries != null && adapter.getData() != null)
-                    barSeries.resetData(generatePoints(adapter.getData(), 6));
+                    barSeries.resetData(generatePoints(adapter.getData(), 5));
             }
 
             @Override
@@ -110,6 +104,7 @@ public class UsageDataFragment extends Fragment {
                           System.out.println(usagetimes.size() + " usage time size");
                       }
                   }
+
                   adapter.setData(s);
                   GraphView graphView = root.findViewById(R.id.graph);
                   if (adapter.getData() != null && adapter.getData().size() > 0)
@@ -154,6 +149,7 @@ public class UsageDataFragment extends Fragment {
     }
 
     public void createGraph(GraphView graph, List<BlacklistEntry> list){
+        graph.removeAllSeries();
         int size = Math.min(list.size(), 6);
         //Fill the series with the data and add it to the graph
         DataPoint[] dps = generatePoints(list, size);
@@ -161,7 +157,8 @@ public class UsageDataFragment extends Fragment {
 
 
         barSeries = new BarGraphSeries<com.jjoe64.graphview.series.DataPoint>(dps);
-       barSeries.setDataWidth(10);
+
+        barSeries.setDataWidth(10);
         barSeries.setDrawValuesOnTop(true);
         barSeries.setValueDependentColor(new ValueDependentColor<DataPoint>() {
             @Override
@@ -171,21 +168,25 @@ public class UsageDataFragment extends Fragment {
         });
         barSeries.setSpacing(100);
         barSeries.setValuesOnTopColor(Color.RED);
+        //barSeries.se
         graph.addSeries(barSeries);
         GridLabelRenderer format = graph.getGridLabelRenderer();
         format.resetStyles();
         format.setVerticalAxisTitle("Minutes");
+        format.setHorizontalAxisTitle("Apps");
         /*format.setLabelsSpace(100);
         format.setPadding(10);*/
 
         graph.getGridLabelRenderer().setHumanRounding(false, true);
         graph.getGridLabelRenderer().setNumHorizontalLabels(dps.length);
-        format.setHorizontalLabelsAngle(40);
-        format.setLabelHorizontalHeight(10);
+        format.setHorizontalLabelsAngle(60);
+        format.setTextSize(30);
+        // format.setLabelHorizontalHeight(50);
 
         //format.draw();
         graph.getViewport().setScrollable(true); // enables horizontal scrolling
         graph.getViewport().setScrollableY(true); // enables vertical scrolling
+
         graph.getViewport().setScalable(false); // enables horizontal zooming and scrolling
         graph.getViewport().setScalableY(false); // enables vertical zooming and scrolling
         //Change graph format to show the name of the app

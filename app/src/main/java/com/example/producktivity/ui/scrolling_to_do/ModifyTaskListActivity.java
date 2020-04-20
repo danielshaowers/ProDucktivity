@@ -1,6 +1,7 @@
 package com.example.producktivity.ui.scrolling_to_do;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TimePicker;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +31,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.lang.ref.WeakReference;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -37,7 +40,7 @@ import java.util.Objects;
 public class ModifyTaskListActivity extends AppCompatActivity {
 
     private TextInputEditText editTextTitle, editTextDesc;
-    private Calendar myCalendar, reminderCalendar;
+    private Calendar dueDateCalendar, reminderCalendar;
 
     private boolean update;
 
@@ -50,12 +53,18 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         editTextDesc = findViewById(R.id.todo_description);
 
         EditText editTextDueDate = findViewById(R.id.todo_date);
+        Button setDateDD = findViewById(R.id.button_dd_date);
+        Button setTimeDD = findViewById(R.id.button_dd_time);
+
         EditText editTextReminder = findViewById(R.id.todo_reminder);
+        Button setDateRD = findViewById(R.id.button_rd_date);
+        Button setTimeRD = findViewById(R.id.button_rd_time);
+
         editTextDueDate.setFocusable(false);
         editTextReminder.setFocusable(false);
 
-        reminderCalendar = makeCalendar(editTextReminder, ModifyTaskListActivity.this);
-        myCalendar = makeCalendar(editTextDueDate, ModifyTaskListActivity.this);
+        reminderCalendar = makeCalendar(editTextReminder, setDateRD, setTimeRD);
+        dueDateCalendar = makeCalendar(editTextDueDate, setDateDD, setTimeDD);
         RadioButton high = findViewById(R.id.high_todo);
         RadioButton medium = findViewById(R.id.medium_todo);
         RadioButton low = findViewById(R.id.low_todo);
@@ -82,12 +91,10 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         button.setOnClickListener(view -> {
             if (update) {
                 updateTaskFromFields(oldTask);
-                MainActivity.scheduleNotification(this, oldTask);
                 setResult(oldTask, 2);
             } else {
                 Task newTask = new Task();
                 updateTaskFromFields(newTask);
-                MainActivity.scheduleNotification(this, newTask);
                 setResult(newTask, 1);
             }
 
@@ -130,7 +137,7 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         t.setDesc(Objects.requireNonNull(editTextDesc.getText()).toString());
         t.setTitle(Objects.requireNonNull(editTextTitle.getText()).toString());
 
-        t.setDueDate(myCalendar.getTime());
+        t.setDueDate(dueDateCalendar.getTime());
 
         t.setReminderTime(reminderCalendar.getTime());
 
@@ -157,32 +164,52 @@ public class ModifyTaskListActivity extends AppCompatActivity {
         finish();
     }
 
-    public Calendar makeCalendar(EditText date, Context context) {
+    public Calendar makeCalendar(EditText date, Button dateSetter, Button timeSetter) {
         final DatePickerDialog[] picker = new DatePickerDialog[1];
-        Calendar myCalendar = Calendar.getInstance();
+        final TimePickerDialog[] timePicker = new TimePickerDialog[1];
+        Calendar calendar = Calendar.getInstance();
         date.setInputType(InputType.TYPE_NULL);
-        date.setOnClickListener(new View.OnClickListener() {
+        dateSetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int day = myCalendar.get(Calendar.DAY_OF_MONTH);
-                int month = myCalendar.get(Calendar.MONTH);
-                int year = myCalendar.get(Calendar.YEAR);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
                 picker[0] = new DatePickerDialog(ModifyTaskListActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        date.setText(dayOfMonth + "/" + (monthOfYear + 1));
-                        myCalendar.set(Calendar.MONTH, monthOfYear);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        myCalendar.set(Calendar.HOUR_OF_DAY, 12);
-                        myCalendar.set(Calendar.MINUTE, 0);
-                        myCalendar.set(Calendar.SECOND, 0);
-                        myCalendar.set(Calendar.MILLISECOND, 0);
+                        DateFormat format = new SimpleDateFormat("MM/dd hh:mm a", Locale.US);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        calendar.set(Calendar.HOUR_OF_DAY, 12);
+                        calendar.set(Calendar.MINUTE, 0);
+                        calendar.set(Calendar.SECOND, 0);
+                        calendar.set(Calendar.MILLISECOND, 0);
+                        date.setText(format.format(calendar.getTime()));
                     }
                 }, year, month, day);
                 picker[0].show();
             }});
 
-        return myCalendar;
+        timeSetter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int hours = calendar.get(Calendar.HOUR_OF_DAY);
+                int mins = calendar.get(Calendar.MINUTE);
+                timePicker[0] = new TimePickerDialog(ModifyTaskListActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        DateFormat format = new SimpleDateFormat("MM/dd hh:mm a", Locale.US);
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+                        date.setText(format.format(calendar.getTime()));
+                    }
+                }, hours, mins, false);
+                timePicker[0].show();
+            }
+        });
+
+        return calendar;
     }
 
 }
