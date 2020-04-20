@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.producktivity.R;
 
 import java.util.Calendar;
@@ -19,6 +21,7 @@ public class CalendarAdapter extends BaseAdapter {
     private final CalendarItem today;
     private final CalendarItem selected;
     private final LayoutInflater inflater;
+    private final Context context;
     private CalendarItem[] days;
 
     //constructor gets each month separately
@@ -28,6 +31,7 @@ public class CalendarAdapter extends BaseAdapter {
         selected = new CalendarItem(monthCalendar);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.context = context;
     }
 
     //get number of days for any month
@@ -64,15 +68,15 @@ public class CalendarAdapter extends BaseAdapter {
         if (currentItem == null) {
             dayView.setClickable(false);
             dayView.setFocusable(false);
-            view.setBackgroundDrawable(null);
             dayView.setText(null);
         } else {
+            view.setForegroundGravity(1);
             if (currentItem.equals(today)) {
-                view.setBackgroundResource(R.drawable.today_background);
+                view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
             } else if (currentItem.equals(selected)) {
-                view.setBackgroundResource(R.drawable.selected_background);
+                view.setBackgroundColor(ContextCompat.getColor(context, R.color.greyed_out));
             } else {
-                view.setBackgroundResource(R.drawable.normal_background);
+                view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
             }
             dayView.setText(currentItem.text);
         }

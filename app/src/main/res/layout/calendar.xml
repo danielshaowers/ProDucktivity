@@ -55,7 +55,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/calendar_days_grid"
-        android:background="@android:color/darker_gray">
+        android:background="@android:color/white">
 
         <GridView
             android:id="@+id/calendar_grid"
