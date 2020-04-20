@@ -49,8 +49,8 @@
 
             <TextView
                 android:id="@+id/todo_date_view"
-                android:layout_width="131dp"
-                android:layout_height="wrap_content"
+                android:layout_width="89dp"
+                android:layout_height="17dp"
                 android:ems="10"
                 android:focusable="true"
                 android:textSize="12sp"
