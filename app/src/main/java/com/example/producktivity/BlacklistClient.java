@@ -87,7 +87,7 @@ public class BlacklistClient {
             if(iter.getCategory().equals(app.getCategory())){
                 if (iter.isInferredProductive() || iter.isUnrestricted())
                     countProductive++;
-                else
+                else if(iter.getDayLimit() != BlacklistEntry.NO_LIMIT || iter.getWeekLimit() != BlacklistEntry.NO_LIMIT)
                     countProductive--;
             }
         }

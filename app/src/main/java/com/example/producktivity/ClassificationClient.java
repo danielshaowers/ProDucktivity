@@ -31,7 +31,7 @@ import java.util.concurrent.TimeoutException;
 public class ClassificationClient {
     private String URL = "https://api.appmonsta.com/v1/stores/android/details/";
     //private String UserName = "23bd817660d5852948f01392ffd4457dd549afa4";
-    private String UserName = "6c37dfff1e13611723680d7faa54c4fd5d4d1fd2";
+    private String UserName = "90af6e5f3ad3778dd01704246f3b18042f264cc0"; //"6c37dfff1e13611723680d7faa54c4fd5d4d1fd2";
     private String PassWord = "X";
     RequestQueue queue;
 
